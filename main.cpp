@@ -1,12 +1,15 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
-int main()
-{
-  struct owner
+struct owner
   {
     string owner_id, first_name, last_name, mobile_num, address;
     int registered_date;
   };
+  
+int main()
+{
+  
   return 0;
 }

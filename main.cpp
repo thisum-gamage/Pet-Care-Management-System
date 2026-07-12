@@ -14,6 +14,13 @@ struct pet
   int age;
 };
 
+struct appoinment
+{
+  int appo_num, appo_date, last_update_date;
+  string pet_id, service_type, symptoms, treatment_notes, appo_status;
+};
+
+
 int main()
 {
 

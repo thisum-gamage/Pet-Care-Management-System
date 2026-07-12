@@ -14,15 +14,24 @@ struct pet
   int age;
 };
 
-struct appoinment
+struct appointment
 {
   int appo_num, appo_date, last_update_date;
   string pet_id, service_type, symptoms, treatment_notes, appo_status;
 };
 
-
 int main()
 {
+  int choice;
+  do
+  {
+    cout << "\n===== Pet Care Management System ====="<<endl;
+    cout << "\n1. Login";
+    cout << "\n2. Exit" <<endl;
+    cout << "\nEnter your choice: ";
+    cin >> choice;
+
+  } while (choice != 2);
 
   return 0;
 }

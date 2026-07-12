@@ -31,6 +31,14 @@ int main()
     cout << "\nEnter your choice: ";
     cin >> choice;
 
+    if (choice==1)
+    {
+      cout << "\nLogin as," << endl;
+      cout << "1. Administrator"<< endl;
+      cout << "2. Receptionist" << endl;
+      cout << "3. Vet staff Member" <<endl;
+    }
+
   } while (choice != 2);
 
   return 0;

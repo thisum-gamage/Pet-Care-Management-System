@@ -23,23 +23,24 @@ struct appointment
 int main()
 {
   int choice;
-  do
+
+  cout << "\n===== Pet Care Management System =====" << endl;
+  cout << "\n1. Login";
+  cout << "\n2. Exit" << endl;
+  cout << "\nEnter your choice: ";
+  cin >> choice;
+
+  if (choice == 1)
   {
-    cout << "\n===== Pet Care Management System ====="<<endl;
-    cout << "\n1. Login";
-    cout << "\n2. Exit" <<endl;
-    cout << "\nEnter your choice: ";
-    cin >> choice;
-
-    if (choice==1)
-    {
-      cout << "\nLogin as," << endl;
-      cout << "1. Administrator"<< endl;
-      cout << "2. Receptionist" << endl;
-      cout << "3. Vet staff Member" <<endl;
-    }
-
-  } while (choice != 2);
+    cout << "\n   Login as," << endl;
+    cout << "\n1. Administrator" << endl;
+    cout << "2. Receptionist" << endl;
+    cout << "3. Vet staff Member" << endl;
+  }
+  else
+  {
+    return 0;
+  }
 
   return 0;
 }

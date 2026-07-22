@@ -27,8 +27,13 @@ struct Appointment
   string pet_id, service_type, symptoms, treatment_notes, appo_status;
 };
 
+void addPetOwner()
+{
+}
+
 void administratorMenu()
 {
+  int option;
   cout << "\n------Welcome to Administrator Section------" << endl;
   cout << "1. Pet Owners" << endl;
   cout << "2. Pet Records" << endl;
@@ -36,6 +41,30 @@ void administratorMenu()
   cout << "4. Appoinments Updates" << endl;
   cout << "5. Reports" << endl;
   cout << "6. User Accounts" << endl;
+
+  cout << "\nEnter your choice: ";
+  cin >> option;
+
+  switch (option)
+  {
+  case 1:
+    addPetOwner(); // Add & update pet owner details 👤
+    break;
+  case 2:
+    // Add pet records 🐾
+    break;
+  case 3:
+    // Add appointments 📅
+    break;
+  case 4:
+    // Track appointments 🔍
+    break;
+  case 5:
+    // View owner & pet lists 📋
+    break;
+  default:
+    cout << "Invalid option!" << endl;
+  }
 }
 
 void receptionistMenu()

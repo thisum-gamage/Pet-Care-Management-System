@@ -38,6 +38,23 @@ void administratorMenu()
   cout << "6. User Accounts" << endl;
 }
 
+void receptionistMenu()
+{
+  cout << "\n------Welcome to Receptionist Section------" << endl;
+  cout << "1. Add & update pet owner details" << endl;
+  cout << "2. Add pet records" << endl;
+  cout << "3. Add appointments" << endl;
+  cout << "4. Track appoinments" << endl;
+  cout << "5. View owner & pet lists" << endl;
+}
+
+void vetStaffMenu()
+{
+  cout << "\n------Welcome to Vet Staff Member Section------" << endl;
+  cout << "1. Update appoinments details" << endl;
+  cout << "2. Track appoinments" << endl;
+}
+
 int main()
 {
   int choice, num;
@@ -64,11 +81,11 @@ int main()
       }
       else if (num == 2)
       {
-        // to recep login function. cout << "\n------Welcome to Receptionist Section------" << endl;
+        receptionistMenu(); // to recep login function.
       }
       else if (num == 3)
       {
-        // to vet staff login function. cout << "\n------Welcome to Vet Staff Member Section------" << endl;
+        vetStaffMenu(); // to vet staff login function.
       }
     }
   } while (choice != 2);

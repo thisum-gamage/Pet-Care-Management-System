@@ -6,6 +6,7 @@
 #include <limits>
 #include <algorithm>
 #include <cctype>
+#include <iomanip>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ void clearInput()
   cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-int generateOwnerID()
+string generateOwnerID()
 {
   ifstream file(OWNERS_FILE);
   string line;
@@ -48,7 +49,7 @@ int generateOwnerID()
 
     if (!id.empty())
     {
-      int currentID = stoi(id);
+      int currentID = stoi(id.substr(3));
 
       if (currentID > highestID)
       {
@@ -57,12 +58,17 @@ int generateOwnerID()
     }
   }
   file.close();
-  return highestID + 1;
+
+  int nextID = highestID + 1;
+  ostringstream ss;
+  ss << "OWN" << setfill('0') << setw(3) << nextID;
+  return ss.str();
 }
 
 void addPetOwner()
 {
   Owner owner;
+  owner.owner_id = generateOwnerID();
 
   clearInput();
 
@@ -89,7 +95,7 @@ void addPetOwner()
     return;
   }
 
-  file << owner.first_name << "," << owner.last_name << "," << owner.mobile_num << "," << owner.address << "," << owner.registered_date << endl;
+  file << owner.owner_id << "," << owner.first_name << "," << owner.last_name << "," << owner.mobile_num << "," << owner.address << "," << owner.registered_date << endl;
 
   file.close();
 

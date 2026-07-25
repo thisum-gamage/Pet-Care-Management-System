@@ -9,10 +9,11 @@
 
 using namespace std;
 
+const string OWNERS_FILE = "D:\\Pet Care Management System Files\\owners.txt";
+
 struct Owner
 {
-  string owner_id, first_name, last_name, mobile_num, address;
-  int registered_date;
+  string owner_id, first_name, last_name, address, registered_date, mobile_num;
 };
 
 struct Pet
@@ -27,8 +28,72 @@ struct Appointment
   string pet_id, service_type, symptoms, treatment_notes, appo_status;
 };
 
+void clearInput()
+{
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+int generateOwnerID()
+{
+  ifstream file(OWNERS_FILE);
+  string line;
+  int highestID = 0;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string id;
+
+    getline(ss, id, ',');
+
+    if (!id.empty())
+    {
+      int currentID = stoi(id);
+
+      if (currentID > highestID)
+      {
+        highestID = currentID;
+      }
+    }
+  }
+  file.close();
+  return highestID + 1;
+}
+
 void addPetOwner()
 {
+  Owner owner;
+
+  clearInput();
+
+  cout << "Enter Your First Name: ";
+  getline(cin, owner.first_name);
+
+  cout << "Enter Your Last Name: ";
+  getline(cin, owner.last_name);
+
+  cout << "Enter Your Mobile Number: ";
+  getline(cin, owner.mobile_num);
+
+  cout << "Enter Your Address: ";
+  getline(cin, owner.address);
+
+  cout << "Enter Registered Date: ";
+  getline(cin, owner.registered_date);
+
+  ofstream file(OWNERS_FILE, ios::app);
+
+  if (!file)
+  {
+    cout << "Unable to open the owners file." << endl;
+    return;
+  }
+
+  file << owner.first_name << "," << owner.last_name << "," << owner.mobile_num << "," << owner.address << "," << owner.registered_date << endl;
+
+  file.close();
+
+  cout << "Owner details inserted successfully." << endl;
 }
 
 void administratorMenu()

@@ -277,7 +277,7 @@ void administratorMenu()
     addPetRecord(); // Add pet records 🐾
     break;
   case 3:
-    // Add appointments 📅
+    addAppointment(); // Add appointments 📅
     break;
   case 4:
     // Track appointments 🔍

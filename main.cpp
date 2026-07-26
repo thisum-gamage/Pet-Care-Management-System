@@ -514,10 +514,14 @@ void administratorMenu()
     {
       viewOwnerList();
     }
-    else
+    else if (choice == 2)
     {
       viewPetList();
-    } 
+    }
+    else
+    {
+      cout << "Invalid Choice!";
+    }
     break;
 
   default:
@@ -528,6 +532,8 @@ void administratorMenu()
 void receptionistMenu()
 {
   int choice;
+  int subChoice;
+
   cout << "\n------Welcome to Receptionist Section------" << endl;
 
   cout << "1. Add & update pet owner details" << endl;
@@ -558,7 +564,23 @@ void receptionistMenu()
     break;
 
   case 5:
-    viewOwnerList();
+    cout << "1. Owners" << endl;
+    cout << "2. Pets" << endl;
+    cout << "\nEnter Your Choice: ";
+    cin >> subChoice;
+
+    if (subChoice == 1)
+    {
+      viewOwnerList();
+    }
+    else if (subChoice == 2)
+    {
+      viewPetList();
+    }
+    else
+    {
+      cout << "Invalid Choice!";
+    }
     break;
 
   default:

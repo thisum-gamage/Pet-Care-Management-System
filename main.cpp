@@ -12,6 +12,8 @@ using namespace std;
 
 const string OWNERS_FILE = "D:\\Pet Care Management System Files\\owners.txt";
 
+const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
+
 struct Owner
 {
   string owner_id, first_name, last_name, address, registered_date, mobile_num;
@@ -65,6 +67,37 @@ string generateOwnerID()
   return ss.str();
 }
 
+string generatePetID()
+{
+  ifstream file(PETS_FILE);
+  string line;
+  int highestID = 0;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string id;
+
+    getline(ss, id, ',');
+
+    if (!id.empty())
+    {
+      int currentID = stoi(id.substr(3));
+
+      if (currentID > highestID)
+      {
+        highestID = currentID;
+      }
+    }
+  }
+  file.close();
+
+  int nextID = highestID + 1;
+  ostringstream ss;
+  ss << "PET" << setfill('0') << setw(3) << nextID;
+  return ss.str();
+}
+
 void addPetOwner()
 {
   Owner owner;
@@ -96,6 +129,46 @@ void addPetOwner()
   }
 
   file << owner.owner_id << "," << owner.first_name << "," << owner.last_name << "," << owner.mobile_num << "," << owner.address << "," << owner.registered_date << endl;
+
+  file.close();
+
+  cout << "Owner details inserted successfully." << endl;
+}
+
+void addPetRecord()
+{
+  Pet pet;
+  pet.pet_id = generatePetID();
+
+  clearInput();
+
+  cout << "Enter Your Pet Name: ";
+  getline(cin, pet.pet_name);
+
+  cout << "Enter Your Pet Type: ";
+  getline(cin, pet.pet_type);
+
+  cout << "Enter Your Pet Breed: ";
+  getline(cin, pet.breed);
+
+  cout << "Enter Your Pet Age: ";
+  cin >> pet.age;
+
+  cout << "Enter Pet Gender: ";
+  getline(cin, pet.gender);
+
+  cout << "Enter Pet Special Notes: ";
+  getline(cin, pet.special_notes);
+
+  ofstream file(PETS_FILE, ios::app);
+
+  if (!file)
+  {
+    cout << "Unable to open the owners file." << endl;
+    return;
+  }
+
+  file << pet.pet_id << "," << pet.pet_name << "," << pet.pet_type << "," << pet.breed << "," << pet.age << "," << pet.gender << "," << pet.special_notes << endl;
 
   file.close();
 

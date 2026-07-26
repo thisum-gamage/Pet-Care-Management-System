@@ -406,7 +406,7 @@ void administratorMenu()
     addAppointment(); // Add appointments 📅
     break;
   case 4:
-    trackAppointment(); // Track appointments 🔍
+    updateAppointment(); // Track appointments 🔍
     break;
   case 5:
     // View owner & pet lists 📋

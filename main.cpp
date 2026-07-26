@@ -380,6 +380,30 @@ void updateAppointment()
   }
 }
 
+void viewOwnerList()
+{
+  ifstream file(OWNERS_FILE);
+  string line;
+  bool recordsAvailable = false;
+
+  cout << "\n===== Owners Records =====" << endl;
+
+  if (!file)
+  {
+    cout << "No owner records are available." << endl;
+    return;
+  }
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    Owner owner;
+
+    
+  }
+
+}
+
 void administratorMenu()
 {
   int option;

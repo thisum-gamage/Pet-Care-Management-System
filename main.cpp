@@ -399,9 +399,77 @@ void viewOwnerList()
     stringstream ss(line);
     Owner owner;
 
-    
+    getline(ss, owner.owner_id, ',');
+    getline(ss, owner.first_name, ',');
+    getline(ss, owner.last_name, ',');
+    getline(ss, owner.mobile_num, ',');
+    getline(ss, owner.address, ',');
+    getline(ss, owner.registered_date, ',');
+
+    cout << "\nOwner ID : " << owner.owner_id << endl;
+    cout << "First Name: " << owner.first_name << endl;
+    cout << "Last Name: " << owner.last_name << endl;
+    cout << "Mobile Number: " << owner.mobile_num << endl;
+    cout << "Address: " << owner.address << endl;
+    cout << "Registered Date: " << owner.registered_date << endl;
+    cout << "------------------------------" << endl;
+
+    recordsAvailable = true;
+  }
+  file.close();
+
+  if (!recordsAvailable)
+  {
+    cout << "No owner records are available." << endl;
+  }
+}
+
+void viewPetList()
+{
+  ifstream file(PETS_FILE);
+  string line;
+  bool recordsAvailable = false;
+
+  cout << "\n===== Pets Records =====" << endl;
+
+  if (!file)
+  {
+    cout << "No pet records are available." << endl;
+    return;
   }
 
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    Pet pet;
+
+    getline(ss, pet.owner_id, ',');
+    getline(ss, pet.pet_id, ',');
+    getline(ss, pet.pet_name, ',');
+    getline(ss, pet.pet_type, ',');
+    getline(ss, pet.breed, ',');
+    cin >> pet.age;
+    getline(ss, pet.gender, ',');
+    getline(ss, pet.special_notes, ',');
+
+    cout << "\nOwner ID : " << pet.owner_id << endl;
+    cout << "Pet ID: " << pet.pet_id << endl;
+    cout << "Pet Name: " << pet.pet_name << endl;
+    cout << "Pet Type: " << pet.pet_type << endl;
+    cout << "Breed: " << pet.breed << endl;
+    cout << "Age: " << pet.age << endl;
+    cout << "Gender: " << pet.gender << endl;
+    cout << "Special Note: " << pet.special_notes << endl;
+    cout << "------------------------------" << endl;
+
+    recordsAvailable = true;
+  }
+  file.close();
+
+  if (!recordsAvailable)
+  {
+    cout << "No pet records are available." << endl;
+  }
 }
 
 void administratorMenu()
@@ -433,7 +501,7 @@ void administratorMenu()
     updateAppointment(); // Track appointments 🔍
     break;
   case 5:
-    // View owner & pet lists 📋
+    viewOwnerList(); // View owner & pet lists 📋
     break;
 
   default:
@@ -474,7 +542,7 @@ void receptionistMenu()
     break;
 
   case 5:
-    // View owner & pet lists
+    viewOwnerList();
     break;
 
   default:

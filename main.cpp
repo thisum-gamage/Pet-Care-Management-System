@@ -428,6 +428,7 @@ void viewPetList()
 {
   ifstream file(PETS_FILE);
   string line;
+  string tempAge;
   bool recordsAvailable = false;
 
   cout << "\n===== Pets Records =====" << endl;
@@ -443,17 +444,18 @@ void viewPetList()
     stringstream ss(line);
     Pet pet;
 
-    getline(ss, pet.owner_id, ',');
     getline(ss, pet.pet_id, ',');
+    getline(ss, pet.owner_id, ',');
     getline(ss, pet.pet_name, ',');
     getline(ss, pet.pet_type, ',');
     getline(ss, pet.breed, ',');
-    cin >> pet.age;
+    getline(ss, tempAge, ',');
+    pet.age = stoi(tempAge);
     getline(ss, pet.gender, ',');
     getline(ss, pet.special_notes, ',');
 
-    cout << "\nOwner ID : " << pet.owner_id << endl;
-    cout << "Pet ID: " << pet.pet_id << endl;
+    cout << "\nPet ID: " << pet.pet_id << endl;
+    cout << "Owner ID : " << pet.owner_id << endl;
     cout << "Pet Name: " << pet.pet_name << endl;
     cout << "Pet Type: " << pet.pet_type << endl;
     cout << "Breed: " << pet.breed << endl;
@@ -475,6 +477,8 @@ void viewPetList()
 void administratorMenu()
 {
   int option;
+  int choice;
+
   cout << "\n------Welcome to Administrator Section------" << endl;
   cout << "1. Pet Owners" << endl;
   cout << "2. Pet Records" << endl;
@@ -501,7 +505,19 @@ void administratorMenu()
     updateAppointment(); // Track appointments 🔍
     break;
   case 5:
-    viewOwnerList(); // View owner & pet lists 📋
+    cout << "1. Owners" << endl;
+    cout << "2. Pets" << endl;
+    cout << "\nEnter Your Choice: ";
+    cin >> choice;
+
+    if (choice == 1)
+    {
+      viewOwnerList();
+    }
+    else
+    {
+      viewPetList();
+    } 
     break;
 
   default:

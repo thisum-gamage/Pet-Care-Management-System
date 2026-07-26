@@ -16,6 +16,8 @@ const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
 
 const string APPOINTMENTS_FILE = "D:\\Pet Care Management System Files\\appointments.txt";
 
+const string TEMP_FILE = "D:\\Pet Care Management System Files\\temp.txt";
+
 struct Owner
 {
   string owner_id, first_name, last_name, address, registered_date, mobile_num;
@@ -307,6 +309,77 @@ void trackAppointment()
   file.close();
 }
 
+void updateAppointment()
+{
+  string updateID;
+  string line;
+  bool found = false;
+
+  cout << "\n===== Update Appointment =====" << endl;
+  cout << "Enter Pet ID/Appointment ID to update: ";
+  cin >> updateID;
+
+  ifstream inputFile(APPOINTMENTS_FILE);
+  ofstream tempFile(TEMP_FILE);
+
+  if (!inputFile || !tempFile)
+  {
+    cout << "Unable to open the required file." << endl;
+    return;
+  }
+
+  while (getline(inputFile, line))
+  {
+    stringstream ss(line);
+    Appointment appointment;
+
+    getline(ss, appointment.appo_num, ',');
+    getline(ss, appointment.pet_id, ',');
+    getline(ss, appointment.appo_date, ',');
+    getline(ss, appointment.service_type, ',');
+    getline(ss, appointment.symptoms, ',');
+    getline(ss, appointment.treatment_notes, ',');
+    getline(ss, appointment.appo_status, ',');
+    getline(ss, appointment.last_updated_date, ',');
+
+    if (appointment.appo_num == updateID || appointment.pet_id == updateID)
+    {
+      clearInput();
+
+      cout << "Enter New Treatment Notes: ";
+      getline(cin, appointment.treatment_notes);
+
+      cout << "Enter New Appoinment Status: ";
+      getline(cin, appointment.appo_status);
+
+      cout << "Enter New Last Updated Date: ";
+      getline(cin, appointment.last_updated_date);
+
+      tempFile << appointment.appo_num << "," << appointment.pet_id << "," << appointment.appo_date << "," << appointment.service_type << "," << appointment.symptoms << "," << appointment.treatment_notes << "," << appointment.appo_status << "," << appointment.last_updated_date << endl;
+      found = true;
+    }
+    else
+    {
+      tempFile << line << endl;
+    }
+  }
+  inputFile.close();
+  tempFile.close();
+
+  if (found)
+  {
+    remove(APPOINTMENTS_FILE.c_str());
+    rename(TEMP_FILE.c_str(), APPOINTMENTS_FILE.c_str());
+
+    cout << "Appointment record updated successfully." << endl;
+  }
+  else
+  {
+    remove(TEMP_FILE.c_str());
+    cout << "Appointment record not found." << endl;
+  }
+}
+
 void administratorMenu()
 {
   int option;
@@ -338,6 +411,7 @@ void administratorMenu()
   case 5:
     // View owner & pet lists 📋
     break;
+
   default:
     cout << "Invalid option!" << endl;
   }
@@ -345,19 +419,68 @@ void administratorMenu()
 
 void receptionistMenu()
 {
+  int choice;
   cout << "\n------Welcome to Receptionist Section------" << endl;
+
   cout << "1. Add & update pet owner details" << endl;
   cout << "2. Add pet records" << endl;
   cout << "3. Add appointments" << endl;
   cout << "4. Track appoinments" << endl;
   cout << "5. View owner & pet lists" << endl;
+
+  cout << "\nEnter your choice: ";
+  cin >> choice;
+
+  switch (choice)
+  {
+  case 1:
+    addPetOwner();
+    break;
+
+  case 2:
+    addPetRecord();
+    break;
+
+  case 3:
+    addAppointment();
+    break;
+
+  case 4:
+    trackAppointment();
+    break;
+
+  case 5:
+    // View owner & pet lists
+    break;
+
+  default:
+    cout << "Invalid option!" << endl;
+  }
 }
 
 void vetStaffMenu()
 {
+  int option;
   cout << "\n------Welcome to Vet Staff Member Section------" << endl;
   cout << "1. Update appoinments details" << endl;
   cout << "2. Track appoinments" << endl;
+
+  cout << "\nEnter your choice: ";
+  cin >> option;
+
+  switch (option)
+  {
+  case 1:
+    updateAppointment();
+    break;
+
+  case 2:
+    trackAppointment();
+    break;
+
+  default:
+    cout << "Invalid option!" << endl;
+  }
 }
 
 int main()

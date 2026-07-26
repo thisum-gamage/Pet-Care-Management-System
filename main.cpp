@@ -14,6 +14,8 @@ const string OWNERS_FILE = "D:\\Pet Care Management System Files\\owners.txt";
 
 const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
 
+const string APPOINTMENTS_FILE = "D:\\Pet Care Management System Files\\appointments.txt";
+
 struct Owner
 {
   string owner_id, first_name, last_name, address, registered_date, mobile_num;
@@ -27,8 +29,7 @@ struct Pet
 
 struct Appointment
 {
-  int appo_num, appo_date, last_update_date;
-  string pet_id, service_type, symptoms, treatment_notes, appo_status;
+  string appo_num, pet_id, service_type, symptoms, treatment_notes, appo_status, last_updated_date, appo_date;
 };
 
 void clearInput()
@@ -98,6 +99,37 @@ string generatePetID()
   return ss.str();
 }
 
+string generateAppointmentID()
+{
+  ifstream file(APPOINTMENTS_FILE);
+  string line;
+  int highestID = 0;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string id;
+
+    getline(ss, id, ',');
+
+    if (!id.empty())
+    {
+      int currentID = stoi(id.substr(3));
+
+      if (currentID > highestID)
+      {
+        highestID = currentID;
+      }
+    }
+  }
+  file.close();
+
+  int nextID = highestID + 1;
+  ostringstream ss;
+  ss << "APP" << setfill('0') << setw(3) << nextID;
+  return ss.str();
+}
+
 void addPetOwner()
 {
   Owner owner;
@@ -142,6 +174,9 @@ void addPetRecord()
 
   clearInput();
 
+  cout << "Enter Owner ID: ";
+  getline(cin, pet.owner_id);
+
   cout << "Enter Your Pet Name: ";
   getline(cin, pet.pet_name);
 
@@ -153,6 +188,7 @@ void addPetRecord()
 
   cout << "Enter Your Pet Age: ";
   cin >> pet.age;
+  clearInput();
 
   cout << "Enter Pet Gender: ";
   getline(cin, pet.gender);
@@ -164,15 +200,58 @@ void addPetRecord()
 
   if (!file)
   {
-    cout << "Unable to open the owners file." << endl;
+    cout << "Unable to open the pets file." << endl;
     return;
   }
 
-  file << pet.pet_id << "," << pet.pet_name << "," << pet.pet_type << "," << pet.breed << "," << pet.age << "," << pet.gender << "," << pet.special_notes << endl;
+  file << pet.pet_id << "," << pet.owner_id << "," << pet.pet_name << "," << pet.pet_type << "," << pet.breed << "," << pet.age << "," << pet.gender << "," << pet.special_notes << endl;
 
   file.close();
 
-  cout << "Owner details inserted successfully." << endl;
+  cout << "Pet details inserted successfully." << endl;
+}
+
+void addAppointment()
+{
+  Appointment appointment;
+  appointment.appo_num = generateAppointmentID();
+
+  clearInput();
+
+  cout << "Enter Pet ID: ";
+  getline(cin, appointment.pet_id);
+
+  cout << "Enter Appointment Date: ";
+  getline(cin, appointment.appo_date);
+
+  cout << "Enter Service Type: ";
+  getline(cin, appointment.service_type);
+
+  cout << "Enter Pet Symptoms: ";
+  getline(cin, appointment.symptoms);
+
+  cout << "Enter Treatment Notes: ";
+  getline(cin, appointment.treatment_notes);
+
+  cout << "Enter Appointment Status: ";
+  getline(cin, appointment.appo_status);
+
+  cout << "Enter Last Updated Date: ";
+  getline(cin, appointment.last_updated_date);
+
+  ofstream file(APPOINTMENTS_FILE, ios::app);
+
+  if (!file)
+  {
+    cout << "Unable to open the appointments file." << endl;
+    return;
+  }
+
+  file << appointment.appo_num << "," << appointment.pet_id << "," << appointment.appo_date << "," << appointment.service_type << "," << appointment.symptoms << "," << appointment.treatment_notes << "," << appointment.appo_status << "," << appointment.last_updated_date << endl;
+
+  file.close();
+
+  cout << "Appointment details inserted successfully." << endl;
 }
 
 void administratorMenu()
@@ -195,7 +274,7 @@ void administratorMenu()
     addPetOwner(); // Add & update pet owner details 👤
     break;
   case 2:
-    // Add pet records 🐾
+    addPetRecord(); // Add pet records 🐾
     break;
   case 3:
     // Add appointments 📅

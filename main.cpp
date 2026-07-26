@@ -230,11 +230,8 @@ void addAppointment()
   cout << "Enter Pet Symptoms: ";
   getline(cin, appointment.symptoms);
 
-  cout << "Enter Treatment Notes: ";
-  getline(cin, appointment.treatment_notes);
-
-  cout << "Enter Appointment Status: ";
-  getline(cin, appointment.appo_status);
+  appointment.treatment_notes = "None";
+  appointment.appo_status = "Pending";
 
   cout << "Enter Last Updated Date: ";
   getline(cin, appointment.last_updated_date);

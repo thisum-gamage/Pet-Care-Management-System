@@ -296,7 +296,6 @@ void trackAppointment()
       cout << "Last Updated: " << appointment.last_updated_date << endl;
 
       found = true;
-      break;
     }
   }
 
@@ -334,7 +333,7 @@ void administratorMenu()
     addAppointment(); // Add appointments 📅
     break;
   case 4:
-    // Track appointments 🔍
+    trackAppointment(); // Track appointments 🔍
     break;
   case 5:
     // View owner & pet lists 📋

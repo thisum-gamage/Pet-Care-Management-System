@@ -317,6 +317,48 @@ void trackAppointment()
 
   else if (prefix == "OWN")
   {
+    ifstream file(OWNERS_FILE);
+
+    if (!file)
+    {
+      cout << "No owner records are available." << endl;
+      return;
+    }
+
+    while (getline(file, line))
+    {
+      stringstream ss(line);
+      Owner owner;
+
+      getline(ss, owner.owner_id, ',');
+      getline(ss, owner.first_name, ',');
+      getline(ss, owner.last_name, ',');
+      getline(ss, owner.mobile_num, ',');
+      getline(ss, owner.address, ',');
+      getline(ss, owner.registered_date, ',');
+
+      if (searchID == owner.owner_id)
+      {
+        cout << "\nOwner ID : " << owner.owner_id << endl;
+        cout << "First Name: " << owner.first_name << endl;
+        cout << "Last Name: " << owner.last_name << endl;
+        cout << "Mobile Number: " << owner.mobile_num << endl;
+        cout << "Address: " << owner.address << endl;
+        cout << "Registered Date: " << owner.registered_date << endl;
+        cout << "------------------------------" << endl;
+
+        found = true;
+      }
+    }
+    file.close();
+
+    if (!found)
+    {
+      cout << "No owner records are available." << endl;
+    }
+  }
+
+  else {
     
   }
 }

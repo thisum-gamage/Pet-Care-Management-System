@@ -257,56 +257,68 @@ void trackAppointment()
 {
   clearInput();
   string searchID;
+  string prefix;
   string line;
   bool found = false;
 
-  cout << "Enter Appointment ID/Pet ID: " << endl;
+  cout << "Enter Appointment ID/Pet ID/Owner ID/Mobile Number: " << endl;
   cin >> searchID;
 
-  ifstream file(APPOINTMENTS_FILE);
+  prefix = searchID.substr(0, 3);
 
-  if (!file)
+  if (prefix == "APP" || prefix == "PET")
   {
-    cout << "No appointment records are available." << endl;
-    return;
-  }
 
-  while (getline(file, line))
-  {
-    stringstream ss(line);
-    Appointment appointment;
+    ifstream file(APPOINTMENTS_FILE);
 
-    getline(ss, appointment.appo_num, ',');
-    getline(ss, appointment.pet_id, ',');
-    getline(ss, appointment.appo_date, ',');
-    getline(ss, appointment.service_type, ',');
-    getline(ss, appointment.symptoms, ',');
-    getline(ss, appointment.treatment_notes, ',');
-    getline(ss, appointment.appo_status, ',');
-    getline(ss, appointment.last_updated_date, ',');
-
-    if (searchID == appointment.appo_num || searchID == appointment.pet_id)
+    if (!file)
     {
-      cout << "\n--- Appointment Found! ---" << endl;
-      cout << "Appointment ID: " << appointment.appo_num << endl;
-      cout << "Pet ID: " << appointment.pet_id << endl;
-      cout << "Date: " << appointment.appo_date << endl;
-      cout << "Service Type: " << appointment.service_type << endl;
-      cout << "Symptoms: " << appointment.symptoms << endl;
-      cout << "Status: " << appointment.appo_status << endl;
-      cout << "Treatment Notes: " << appointment.treatment_notes << endl;
-      cout << "Last Updated: " << appointment.last_updated_date << endl;
-
-      found = true;
+      cout << "No appointment records are available." << endl;
+      return;
     }
+
+    while (getline(file, line))
+    {
+      stringstream ss(line);
+      Appointment appointment;
+
+      getline(ss, appointment.appo_num, ',');
+      getline(ss, appointment.pet_id, ',');
+      getline(ss, appointment.appo_date, ',');
+      getline(ss, appointment.service_type, ',');
+      getline(ss, appointment.symptoms, ',');
+      getline(ss, appointment.treatment_notes, ',');
+      getline(ss, appointment.appo_status, ',');
+      getline(ss, appointment.last_updated_date, ',');
+
+      if (searchID == appointment.appo_num || searchID == appointment.pet_id)
+      {
+        cout << "\n--- Appointment Found! ---" << endl;
+        cout << "Appointment ID: " << appointment.appo_num << endl;
+        cout << "Pet ID: " << appointment.pet_id << endl;
+        cout << "Date: " << appointment.appo_date << endl;
+        cout << "Service Type: " << appointment.service_type << endl;
+        cout << "Symptoms: " << appointment.symptoms << endl;
+        cout << "Status: " << appointment.appo_status << endl;
+        cout << "Treatment Notes: " << appointment.treatment_notes << endl;
+        cout << "Last Updated: " << appointment.last_updated_date << endl;
+
+        found = true;
+      }
+    }
+
+    if (!found)
+    {
+      cout << "No appointment found for given ID!" << endl;
+    }
+
+    file.close();
   }
 
-  if (!found)
+  else if (prefix == "OWN")
   {
-    cout << "No appointment found for given ID!" << endl;
+    
   }
-
-  file.close();
 }
 
 void updateAppointment()

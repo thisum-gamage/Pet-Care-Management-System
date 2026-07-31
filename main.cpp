@@ -17,7 +17,9 @@ const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
 
 const string APPOINTMENTS_FILE = "D:\\Pet Care Management System Files\\appointments.txt";
 
-const string TEMP_FILE_1 = "D:\\Pet Care Management System Files\\temp.txt";
+const string TEMP_FILE_1 = "D:\\Pet Care Management System Files\\temp1.txt";
+
+const string TEMP_FILE_2 = "D:\\Pet Care Management System Files\\temp2.txt";
 
 const string USER_FILE = "D:\\Pet Care Management System Files\\user.txt";
 
@@ -612,6 +614,82 @@ void trackAppointment()
   }
 }
 
+void updatePetOwner()
+{
+  string updateID;
+  string line;
+  bool found = false;
+
+  cout << "\n===== Update Pet Owner =====" << endl;
+  cout << "Enter Owner ID to update: ";
+  cin >> updateID;
+
+  ifstream inputFile(OWNERS_FILE);
+  ofstream tempFile2(TEMP_FILE_2);
+
+  if (!inputFile || !tempFile2)
+  {
+    cout << "Unable to open the required file." << endl;
+    return;
+  }
+
+  while (getline(inputFile, line))
+  {
+    stringstream ss(line);
+    Owner owner;
+
+    getline(ss, owner.ownerID, ',');
+    getline(ss, owner.firstName, ',');
+    getline(ss, owner.lastName, ',');
+    getline(ss, owner.mobileNumber, ',');
+    getline(ss, owner.address, ',');
+    getline(ss, owner.registeredDate, ',');
+
+    if (owner.ownerID == updateID)
+    {
+
+      clearInput();
+
+      cout << "Enter New First Name: ";
+      getline(cin, owner.firstName);
+
+      cout << "Enter New Last Name: ";
+      getline(cin, owner.lastName);
+
+      cout << "Enter New Mobile Number: ";
+      getline(cin, owner.mobileNumber);
+
+      cout << "Enter New Address: ";
+      getline(cin, owner.address);
+
+      cout << "Enter New Registered Date: ";
+      getline(cin, owner.registeredDate);
+
+      tempFile2 << owner.ownerID << "," << owner.firstName << "," << owner.lastName << "," << owner.mobileNumber << "," << owner.address << "," << owner.registeredDate << endl;
+      found = true;
+    }
+    else
+    {
+      tempFile2 << line << endl;
+    }
+  }
+  inputFile.close();
+  tempFile2.close();
+
+  if (found)
+  {
+    remove(OWNERS_FILE.c_str());
+    rename(TEMP_FILE_1.c_str(), OWNERS_FILE.c_str());
+
+    cout << "Owner record updated successfully." << endl;
+  }
+  else
+  {
+    remove(TEMP_FILE_1.c_str());
+    cout << "Owner record not found." << endl;
+  }
+}
+
 void updateAppointment()
 {
   string updateID;
@@ -623,9 +701,9 @@ void updateAppointment()
   cin >> updateID;
 
   ifstream inputFile(APPOINTMENTS_FILE);
-  ofstream tempFile(TEMP_FILE_1);
+  ofstream tempFile1(TEMP_FILE_1);
 
-  if (!inputFile || !tempFile)
+  if (!inputFile || !tempFile1)
   {
     cout << "Unable to open the required file." << endl;
     return;
@@ -658,16 +736,16 @@ void updateAppointment()
       cout << "Enter New Last Updated Date: ";
       getline(cin, appointment.lastUpdatedDate);
 
-      tempFile << appointment.appointmentNumber << "," << appointment.petID << "," << appointment.appointmentDate << "," << appointment.serviceType << "," << appointment.symptoms << "," << appointment.treatmentNotes << "," << appointment.appointmentStatus << "," << appointment.lastUpdatedDate << endl;
+      tempFile1 << appointment.appointmentNumber << "," << appointment.petID << "," << appointment.appointmentDate << "," << appointment.serviceType << "," << appointment.symptoms << "," << appointment.treatmentNotes << "," << appointment.appointmentStatus << "," << appointment.lastUpdatedDate << endl;
       found = true;
     }
     else
     {
-      tempFile << line << endl;
+      tempFile1 << line << endl;
     }
   }
   inputFile.close();
-  tempFile.close();
+  tempFile1.close();
 
   if (found)
   {

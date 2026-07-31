@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cctype>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
@@ -16,7 +17,11 @@ const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
 
 const string APPOINTMENTS_FILE = "D:\\Pet Care Management System Files\\appointments.txt";
 
-const string TEMP_FILE = "D:\\Pet Care Management System Files\\temp.txt";
+const string TEMP_FILE_1 = "D:\\Pet Care Management System Files\\temp1.txt";
+
+const string TEMP_FILE_2 = "D:\\Pet Care Management System Files\\temp2.txt";
+
+const string USER_FILE = "D:\\Pet Care Management System Files\\user.txt";
 
 struct Owner
 {
@@ -32,6 +37,14 @@ struct Pet
 struct Appointment
 {
   string appointmentNumber, petID, serviceType, symptoms, treatmentNotes, appointmentStatus, lastUpdatedDate, appointmentDate;
+};
+
+struct User
+{
+  int userID;
+  string username;
+  string password;
+  string role;
 };
 
 void clearInput()
@@ -130,6 +143,115 @@ string generateAppointmentID()
   ostringstream ss;
   ss << "APP" << setfill('0') << setw(3) << nextID;
   return ss.str();
+}
+
+string convertToLower(string text)
+{
+  transform(
+      text.begin(),
+      text.end(),
+      text.begin(),
+      [](unsigned char character)
+      {
+        return static_cast<char>(tolower(character));
+      });
+
+  return text;
+}
+
+bool login(User &loggedInUser)
+{
+  string enteredUsername;
+  string enteredPassword;
+  int attempts = 3;
+
+  while (attempts > 0)
+  {
+    cout << "\n===== Pet System Login =====" << endl;
+
+    cout << "Username: ";
+    cin >> enteredUsername;
+    cout << "Password: ";
+    cin >> enteredPassword;
+
+    ifstream file(USER_FILE);
+
+    if (!file)
+    {
+      cout << "\nUnable to open the user file." << endl;
+      return false;
+    }
+
+    string line;
+
+    while (getline(file, line))
+    {
+      stringstream ss(line);
+      User user;
+      string id;
+
+      getline(ss, id, ',');
+      getline(ss, user.username, ',');
+      getline(ss, user.password, ',');
+      getline(ss, user.role);
+
+      if (id.empty())
+      {
+        continue;
+      }
+
+      user.userID = stoi(id);
+
+      if (enteredUsername == user.username &&
+          enteredPassword == user.password)
+      {
+        loggedInUser = user;
+
+        file.close();
+        cout << "\nLogin successful." << endl;
+        cout << "Welcome, " << loggedInUser.username << "!" << endl;
+        cout << "Role: " << loggedInUser.role << endl;
+
+        return true;
+      }
+    }
+    file.close();
+
+    attempts--;
+    cout << "\nInvalid username or password." << endl;
+    cout << "Remaining attempts: " << attempts << endl;
+  }
+  cout << "\nAccess denied. Too many unsuccessful attempts." << endl;
+
+  return false;
+}
+
+void initializeUserFile()
+{
+  ifstream inputFile(USER_FILE);
+
+  // If the file already exists, do not create it again
+  if (inputFile)
+  {
+    inputFile.close();
+    return;
+  }
+  ofstream outputFile(USER_FILE);
+
+  if (!outputFile)
+  {
+    cout << "Unable to create the user file." << endl;
+    return;
+  }
+
+  // Save default users
+  outputFile << "1,admin,123,Administrator" << endl;
+  outputFile << "2,receptionist,456,Receptionist" << endl;
+  outputFile << "3,vetstaffmember,789,Vet Staff Member" << endl;
+
+  outputFile.close();
+
+  cout << "Default user accounts were created." << endl;
 }
 
 void addPetOwner()
@@ -492,6 +614,82 @@ void trackAppointment()
   }
 }
 
+void updatePetOwner()
+{
+  string updateID;
+  string line;
+  bool found = false;
+
+  cout << "\n===== Update Pet Owner =====" << endl;
+  cout << "Enter Owner ID to update: ";
+  cin >> updateID;
+
+  ifstream inputFile(OWNERS_FILE);
+  ofstream tempFile2(TEMP_FILE_2);
+
+  if (!inputFile || !tempFile2)
+  {
+    cout << "Unable to open the required file." << endl;
+    return;
+  }
+
+  while (getline(inputFile, line))
+  {
+    stringstream ss(line);
+    Owner owner;
+
+    getline(ss, owner.ownerID, ',');
+    getline(ss, owner.firstName, ',');
+    getline(ss, owner.lastName, ',');
+    getline(ss, owner.mobileNumber, ',');
+    getline(ss, owner.address, ',');
+    getline(ss, owner.registeredDate, ',');
+
+    if (owner.ownerID == updateID)
+    {
+
+      clearInput();
+
+      cout << "Enter New First Name: ";
+      getline(cin, owner.firstName);
+
+      cout << "Enter New Last Name: ";
+      getline(cin, owner.lastName);
+
+      cout << "Enter New Mobile Number: ";
+      getline(cin, owner.mobileNumber);
+
+      cout << "Enter New Address: ";
+      getline(cin, owner.address);
+
+      cout << "Enter New Registered Date: ";
+      getline(cin, owner.registeredDate);
+
+      tempFile2 << owner.ownerID << "," << owner.firstName << "," << owner.lastName << "," << owner.mobileNumber << "," << owner.address << "," << owner.registeredDate << endl;
+      found = true;
+    }
+    else
+    {
+      tempFile2 << line << endl;
+    }
+  }
+  inputFile.close();
+  tempFile2.close();
+
+  if (found)
+  {
+    remove(OWNERS_FILE.c_str());
+    rename(TEMP_FILE_2.c_str(), OWNERS_FILE.c_str());
+
+    cout << "Owner record updated successfully." << endl;
+  }
+  else
+  {
+    remove(TEMP_FILE_2.c_str());
+    cout << "Owner record not found." << endl;
+  }
+}
+
 void updateAppointment()
 {
   string updateID;
@@ -503,9 +701,9 @@ void updateAppointment()
   cin >> updateID;
 
   ifstream inputFile(APPOINTMENTS_FILE);
-  ofstream tempFile(TEMP_FILE);
+  ofstream tempFile1(TEMP_FILE_1);
 
-  if (!inputFile || !tempFile)
+  if (!inputFile || !tempFile1)
   {
     cout << "Unable to open the required file." << endl;
     return;
@@ -538,27 +736,27 @@ void updateAppointment()
       cout << "Enter New Last Updated Date: ";
       getline(cin, appointment.lastUpdatedDate);
 
-      tempFile << appointment.appointmentNumber << "," << appointment.petID << "," << appointment.appointmentDate << "," << appointment.serviceType << "," << appointment.symptoms << "," << appointment.treatmentNotes << "," << appointment.appointmentStatus << "," << appointment.lastUpdatedDate << endl;
+      tempFile1 << appointment.appointmentNumber << "," << appointment.petID << "," << appointment.appointmentDate << "," << appointment.serviceType << "," << appointment.symptoms << "," << appointment.treatmentNotes << "," << appointment.appointmentStatus << "," << appointment.lastUpdatedDate << endl;
       found = true;
     }
     else
     {
-      tempFile << line << endl;
+      tempFile1 << line << endl;
     }
   }
   inputFile.close();
-  tempFile.close();
+  tempFile1.close();
 
   if (found)
   {
     remove(APPOINTMENTS_FILE.c_str());
-    rename(TEMP_FILE.c_str(), APPOINTMENTS_FILE.c_str());
+    rename(TEMP_FILE_1.c_str(), APPOINTMENTS_FILE.c_str());
 
     cout << "Appointment record updated successfully." << endl;
   }
   else
   {
-    remove(TEMP_FILE.c_str());
+    remove(TEMP_FILE_1.c_str());
     cout << "Appointment record not found." << endl;
   }
 }
@@ -657,148 +855,216 @@ void viewPetList()
   }
 }
 
-void administratorMenu()
+void administratorMenu(const User &currentUser)
 {
   int option;
-  int choice;
-
-  cout << "\n------Welcome to Administrator Section------" << endl;
-  cout << "1. Pet Owners" << endl;
-  cout << "2. Pet Records" << endl;
-  cout << "3. Appointments" << endl;
-  cout << "4. Appointments Updates" << endl;
-  cout << "5. Reports" << endl;
-  cout << "6. User Accounts" << endl;
-
-  cout << "\nEnter your choice: ";
-  cin >> option;
-
-  switch (option)
+  int choice, subChoice1;
+  do
   {
-  case 1:
-    addPetOwner(); // Add & update pet owner details 👤
-    break;
-  case 2:
-    addPetRecord(); // Add pet records 🐾
-    break;
-  case 3:
-    addAppointment(); // Add appointments 📅
-    break;
-  case 4:
-    updateAppointment(); // Track appointments 🔍
-    break;
-  case 5:
-    cout << "1. Owners" << endl;
-    cout << "2. Pets" << endl;
-    cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    cout << "\n------Welcome to Administrator Section------" << endl;
+    cout << "1. Pet Owners" << endl;
+    cout << "2. Pet Records" << endl;
+    cout << "3. Appointments" << endl;
+    cout << "4. Appointments Updates" << endl;
+    cout << "5. Reports" << endl;
+    cout << "6. User Accounts" << endl;
+    cout << "7. Logout" << endl;
 
-    if (choice == 1)
-    {
-      viewOwnerList();
-    }
-    else if (choice == 2)
-    {
-      viewPetList();
-    }
-    else
-    {
-      cout << "Invalid Choice!";
-    }
-    break;
+    cout << "\nEnter your choice: ";
+    cin >> option;
 
-  default:
-    cout << "Invalid option!" << endl;
-  }
+    switch (option)
+    {
+    case 1:
+      cout << "1. Add pet owner details" << endl;
+      cout << "2. Update pet owner details" << endl;
+      cout << "\nEnter Your Choice: ";
+      cin >> subChoice1; // Add & update pet owner details 👤
+
+      if (subChoice1 == 1)
+      {
+        addPetOwner();
+      }
+      else if (subChoice1 == 2)
+      {
+        updatePetOwner();
+      }
+      else
+      {
+        cout << "Invalid Choice!";
+      }
+      break;
+
+    case 2:
+      addPetRecord(); // Add pet records 🐾
+      break;
+
+    case 3:
+      addAppointment(); // Add appointments 📅
+      break;
+
+    case 4:
+      updateAppointment(); // Track appointments 🔍
+      break;
+
+    case 5:
+      cout << "1. Owners" << endl;
+      cout << "2. Pets" << endl;
+      cout << "\nEnter Your Choice: ";
+      cin >> choice;
+
+      if (choice == 1)
+      {
+        viewOwnerList();
+      }
+      else if (choice == 2)
+      {
+        viewPetList();
+      }
+      else
+      {
+        cout << "Invalid Choice!";
+      }
+      break;
+
+    case 6:
+      cout << "User Accounts Management Section" << endl;
+      break;
+
+    case 7:
+      cout << "Logging out..." << endl;
+      break;
+
+    default:
+      cout << "Invalid option!" << endl;
+    }
+  } while (option != 7);
 }
 
-void receptionistMenu()
+void receptionistMenu(const User &currentUser)
 {
   int choice;
   int subChoice;
+  int subChoice2;
 
-  cout << "\n------Welcome to Receptionist Section------" << endl;
-
-  cout << "1. Add & update pet owner details" << endl;
-  cout << "2. Add pet records" << endl;
-  cout << "3. Add appointments" << endl;
-  cout << "4. Track appointments" << endl;
-  cout << "5. View owner & pet lists" << endl;
-
-  cout << "\nEnter your choice: ";
-  cin >> choice;
-
-  switch (choice)
+  do
   {
-  case 1:
-    addPetOwner();
-    break;
+    cout << "\n------Welcome to Receptionist Section------" << endl;
 
-  case 2:
-    addPetRecord();
-    break;
+    cout << "1. Add & update pet owner details" << endl;
+    cout << "2. Add pet records" << endl;
+    cout << "3. Add appointments" << endl;
+    cout << "4. Track appointments" << endl;
+    cout << "5. View owner & pet lists" << endl;
+    cout << "6. Logout" << endl;
 
-  case 3:
-    addAppointment();
-    break;
+    cout << "\nEnter your choice: ";
+    cin >> choice;
 
-  case 4:
-    trackAppointment();
-    break;
-
-  case 5:
-    cout << "1. Owners" << endl;
-    cout << "2. Pets" << endl;
-    cout << "\nEnter Your Choice: ";
-    cin >> subChoice;
-
-    if (subChoice == 1)
+    switch (choice)
     {
-      viewOwnerList();
-    }
-    else if (subChoice == 2)
-    {
-      viewPetList();
-    }
-    else
-    {
-      cout << "Invalid Choice!";
-    }
-    break;
+    case 1:
+      cout << "1. Add pet owner details" << endl;
+      cout << "2. Update pet owner details" << endl;
+      cout << "\nEnter Your Choice: ";
+      cin >> subChoice2;
 
-  default:
-    cout << "Invalid option!" << endl;
-  }
+      if (subChoice2 == 1)
+      {
+        addPetOwner();
+      }
+      else if (subChoice2 == 2)
+      {
+        updatePetOwner();
+      }
+      else
+      {
+        cout << "Invalid Choice!";
+      }
+      break;
+
+    case 2:
+      addPetRecord();
+      break;
+
+    case 3:
+      addAppointment();
+      break;
+
+    case 4:
+      trackAppointment();
+      break;
+
+    case 5:
+      cout << "1. Owners" << endl;
+      cout << "2. Pets" << endl;
+      cout << "\nEnter Your Choice: ";
+      cin >> subChoice;
+
+      if (subChoice == 1)
+      {
+        viewOwnerList();
+      }
+      else if (subChoice == 2)
+      {
+        viewPetList();
+      }
+      else
+      {
+        cout << "Invalid Choice!";
+      }
+      break;
+
+    case 6:
+      cout << "Logging out..." << endl;
+      break;
+
+    default:
+      cout << "Invalid option!" << endl;
+    }
+  } while (choice != 6);
 }
 
-void vetStaffMenu()
+void vetStaffMenu(const User &currentUser)
 {
   int option;
-  cout << "\n------Welcome to Vet Staff Member Section------" << endl;
-  cout << "1. Update appointments details" << endl;
-  cout << "2. Track appointments" << endl;
 
-  cout << "\nEnter your choice: ";
-  cin >> option;
-
-  switch (option)
+  do
   {
-  case 1:
-    updateAppointment();
-    break;
+    cout << "\n------Welcome to Vet Staff Member Section------" << endl;
+    cout << "1. Update appointments details" << endl;
+    cout << "2. Track appointments" << endl;
+    cout << "3. Logout" << endl;
 
-  case 2:
-    trackAppointment();
-    break;
+    cout << "\nEnter your choice: ";
+    cin >> option;
 
-  default:
-    cout << "Invalid option!" << endl;
-  }
+    switch (option)
+    {
+    case 1:
+      updateAppointment();
+      break;
+
+    case 2:
+      trackAppointment();
+      break;
+
+    case 3:
+      cout << "Logging out..." << endl;
+      break;
+
+    default:
+      cout << "Invalid option!" << endl;
+    }
+  } while (option != 3);
 }
 
 int main()
 {
-  int choice, num;
+  initializeUserFile();
+  User loggedInUser;
+  int choice, num, mainChoice;
+
   do
   {
     cout << "\n===== Pet Care Management System =====" << endl;
@@ -809,14 +1075,32 @@ int main()
 
     if (choice == 1)
     {
-      cout << "\n   Login as," << endl;
+      if (login(loggedInUser))
+      {
+        if (loggedInUser.role == "Administrator")
+        {
+          administratorMenu(loggedInUser);
+        }
+
+        else if (loggedInUser.role == "Receptionist")
+        {
+          receptionistMenu(loggedInUser);
+        }
+
+        else if (loggedInUser.role == "Vet Staff Member")
+        {
+          vetStaffMenu(loggedInUser);
+        }
+      }
+
+      /*cout << "\n   Login as," << endl;
       cout << "\n1. Administrator" << endl;
       cout << "2. Receptionist" << endl;
       cout << "3. Vet Staff Member" << endl;
       cout << "\nEnter your choice: ";
-      cin >> num;
+      cin >> num;*/
 
-      if (num == 1)
+      /* if (num == 1)
       {
         administratorMenu(); // to admin login function.
       }
@@ -827,9 +1111,34 @@ int main()
       else if (num == 3)
       {
         vetStaffMenu(); // to vet staff login function.
+      } */
+
+      cout << "\n===== Main Menu =====" << endl;
+      cout << "1. Login Again" << endl;
+      cout << "2. Exit System" << endl;
+      cout << "Enter your choice: ";
+      cin >> mainChoice;
+      if (mainChoice != 1 && mainChoice != 2)
+      {
+        cout << "Invalid choice. The system will close." << endl;
+        mainChoice = 2;
       }
     }
-  } while (choice != 2);
+
+    else if (choice == 2)
+    {
+      mainChoice = 2;
+    }
+
+    else
+    {
+      cout << "Invalid Choice !!!" << endl;
+      mainChoice = 1;
+    }
+
+  } while (mainChoice != 2);
+
+  cout << "\nThank you for using the Pet Management System." << endl;
 
   return 0;
 }

@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cctype>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
@@ -17,6 +18,8 @@ const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
 const string APPOINTMENTS_FILE = "D:\\Pet Care Management System Files\\appointments.txt";
 
 const string TEMP_FILE = "D:\\Pet Care Management System Files\\temp.txt";
+
+const string USER_FILE = "D:\\Pet Care Management System Files\\user.txt";
 
 struct Owner
 {
@@ -32,6 +35,14 @@ struct Pet
 struct Appointment
 {
   string appointmentNumber, petID, serviceType, symptoms, treatmentNotes, appointmentStatus, lastUpdatedDate, appointmentDate;
+};
+
+struct User
+{
+  int userID;
+  string username;
+  string password;
+  string role;
 };
 
 void clearInput()
@@ -130,6 +141,114 @@ string generateAppointmentID()
   ostringstream ss;
   ss << "APP" << setfill('0') << setw(3) << nextID;
   return ss.str();
+}
+
+string convertToLower(string text)
+{
+  transform(
+      text.begin(),
+      text.end(),
+      text.begin(),
+      [](unsigned char character)
+      {
+        return static_cast<char>(tolower(character));
+      });
+
+  return text;
+}
+
+bool login(User &loggedInUser)
+{
+  string enteredUsername;
+  string enteredPassword;
+  int attempts = 3;
+
+  while (attempts > 0)
+  {
+    cout << "\n===== Pet System Login =====" << endl;
+
+    cout << "Username: ";
+    cin >> enteredUsername;
+    cout << "Password: ";
+    cin >> enteredPassword;
+
+    ifstream file(USER_FILE);
+
+    if (!file)
+    {
+      cout << "\nUnable to open the user file." << endl;
+      return false;
+    }
+
+    string line;
+
+    while (getline(file, line))
+    {
+      stringstream ss(line);
+      User user;
+      string id;
+
+      getline(ss, id, ',');
+      getline(ss, user.username, ',');
+      getline(ss, user.password, ',');
+      getline(ss, user.role);
+
+      if (id.empty())
+      {
+        continue;
+      }
+
+      user.userID = stoi(id);
+
+      if (enteredUsername == user.username &&
+          enteredPassword == user.password)
+      {
+        loggedInUser = user;
+
+        file.close();
+        cout << "\nLogin successful." << endl;
+        cout << "Welcome, " << loggedInUser.username << "!" << endl;
+        cout << "Role: " << loggedInUser.role << endl;
+
+        return true;
+      }
+    }
+    file.close();
+
+    attempts--;
+    cout << "\nInvalid username or password." << endl;
+    cout << "Remaining attempts: " << attempts << endl;
+  }
+  cout << "\nAccess denied. Too many unsuccessful attempts." << endl;
+
+  return false;
+}
+
+void initializeUserFile()
+{
+  ifstream inputFile(USER_FILE);
+
+  // If the file already exists, do not create it again
+  if (inputFile)
+  {
+    inputFile.close();
+    return;
+  }
+  ofstream outputFile(USER_FILE);
+
+  if (!outputFile)
+  {
+    cout << "Unable to create the user file." << endl;
+    return;
+  }
+
+  // Save default users
+  outputFile << "1,admin,123,Administrator" << endl;
+  outputFile << "2,staff,456,Staff" << endl;
+
+  outputFile.close();
+
+  cout << "Default user accounts were created." << endl;
 }
 
 void addPetOwner()

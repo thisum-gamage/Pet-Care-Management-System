@@ -848,58 +848,66 @@ void receptionistMenu(const User &currentUser)
   int choice;
   int subChoice;
 
-  cout << "\n------Welcome to Receptionist Section------" << endl;
-
-  cout << "1. Add & update pet owner details" << endl;
-  cout << "2. Add pet records" << endl;
-  cout << "3. Add appointments" << endl;
-  cout << "4. Track appointments" << endl;
-  cout << "5. View owner & pet lists" << endl;
-
-  cout << "\nEnter your choice: ";
-  cin >> choice;
-
-  switch (choice)
+  do
   {
-  case 1:
-    addPetOwner();
-    break;
+    cout << "\n------Welcome to Receptionist Section------" << endl;
 
-  case 2:
-    addPetRecord();
-    break;
+    cout << "1. Add & update pet owner details" << endl;
+    cout << "2. Add pet records" << endl;
+    cout << "3. Add appointments" << endl;
+    cout << "4. Track appointments" << endl;
+    cout << "5. View owner & pet lists" << endl;
+    cout << "6. Logout" << endl;
 
-  case 3:
-    addAppointment();
-    break;
+    cout << "\nEnter your choice: ";
+    cin >> choice;
 
-  case 4:
-    trackAppointment();
-    break;
-
-  case 5:
-    cout << "1. Owners" << endl;
-    cout << "2. Pets" << endl;
-    cout << "\nEnter Your Choice: ";
-    cin >> subChoice;
-
-    if (subChoice == 1)
+    switch (choice)
     {
-      viewOwnerList();
-    }
-    else if (subChoice == 2)
-    {
-      viewPetList();
-    }
-    else
-    {
-      cout << "Invalid Choice!";
-    }
-    break;
+    case 1:
+      addPetOwner();
+      break;
 
-  default:
-    cout << "Invalid option!" << endl;
-  }
+    case 2:
+      addPetRecord();
+      break;
+
+    case 3:
+      addAppointment();
+      break;
+
+    case 4:
+      trackAppointment();
+      break;
+
+    case 5:
+      cout << "1. Owners" << endl;
+      cout << "2. Pets" << endl;
+      cout << "\nEnter Your Choice: ";
+      cin >> subChoice;
+
+      if (subChoice == 1)
+      {
+        viewOwnerList();
+      }
+      else if (subChoice == 2)
+      {
+        viewPetList();
+      }
+      else
+      {
+        cout << "Invalid Choice!";
+      }
+      break;
+
+    case 6:
+      cout << "Logging out..." << endl;
+      break;
+      
+    default:
+      cout << "Invalid option!" << endl;
+    }
+  } while (choice != 6);
 }
 
 void vetStaffMenu(const User &currentUser)

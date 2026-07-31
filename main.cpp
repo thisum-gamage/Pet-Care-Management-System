@@ -800,15 +800,19 @@ void administratorMenu(const User &currentUser)
     case 1:
       addPetOwner(); // Add & update pet owner details 👤
       break;
+
     case 2:
       addPetRecord(); // Add pet records 🐾
       break;
+
     case 3:
       addAppointment(); // Add appointments 📅
       break;
+
     case 4:
       updateAppointment(); // Track appointments 🔍
       break;
+
     case 5:
       cout << "1. Owners" << endl;
       cout << "2. Pets" << endl;
@@ -829,10 +833,13 @@ void administratorMenu(const User &currentUser)
       }
       break;
 
+    case 7:
+      cout << "Logging out..." << endl;
+
     default:
       cout << "Invalid option!" << endl;
     }
-  } while (option == 7);
+  } while (option != 7);
 }
 
 void receptionistMenu(const User &currentUser)

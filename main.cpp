@@ -858,7 +858,7 @@ void viewPetList()
 void administratorMenu(const User &currentUser)
 {
   int option;
-  int choice;
+  int choice, subChoice1;
   do
   {
     cout << "\n------Welcome to Administrator Section------" << endl;
@@ -876,7 +876,23 @@ void administratorMenu(const User &currentUser)
     switch (option)
     {
     case 1:
-      addPetOwner(); // Add & update pet owner details 👤
+      cout << "1. Add pet owner details" << endl;
+      cout << "2. Update pet owner details" << endl;
+      cout << "\nEnter Your Choice: ";
+      cin >> subChoice1; // Add & update pet owner details 👤
+
+      if (subChoice1 == 1)
+      {
+        addPetOwner();
+      }
+      else if (subChoice1 == 2)
+      {
+        updatePetOwner();
+      }
+      else
+      {
+        cout << "Invalid Choice!";
+      }
       break;
 
     case 2:
@@ -929,6 +945,7 @@ void receptionistMenu(const User &currentUser)
 {
   int choice;
   int subChoice;
+  int subChoice2;
 
   do
   {
@@ -947,7 +964,23 @@ void receptionistMenu(const User &currentUser)
     switch (choice)
     {
     case 1:
-      addPetOwner();
+      cout << "1. Add pet owner details" << endl;
+      cout << "2. Update pet owner details" << endl;
+      cout << "\nEnter Your Choice: ";
+      cin >> subChoice2;
+
+      if (subChoice2 == 1)
+      {
+        addPetOwner();
+      }
+      else if (subChoice2 == 2)
+      {
+        updatePetOwner();
+      }
+      else
+      {
+        cout << "Invalid Choice!";
+      }
       break;
 
     case 2:

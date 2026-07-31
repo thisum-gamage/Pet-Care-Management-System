@@ -20,18 +20,18 @@ const string TEMP_FILE = "D:\\Pet Care Management System Files\\temp.txt";
 
 struct Owner
 {
-  string owner_id, first_name, last_name, address, registered_date, mobile_num;
+  string ownerID, firstName, lastName, address, registeredDate, mobileNumber;
 };
 
 struct Pet
 {
-  string pet_id, owner_id, pet_name, pet_type, breed, gender, special_notes;
+  string petID, ownerID, petName, petType, breed, gender, specialNotes;
   int age;
 };
 
 struct Appointment
 {
-  string appo_num, pet_id, service_type, symptoms, treatment_notes, appo_status, last_updated_date, appo_date;
+  string appointmentNumber, petID, serviceType, symptoms, treatmentNotes, appointmentStatus, lastUpdatedDate, appointmentDate;
 };
 
 void clearInput()
@@ -135,24 +135,24 @@ string generateAppointmentID()
 void addPetOwner()
 {
   Owner owner;
-  owner.owner_id = generateOwnerID();
+  owner.ownerID = generateOwnerID();
 
   clearInput();
 
   cout << "Enter Your First Name: ";
-  getline(cin, owner.first_name);
+  getline(cin, owner.firstName);
 
   cout << "Enter Your Last Name: ";
-  getline(cin, owner.last_name);
+  getline(cin, owner.lastName);
 
   cout << "Enter Your Mobile Number: ";
-  getline(cin, owner.mobile_num);
+  getline(cin, owner.mobileNumber);
 
   cout << "Enter Your Address: ";
   getline(cin, owner.address);
 
   cout << "Enter Registered Date: ";
-  getline(cin, owner.registered_date);
+  getline(cin, owner.registeredDate);
 
   ofstream file(OWNERS_FILE, ios::app);
 
@@ -162,7 +162,7 @@ void addPetOwner()
     return;
   }
 
-  file << owner.owner_id << "," << owner.first_name << "," << owner.last_name << "," << owner.mobile_num << "," << owner.address << "," << owner.registered_date << endl;
+  file << owner.ownerID << "," << owner.firstName << "," << owner.lastName << "," << owner.mobileNumber << "," << owner.address << "," << owner.registeredDate << endl;
 
   file.close();
 
@@ -172,18 +172,18 @@ void addPetOwner()
 void addPetRecord()
 {
   Pet pet;
-  pet.pet_id = generatePetID();
+  pet.petID = generatePetID();
 
   clearInput();
 
   cout << "Enter Owner ID: ";
-  getline(cin, pet.owner_id);
+  getline(cin, pet.ownerID);
 
   cout << "Enter Your Pet Name: ";
-  getline(cin, pet.pet_name);
+  getline(cin, pet.petName);
 
   cout << "Enter Your Pet Type: ";
-  getline(cin, pet.pet_type);
+  getline(cin, pet.petType);
 
   cout << "Enter Your Pet Breed: ";
   getline(cin, pet.breed);
@@ -196,7 +196,7 @@ void addPetRecord()
   getline(cin, pet.gender);
 
   cout << "Enter Pet Special Notes: ";
-  getline(cin, pet.special_notes);
+  getline(cin, pet.specialNotes);
 
   ofstream file(PETS_FILE, ios::app);
 
@@ -206,7 +206,7 @@ void addPetRecord()
     return;
   }
 
-  file << pet.pet_id << "," << pet.owner_id << "," << pet.pet_name << "," << pet.pet_type << "," << pet.breed << "," << pet.age << "," << pet.gender << "," << pet.special_notes << endl;
+  file << pet.petID << "," << pet.ownerID << "," << pet.petName << "," << pet.petType << "," << pet.breed << "," << pet.age << "," << pet.gender << "," << pet.specialNotes << endl;
 
   file.close();
 
@@ -216,27 +216,27 @@ void addPetRecord()
 void addAppointment()
 {
   Appointment appointment;
-  appointment.appo_num = generateAppointmentID();
+  appointment.appointmentNumber = generateAppointmentID();
 
   clearInput();
 
   cout << "Enter Pet ID: ";
-  getline(cin, appointment.pet_id);
+  getline(cin, appointment.petID);
 
   cout << "Enter Appointment Date: ";
-  getline(cin, appointment.appo_date);
+  getline(cin, appointment.appointmentDate);
 
   cout << "Enter Service Type: ";
-  getline(cin, appointment.service_type);
+  getline(cin, appointment.serviceType);
 
   cout << "Enter Pet Symptoms: ";
   getline(cin, appointment.symptoms);
 
-  appointment.treatment_notes = "None";
-  appointment.appo_status = "Pending";
+  appointment.treatmentNotes = "None";
+  appointment.appointmentStatus = "Pending";
 
   cout << "Enter Last Updated Date: ";
-  getline(cin, appointment.last_updated_date);
+  getline(cin, appointment.lastUpdatedDate);
 
   ofstream file(APPOINTMENTS_FILE, ios::app);
 
@@ -246,7 +246,7 @@ void addAppointment()
     return;
   }
 
-  file << appointment.appo_num << "," << appointment.pet_id << "," << appointment.appo_date << "," << appointment.service_type << "," << appointment.symptoms << "," << appointment.treatment_notes << "," << appointment.appo_status << "," << appointment.last_updated_date << endl;
+  file << appointment.appointmentNumber << "," << appointment.petID << "," << appointment.appointmentDate << "," << appointment.serviceType << "," << appointment.symptoms << "," << appointment.treatmentNotes << "," << appointment.appointmentStatus << "," << appointment.lastUpdatedDate << endl;
 
   file.close();
 
@@ -282,26 +282,26 @@ void trackAppointment()
       stringstream ss(line);
       Appointment appointment;
 
-      getline(ss, appointment.appo_num, ',');
-      getline(ss, appointment.pet_id, ',');
-      getline(ss, appointment.appo_date, ',');
-      getline(ss, appointment.service_type, ',');
+      getline(ss, appointment.appointmentNumber, ',');
+      getline(ss, appointment.petID, ',');
+      getline(ss, appointment.appointmentDate, ',');
+      getline(ss, appointment.serviceType, ',');
       getline(ss, appointment.symptoms, ',');
-      getline(ss, appointment.treatment_notes, ',');
-      getline(ss, appointment.appo_status, ',');
-      getline(ss, appointment.last_updated_date, ',');
+      getline(ss, appointment.treatmentNotes, ',');
+      getline(ss, appointment.appointmentStatus, ',');
+      getline(ss, appointment.lastUpdatedDate, ',');
 
-      if (searchID == appointment.appo_num || searchID == appointment.pet_id)
+      if (searchID == appointment.appointmentNumber || searchID == appointment.petID)
       {
         cout << "\n--- Appointment Found! ---" << endl;
-        cout << "Appointment ID: " << appointment.appo_num << endl;
-        cout << "Pet ID: " << appointment.pet_id << endl;
-        cout << "Date: " << appointment.appo_date << endl;
-        cout << "Service Type: " << appointment.service_type << endl;
+        cout << "Appointment ID: " << appointment.appointmentNumber << endl;
+        cout << "Pet ID: " << appointment.petID << endl;
+        cout << "Date: " << appointment.appointmentDate << endl;
+        cout << "Service Type: " << appointment.serviceType << endl;
         cout << "Symptoms: " << appointment.symptoms << endl;
-        cout << "Status: " << appointment.appo_status << endl;
-        cout << "Treatment Notes: " << appointment.treatment_notes << endl;
-        cout << "Last Updated: " << appointment.last_updated_date << endl;
+        cout << "Status: " << appointment.appointmentStatus << endl;
+        cout << "Treatment Notes: " << appointment.treatmentNotes << endl;
+        cout << "Last Updated: " << appointment.lastUpdatedDate << endl;
 
         found = true;
       }
@@ -330,21 +330,21 @@ void trackAppointment()
       stringstream ss(line);
       Owner owner;
 
-      getline(ss, owner.owner_id, ',');
-      getline(ss, owner.first_name, ',');
-      getline(ss, owner.last_name, ',');
-      getline(ss, owner.mobile_num, ',');
+      getline(ss, owner.ownerID, ',');
+      getline(ss, owner.firstName, ',');
+      getline(ss, owner.lastName, ',');
+      getline(ss, owner.mobileNumber, ',');
       getline(ss, owner.address, ',');
-      getline(ss, owner.registered_date, ',');
+      getline(ss, owner.registeredDate, ',');
 
-      if (searchID == owner.owner_id)
+      if (searchID == owner.ownerID)
       {
-        cout << "\nOwner ID : " << owner.owner_id << endl;
-        cout << "First Name: " << owner.first_name << endl;
-        cout << "Last Name: " << owner.last_name << endl;
-        cout << "Mobile Number: " << owner.mobile_num << endl;
+        cout << "\nOwner ID : " << owner.ownerID << endl;
+        cout << "First Name: " << owner.firstName << endl;
+        cout << "Last Name: " << owner.lastName << endl;
+        cout << "Mobile Number: " << owner.mobileNumber << endl;
         cout << "Address: " << owner.address << endl;
-        cout << "Registered Date: " << owner.registered_date << endl;
+        cout << "Registered Date: " << owner.registeredDate << endl;
         cout << "------------------------------" << endl;
 
         found = true;
@@ -358,8 +358,8 @@ void trackAppointment()
     }
   }
 
-  else {
-    
+  else
+  {
   }
 }
 
@@ -387,29 +387,29 @@ void updateAppointment()
     stringstream ss(line);
     Appointment appointment;
 
-    getline(ss, appointment.appo_num, ',');
-    getline(ss, appointment.pet_id, ',');
-    getline(ss, appointment.appo_date, ',');
-    getline(ss, appointment.service_type, ',');
+    getline(ss, appointment.appointmentNumber, ',');
+    getline(ss, appointment.petID, ',');
+    getline(ss, appointment.appointmentDate, ',');
+    getline(ss, appointment.serviceType, ',');
     getline(ss, appointment.symptoms, ',');
-    getline(ss, appointment.treatment_notes, ',');
-    getline(ss, appointment.appo_status, ',');
-    getline(ss, appointment.last_updated_date, ',');
+    getline(ss, appointment.treatmentNotes, ',');
+    getline(ss, appointment.appointmentStatus, ',');
+    getline(ss, appointment.lastUpdatedDate, ',');
 
-    if (appointment.appo_num == updateID || appointment.pet_id == updateID)
+    if (appointment.appointmentNumber == updateID || appointment.petID == updateID)
     {
       clearInput();
 
       cout << "Enter New Treatment Notes: ";
-      getline(cin, appointment.treatment_notes);
+      getline(cin, appointment.treatmentNotes);
 
-      cout << "Enter New Appoinment Status: ";
-      getline(cin, appointment.appo_status);
+      cout << "Enter New Appointment Status: ";
+      getline(cin, appointment.appointmentStatus);
 
       cout << "Enter New Last Updated Date: ";
-      getline(cin, appointment.last_updated_date);
+      getline(cin, appointment.lastUpdatedDate);
 
-      tempFile << appointment.appo_num << "," << appointment.pet_id << "," << appointment.appo_date << "," << appointment.service_type << "," << appointment.symptoms << "," << appointment.treatment_notes << "," << appointment.appo_status << "," << appointment.last_updated_date << endl;
+      tempFile << appointment.appointmentNumber << "," << appointment.petID << "," << appointment.appointmentDate << "," << appointment.serviceType << "," << appointment.symptoms << "," << appointment.treatmentNotes << "," << appointment.appointmentStatus << "," << appointment.lastUpdatedDate << endl;
       found = true;
     }
     else
@@ -453,19 +453,19 @@ void viewOwnerList()
     stringstream ss(line);
     Owner owner;
 
-    getline(ss, owner.owner_id, ',');
-    getline(ss, owner.first_name, ',');
-    getline(ss, owner.last_name, ',');
-    getline(ss, owner.mobile_num, ',');
+    getline(ss, owner.ownerID, ',');
+    getline(ss, owner.firstName, ',');
+    getline(ss, owner.lastName, ',');
+    getline(ss, owner.mobileNumber, ',');
     getline(ss, owner.address, ',');
-    getline(ss, owner.registered_date, ',');
+    getline(ss, owner.registeredDate, ',');
 
-    cout << "\nOwner ID : " << owner.owner_id << endl;
-    cout << "First Name: " << owner.first_name << endl;
-    cout << "Last Name: " << owner.last_name << endl;
-    cout << "Mobile Number: " << owner.mobile_num << endl;
+    cout << "\nOwner ID : " << owner.ownerID << endl;
+    cout << "First Name: " << owner.firstName << endl;
+    cout << "Last Name: " << owner.lastName << endl;
+    cout << "Mobile Number: " << owner.mobileNumber << endl;
     cout << "Address: " << owner.address << endl;
-    cout << "Registered Date: " << owner.registered_date << endl;
+    cout << "Registered Date: " << owner.registeredDate << endl;
     cout << "------------------------------" << endl;
 
     recordsAvailable = true;
@@ -498,24 +498,24 @@ void viewPetList()
     stringstream ss(line);
     Pet pet;
 
-    getline(ss, pet.pet_id, ',');
-    getline(ss, pet.owner_id, ',');
-    getline(ss, pet.pet_name, ',');
-    getline(ss, pet.pet_type, ',');
+    getline(ss, pet.petID, ',');
+    getline(ss, pet.ownerID, ',');
+    getline(ss, pet.petName, ',');
+    getline(ss, pet.petType, ',');
     getline(ss, pet.breed, ',');
     getline(ss, tempAge, ',');
     pet.age = stoi(tempAge);
     getline(ss, pet.gender, ',');
-    getline(ss, pet.special_notes, ',');
+    getline(ss, pet.specialNotes, ',');
 
-    cout << "\nPet ID: " << pet.pet_id << endl;
-    cout << "Owner ID : " << pet.owner_id << endl;
-    cout << "Pet Name: " << pet.pet_name << endl;
-    cout << "Pet Type: " << pet.pet_type << endl;
+    cout << "\nPet ID: " << pet.petID << endl;
+    cout << "Owner ID : " << pet.ownerID << endl;
+    cout << "Pet Name: " << pet.petName << endl;
+    cout << "Pet Type: " << pet.petType << endl;
     cout << "Breed: " << pet.breed << endl;
     cout << "Age: " << pet.age << endl;
     cout << "Gender: " << pet.gender << endl;
-    cout << "Special Note: " << pet.special_notes << endl;
+    cout << "Special Note: " << pet.specialNotes << endl;
     cout << "------------------------------" << endl;
 
     recordsAvailable = true;
@@ -536,8 +536,8 @@ void administratorMenu()
   cout << "\n------Welcome to Administrator Section------" << endl;
   cout << "1. Pet Owners" << endl;
   cout << "2. Pet Records" << endl;
-  cout << "3. Appoinments" << endl;
-  cout << "4. Appoinments Updates" << endl;
+  cout << "3. Appointments" << endl;
+  cout << "4. Appointments Updates" << endl;
   cout << "5. Reports" << endl;
   cout << "6. User Accounts" << endl;
 
@@ -593,7 +593,7 @@ void receptionistMenu()
   cout << "1. Add & update pet owner details" << endl;
   cout << "2. Add pet records" << endl;
   cout << "3. Add appointments" << endl;
-  cout << "4. Track appoinments" << endl;
+  cout << "4. Track appointments" << endl;
   cout << "5. View owner & pet lists" << endl;
 
   cout << "\nEnter your choice: ";
@@ -646,8 +646,8 @@ void vetStaffMenu()
 {
   int option;
   cout << "\n------Welcome to Vet Staff Member Section------" << endl;
-  cout << "1. Update appoinments details" << endl;
-  cout << "2. Track appoinments" << endl;
+  cout << "1. Update appointments details" << endl;
+  cout << "2. Track appointments" << endl;
 
   cout << "\nEnter your choice: ";
   cin >> option;
@@ -693,7 +693,7 @@ int main()
       }
       else if (num == 2)
       {
-        receptionistMenu(); // to recep login function.
+        receptionistMenu(); // to reception login function.
       }
       else if (num == 3)
       {

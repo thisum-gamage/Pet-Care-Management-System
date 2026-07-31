@@ -835,6 +835,7 @@ void administratorMenu(const User &currentUser)
 
     case 7:
       cout << "Logging out..." << endl;
+      break;
 
     default:
       cout << "Invalid option!" << endl;

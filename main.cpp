@@ -679,13 +679,13 @@ void updatePetOwner()
   if (found)
   {
     remove(OWNERS_FILE.c_str());
-    rename(TEMP_FILE_1.c_str(), OWNERS_FILE.c_str());
+    rename(TEMP_FILE_2.c_str(), OWNERS_FILE.c_str());
 
     cout << "Owner record updated successfully." << endl;
   }
   else
   {
-    remove(TEMP_FILE_1.c_str());
+    remove(TEMP_FILE_2.c_str());
     cout << "Owner record not found." << endl;
   }
 }

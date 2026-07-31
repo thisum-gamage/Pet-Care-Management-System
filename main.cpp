@@ -833,6 +833,10 @@ void administratorMenu(const User &currentUser)
       }
       break;
 
+    case 6:
+      cout << "User Accounts Management Section" << endl;
+      break;
+
     case 7:
       cout << "Logging out..." << endl;
       break;

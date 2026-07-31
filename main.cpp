@@ -253,13 +253,223 @@ void addAppointment()
   cout << "Appointment details inserted successfully." << endl;
 }
 
+void searchByAppointmentIDOrPetID(string searchID)
+{
+  string line;
+  Appointment appointment;
+  bool found = false;
+
+  ifstream appointmentFile(APPOINTMENTS_FILE);
+
+  if (!appointmentFile)
+  {
+    cout << "No appointment records are available." << endl;
+    return;
+  }
+
+  while (getline(appointmentFile, line))
+  {
+    stringstream ss(line);
+
+    getline(ss, appointment.appointmentNumber, ',');
+    getline(ss, appointment.petID, ',');
+    getline(ss, appointment.appointmentDate, ',');
+    getline(ss, appointment.serviceType, ',');
+    getline(ss, appointment.symptoms, ',');
+    getline(ss, appointment.treatmentNotes, ',');
+    getline(ss, appointment.appointmentStatus, ',');
+    getline(ss, appointment.lastUpdatedDate, ',');
+
+    if (searchID == appointment.appointmentNumber || searchID == appointment.petID)
+    {
+      cout << "\n--- Appointment Found! ---" << endl;
+      cout << "Appointment ID : " << appointment.appointmentNumber << endl;
+      cout << "Pet ID         : " << appointment.petID << endl;
+      cout << "Date           : " << appointment.appointmentDate << endl;
+      cout << "Service Type   : " << appointment.serviceType << endl;
+      cout << "Symptoms       : " << appointment.symptoms << endl;
+      cout << "Status         : " << appointment.appointmentStatus << endl;
+      cout << "Treatment Notes: " << appointment.treatmentNotes << endl;
+      cout << "Last Updated   : " << appointment.lastUpdatedDate << endl;
+
+      found = true;
+    }
+  }
+
+  if (!found)
+  {
+    cout << "No appointment found for given ID!" << endl;
+  }
+
+  appointmentFile.close();
+}
+
+void searchByOwnerID(string searchID)
+{
+  string line;
+  Owner owner;
+  bool found = false;
+
+  ifstream ownersFile(OWNERS_FILE);
+
+  if (!ownersFile)
+  {
+    cout << "No owner records are available." << endl;
+    return;
+  }
+
+  while (getline(ownersFile, line))
+  {
+    stringstream ss(line);
+
+    getline(ss, owner.ownerID, ',');
+    getline(ss, owner.firstName, ',');
+    getline(ss, owner.lastName, ',');
+    getline(ss, owner.mobileNumber, ',');
+    getline(ss, owner.address, ',');
+    getline(ss, owner.registeredDate, ',');
+
+    if (searchID == owner.ownerID)
+    {
+      cout << "\nOwner ID     : " << owner.ownerID << endl;
+      cout << "First Name     : " << owner.firstName << endl;
+      cout << "Last Name      : " << owner.lastName << endl;
+      cout << "Mobile Number  : " << owner.mobileNumber << endl;
+      cout << "Address        : " << owner.address << endl;
+      cout << "Registered Date: " << owner.registeredDate << endl;
+      cout << "------------------------------" << endl;
+
+      found = true;
+    }
+  }
+  ownersFile.close();
+
+  if (!found)
+  {
+    cout << "No owner records are available." << endl;
+  }
+}
+
+void searchByMobileNumber(string searchID)
+{
+  string line;
+  string tempAge;
+  Owner owner;
+  Pet pet;
+  Appointment appointment;
+  string foundOwnerID = "";
+  bool ownerFound = false;
+  bool appointmentFound = false;
+
+  ifstream ownerFile(OWNERS_FILE);
+
+  if (!ownerFile)
+  {
+    cout << "No owner records available!" << endl;
+    return;
+  }
+
+  while (getline(ownerFile, line))
+  {
+    stringstream ss(line);
+
+    getline(ss, owner.ownerID, ',');
+    getline(ss, owner.firstName, ',');
+    getline(ss, owner.lastName, ',');
+    getline(ss, owner.mobileNumber, ',');
+    getline(ss, owner.address, ',');
+    getline(ss, owner.registeredDate, ',');
+
+    if (searchID == owner.mobileNumber)
+    {
+      foundOwnerID = owner.ownerID;
+      ownerFound = true;
+
+      cout << "\n--- Owner Details Found ---" << endl;
+      cout << "Owner ID     : " << owner.ownerID << endl;
+      cout << "Name         : " << owner.firstName << " " << owner.lastName << endl;
+      cout << "Mobile       : " << owner.mobileNumber << endl;
+      break;
+    }
+  }
+  ownerFile.close();
+
+  if (!ownerFound)
+  {
+    cout << "No owner found with this mobile number!" << endl;
+    return;
+  }
+
+  ifstream petFile(PETS_FILE);
+  if (!petFile)
+  {
+    cout << "No pet records available!" << endl;
+    return;
+  }
+
+  while (getline(petFile, line))
+  {
+    stringstream ss(line);
+
+    getline(ss, pet.petID, ',');
+    getline(ss, pet.ownerID, ',');
+    getline(ss, pet.petName, ',');
+    getline(ss, pet.petType, ',');
+    getline(ss, pet.breed, ',');
+    getline(ss, tempAge, ',');
+    pet.age = stoi(tempAge);
+    getline(ss, pet.gender, ',');
+    getline(ss, pet.specialNotes, ',');
+
+    if (foundOwnerID == pet.ownerID)
+    {
+      ifstream appointmentFile(APPOINTMENTS_FILE);
+      string appointmentLine;
+
+      while (getline(appointmentFile, appointmentLine))
+      {
+        stringstream appointmentSS(appointmentLine);
+
+        getline(appointmentSS, appointment.appointmentNumber, ',');
+        getline(appointmentSS, appointment.petID, ',');
+        getline(appointmentSS, appointment.appointmentDate, ',');
+        getline(appointmentSS, appointment.serviceType, ',');
+        getline(appointmentSS, appointment.symptoms, ',');
+        getline(appointmentSS, appointment.treatmentNotes, ',');
+        getline(appointmentSS, appointment.appointmentStatus, ',');
+        getline(appointmentSS, appointment.lastUpdatedDate, ',');
+
+        if (appointment.petID == pet.petID)
+        {
+          cout << "\n--- Appointment Details ---" << endl;
+          cout << "Appointment ID : " << appointment.appointmentNumber << endl;
+          cout << "Pet ID         : " << appointment.petID << endl;
+          cout << "Pet Name       : " << pet.petName << endl;
+          cout << "Date           : " << appointment.appointmentDate << endl;
+          cout << "Service        : " << appointment.serviceType << endl;
+          cout << "Status         : " << appointment.appointmentStatus << endl;
+          appointmentFound = true;
+        }
+      }
+      appointmentFile.close();
+    }
+  }
+  petFile.close();
+
+  if (!appointmentFound)
+  {
+    cout << "No appointments found for this owner's pets!" << endl;
+  }
+}
+
 void trackAppointment()
 {
   clearInput();
+
   string searchID;
   string prefix;
   string line;
-  bool found = false;
+  string targetOwnerID;
 
   cout << "Enter Appointment ID/Pet ID/Owner ID/Mobile Number: " << endl;
   cin >> searchID;
@@ -268,98 +478,17 @@ void trackAppointment()
 
   if (prefix == "APP" || prefix == "PET")
   {
-
-    ifstream file(APPOINTMENTS_FILE);
-
-    if (!file)
-    {
-      cout << "No appointment records are available." << endl;
-      return;
-    }
-
-    while (getline(file, line))
-    {
-      stringstream ss(line);
-      Appointment appointment;
-
-      getline(ss, appointment.appointmentNumber, ',');
-      getline(ss, appointment.petID, ',');
-      getline(ss, appointment.appointmentDate, ',');
-      getline(ss, appointment.serviceType, ',');
-      getline(ss, appointment.symptoms, ',');
-      getline(ss, appointment.treatmentNotes, ',');
-      getline(ss, appointment.appointmentStatus, ',');
-      getline(ss, appointment.lastUpdatedDate, ',');
-
-      if (searchID == appointment.appointmentNumber || searchID == appointment.petID)
-      {
-        cout << "\n--- Appointment Found! ---" << endl;
-        cout << "Appointment ID: " << appointment.appointmentNumber << endl;
-        cout << "Pet ID: " << appointment.petID << endl;
-        cout << "Date: " << appointment.appointmentDate << endl;
-        cout << "Service Type: " << appointment.serviceType << endl;
-        cout << "Symptoms: " << appointment.symptoms << endl;
-        cout << "Status: " << appointment.appointmentStatus << endl;
-        cout << "Treatment Notes: " << appointment.treatmentNotes << endl;
-        cout << "Last Updated: " << appointment.lastUpdatedDate << endl;
-
-        found = true;
-      }
-    }
-
-    if (!found)
-    {
-      cout << "No appointment found for given ID!" << endl;
-    }
-
-    file.close();
+    searchByAppointmentIDOrPetID(searchID);
   }
 
   else if (prefix == "OWN")
   {
-    ifstream file(OWNERS_FILE);
-
-    if (!file)
-    {
-      cout << "No owner records are available." << endl;
-      return;
-    }
-
-    while (getline(file, line))
-    {
-      stringstream ss(line);
-      Owner owner;
-
-      getline(ss, owner.ownerID, ',');
-      getline(ss, owner.firstName, ',');
-      getline(ss, owner.lastName, ',');
-      getline(ss, owner.mobileNumber, ',');
-      getline(ss, owner.address, ',');
-      getline(ss, owner.registeredDate, ',');
-
-      if (searchID == owner.ownerID)
-      {
-        cout << "\nOwner ID : " << owner.ownerID << endl;
-        cout << "First Name: " << owner.firstName << endl;
-        cout << "Last Name: " << owner.lastName << endl;
-        cout << "Mobile Number: " << owner.mobileNumber << endl;
-        cout << "Address: " << owner.address << endl;
-        cout << "Registered Date: " << owner.registeredDate << endl;
-        cout << "------------------------------" << endl;
-
-        found = true;
-      }
-    }
-    file.close();
-
-    if (!found)
-    {
-      cout << "No owner records are available." << endl;
-    }
+    searchByOwnerID(searchID);
   }
 
   else
   {
+    searchByMobileNumber(searchID);
   }
 }
 

@@ -17,7 +17,7 @@ const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
 
 const string APPOINTMENTS_FILE = "D:\\Pet Care Management System Files\\appointments.txt";
 
-const string TEMP_FILE = "D:\\Pet Care Management System Files\\temp.txt";
+const string TEMP_FILE_1 = "D:\\Pet Care Management System Files\\temp.txt";
 
 const string USER_FILE = "D:\\Pet Care Management System Files\\user.txt";
 
@@ -623,7 +623,7 @@ void updateAppointment()
   cin >> updateID;
 
   ifstream inputFile(APPOINTMENTS_FILE);
-  ofstream tempFile(TEMP_FILE);
+  ofstream tempFile(TEMP_FILE_1);
 
   if (!inputFile || !tempFile)
   {
@@ -672,13 +672,13 @@ void updateAppointment()
   if (found)
   {
     remove(APPOINTMENTS_FILE.c_str());
-    rename(TEMP_FILE.c_str(), APPOINTMENTS_FILE.c_str());
+    rename(TEMP_FILE_1.c_str(), APPOINTMENTS_FILE.c_str());
 
     cout << "Appointment record updated successfully." << endl;
   }
   else
   {
-    remove(TEMP_FILE.c_str());
+    remove(TEMP_FILE_1.c_str());
     cout << "Appointment record not found." << endl;
   }
 }

@@ -244,7 +244,8 @@ void initializeUserFile()
 
   // Save default users
   outputFile << "1,admin,123,Administrator" << endl;
-  outputFile << "2,staff,456,Staff" << endl;
+  outputFile << "2,receptionist,456,Receptionist" << endl;
+  outputFile << "3,vetstaffmember,789,Vet Staff Member" << endl;
 
   outputFile.close();
 
@@ -776,7 +777,7 @@ void viewPetList()
   }
 }
 
-void administratorMenu()
+void administratorMenu(const User &currentUser)
 {
   int option;
   int choice;
@@ -831,7 +832,7 @@ void administratorMenu()
   }
 }
 
-void receptionistMenu()
+void receptionistMenu(const User &currentUser)
 {
   int choice;
   int subChoice;
@@ -890,7 +891,7 @@ void receptionistMenu()
   }
 }
 
-void vetStaffMenu()
+void vetStaffMenu(const User &currentUser)
 {
   int option;
   cout << "\n------Welcome to Vet Staff Member Section------" << endl;
@@ -917,7 +918,10 @@ void vetStaffMenu()
 
 int main()
 {
-  int choice, num;
+  initializeUserFile();
+  User loggedInUser;
+  int choice, num, mainChoice;
+
   do
   {
     cout << "\n===== Pet Care Management System =====" << endl;
@@ -928,14 +932,32 @@ int main()
 
     if (choice == 1)
     {
-      cout << "\n   Login as," << endl;
+      if (login(loggedInUser))
+      {
+        if (loggedInUser.role == "Administrator")
+        {
+          administratorMenu(loggedInUser);
+        }
+
+        else if (loggedInUser.role == "Receptionist")
+        {
+          receptionistMenu(loggedInUser);
+        }
+
+        else if (loggedInUser.role == "Vet Staff Member")
+        {
+          vetStaffMenu(loggedInUser);
+        }
+      }
+
+      /*cout << "\n   Login as," << endl;
       cout << "\n1. Administrator" << endl;
       cout << "2. Receptionist" << endl;
       cout << "3. Vet Staff Member" << endl;
       cout << "\nEnter your choice: ";
-      cin >> num;
+      cin >> num;*/
 
-      if (num == 1)
+      /* if (num == 1)
       {
         administratorMenu(); // to admin login function.
       }
@@ -946,9 +968,34 @@ int main()
       else if (num == 3)
       {
         vetStaffMenu(); // to vet staff login function.
+      } */
+
+      cout << "\n===== Main Menu =====" << endl;
+      cout << "1. Login Again" << endl;
+      cout << "2. Exit System" << endl;
+      cout << "Enter your choice: ";
+      cin >> mainChoice;
+      if (mainChoice != 1 && mainChoice != 2)
+      {
+        cout << "Invalid choice. The system will close." << endl;
+        mainChoice = 2;
       }
     }
-  } while (choice != 2);
+
+    else if (choice == 2)
+    {
+      mainChoice = 2;
+    }
+
+    else
+    {
+      cout << "Invalid Choice !!!" << endl;
+      mainChoice = 1;
+    }
+
+  } while (mainChoice != 2);
+
+  cout << "\nThank you for using the Pet Management System." << endl;
 
   return 0;
 }

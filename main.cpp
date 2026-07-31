@@ -781,55 +781,58 @@ void administratorMenu(const User &currentUser)
 {
   int option;
   int choice;
-
-  cout << "\n------Welcome to Administrator Section------" << endl;
-  cout << "1. Pet Owners" << endl;
-  cout << "2. Pet Records" << endl;
-  cout << "3. Appointments" << endl;
-  cout << "4. Appointments Updates" << endl;
-  cout << "5. Reports" << endl;
-  cout << "6. User Accounts" << endl;
-
-  cout << "\nEnter your choice: ";
-  cin >> option;
-
-  switch (option)
+  do
   {
-  case 1:
-    addPetOwner(); // Add & update pet owner details 👤
-    break;
-  case 2:
-    addPetRecord(); // Add pet records 🐾
-    break;
-  case 3:
-    addAppointment(); // Add appointments 📅
-    break;
-  case 4:
-    updateAppointment(); // Track appointments 🔍
-    break;
-  case 5:
-    cout << "1. Owners" << endl;
-    cout << "2. Pets" << endl;
-    cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    cout << "\n------Welcome to Administrator Section------" << endl;
+    cout << "1. Pet Owners" << endl;
+    cout << "2. Pet Records" << endl;
+    cout << "3. Appointments" << endl;
+    cout << "4. Appointments Updates" << endl;
+    cout << "5. Reports" << endl;
+    cout << "6. User Accounts" << endl;
+    cout << "7. Logout" << endl;
 
-    if (choice == 1)
-    {
-      viewOwnerList();
-    }
-    else if (choice == 2)
-    {
-      viewPetList();
-    }
-    else
-    {
-      cout << "Invalid Choice!";
-    }
-    break;
+    cout << "\nEnter your choice: ";
+    cin >> option;
 
-  default:
-    cout << "Invalid option!" << endl;
-  }
+    switch (option)
+    {
+    case 1:
+      addPetOwner(); // Add & update pet owner details 👤
+      break;
+    case 2:
+      addPetRecord(); // Add pet records 🐾
+      break;
+    case 3:
+      addAppointment(); // Add appointments 📅
+      break;
+    case 4:
+      updateAppointment(); // Track appointments 🔍
+      break;
+    case 5:
+      cout << "1. Owners" << endl;
+      cout << "2. Pets" << endl;
+      cout << "\nEnter Your Choice: ";
+      cin >> choice;
+
+      if (choice == 1)
+      {
+        viewOwnerList();
+      }
+      else if (choice == 2)
+      {
+        viewPetList();
+      }
+      else
+      {
+        cout << "Invalid Choice!";
+      }
+      break;
+
+    default:
+      cout << "Invalid option!" << endl;
+    }
+  } while (option == 7);
 }
 
 void receptionistMenu(const User &currentUser)

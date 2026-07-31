@@ -903,7 +903,7 @@ void receptionistMenu(const User &currentUser)
     case 6:
       cout << "Logging out..." << endl;
       break;
-      
+
     default:
       cout << "Invalid option!" << endl;
     }
@@ -913,26 +913,35 @@ void receptionistMenu(const User &currentUser)
 void vetStaffMenu(const User &currentUser)
 {
   int option;
-  cout << "\n------Welcome to Vet Staff Member Section------" << endl;
-  cout << "1. Update appointments details" << endl;
-  cout << "2. Track appointments" << endl;
 
-  cout << "\nEnter your choice: ";
-  cin >> option;
-
-  switch (option)
+  do
   {
-  case 1:
-    updateAppointment();
-    break;
+    cout << "\n------Welcome to Vet Staff Member Section------" << endl;
+    cout << "1. Update appointments details" << endl;
+    cout << "2. Track appointments" << endl;
+    cout << "3. Logout" << endl;
 
-  case 2:
-    trackAppointment();
-    break;
+    cout << "\nEnter your choice: ";
+    cin >> option;
 
-  default:
-    cout << "Invalid option!" << endl;
-  }
+    switch (option)
+    {
+    case 1:
+      updateAppointment();
+      break;
+
+    case 2:
+      trackAppointment();
+      break;
+
+    case 3:
+      cout << "Logging out..." << endl;
+      break;
+
+    default:
+      cout << "Invalid option!" << endl;
+    }
+  } while (option != 3);
 }
 
 int main()

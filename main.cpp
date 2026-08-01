@@ -428,19 +428,16 @@ void addUserAccount()
   if (tempRole == 1)
   {
     user.role = "Administrator";
-    return;
   }
 
   else if (tempRole == 2)
   {
     user.role = "Receptionist";
-    return;
   }
 
   else if (tempRole == 3)
   {
     user.role = "Vet Staff Member";
-    return;
   }
 
   else
@@ -448,8 +445,6 @@ void addUserAccount()
     cout << "Invalid Choice!!!" << endl;
     return;
   }
-
-  getline(cin, user.role);
 
   ofstream userFile(USER_FILE, ios::app);
 

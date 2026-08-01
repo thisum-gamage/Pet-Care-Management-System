@@ -145,6 +145,33 @@ string generateAppointmentID()
   return ss.str();
 }
 
+int generateUserID()
+{
+  ifstream userFile(USER_FILE);
+  string line;
+  int highestID = 0;
+
+  while (getline(userFile, line))
+  {
+    stringstream ss(line);
+    string id;
+
+    getline(ss, id, ',');
+
+    if (!id.empty())
+    {
+      int currentID = stoi(id);
+
+      if (currentID > highestID)
+      {
+        highestID = currentID;
+      }
+    }
+  }
+  userFile.close();
+  return highestID + 1;
+}
+
 string convertToLower(string text)
 {
   transform(
@@ -373,6 +400,39 @@ void addAppointment()
   file.close();
 
   cout << "Appointment details inserted successfully." << endl;
+}
+
+void addUserAccount()
+{
+  User user;
+  user.userID = generateUserID();
+  clearInput();
+
+  cout << "\n===== Add User Account =====" << endl;
+
+  cout << "Enter Username: ";
+  getline(cin, user.username);
+
+  cout << "Enter Password: ";
+  getline(cin, user.password);
+
+  cout << "Enter Role: ";
+  getline(cin, user.role);
+
+  ofstream userFile(USER_FILE, ios::app);
+
+  if (!userFile)
+  {
+    cout << "Unable to open the employee file." << endl;
+    return;
+  }
+
+  userFile << user.userID << "," << user.username << "," << user.password << "," << user.role << endl;
+
+  userFile.close();
+
+  cout << "Employee inserted successfully." << endl;
+  cout << "Employee ID: " << user.userID << endl;
 }
 
 void searchByAppointmentIDOrPetID(string searchID)
@@ -929,6 +989,7 @@ void administratorMenu(const User &currentUser)
 
     case 6:
       cout << "User Accounts Management Section" << endl;
+      addUserAccount();
       break;
 
     case 7:

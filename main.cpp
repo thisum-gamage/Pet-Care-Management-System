@@ -693,6 +693,7 @@ void trackAppointment()
   else if (prefix == "OWN")
   {
     searchByOwnerID(searchID);
+    searchByAppointmentIDOrPetID(searchID);
   }
 
   else
@@ -942,6 +943,53 @@ void viewPetList()
   }
 }
 
+void viewAppointmentList()
+{
+  ifstream file(APPOINTMENTS_FILE);
+  string line;
+  bool recordsAvailable = false;
+
+  cout << "\n===== Appointment Records =====" << endl;
+
+  if (!file)
+  {
+    cout << "No appointment records are available." << endl;
+    return;
+  }
+
+  while (getline(file, line))
+  {
+    Appointment appointment;
+    stringstream ss(line);
+
+    getline(ss, appointment.appointmentNumber, ',');
+    getline(ss, appointment.petID, ',');
+    getline(ss, appointment.appointmentDate, ',');
+    getline(ss, appointment.serviceType, ',');
+    getline(ss, appointment.symptoms, ',');
+    getline(ss, appointment.treatmentNotes, ',');
+    getline(ss, appointment.appointmentStatus, ',');
+    getline(ss, appointment.lastUpdatedDate, ',');
+
+    cout << "Appointment ID : " << appointment.appointmentNumber << endl;
+    cout << "Pet ID         : " << appointment.petID << endl;
+    cout << "Date           : " << appointment.appointmentDate << endl;
+    cout << "Service Type   : " << appointment.serviceType << endl;
+    cout << "Symptoms       : " << appointment.symptoms << endl;
+    cout << "Status         : " << appointment.appointmentStatus << endl;
+    cout << "Treatment Notes: " << appointment.treatmentNotes << endl;
+    cout << "Last Updated   : " << appointment.lastUpdatedDate << endl;
+
+    recordsAvailable = true;
+  }
+  file.close();
+
+  if (!recordsAvailable)
+  {
+    cout << "No appointment records are available." << endl;
+  }
+}
+
 void administratorMenu(const User &currentUser)
 {
   int option;
@@ -997,6 +1045,7 @@ void administratorMenu(const User &currentUser)
     case 5:
       cout << "1. Owners" << endl;
       cout << "2. Pets" << endl;
+      cout << "3. Appointment" << endl;
       cout << "\nEnter Your Choice: ";
       cin >> choice;
 
@@ -1008,6 +1057,12 @@ void administratorMenu(const User &currentUser)
       {
         viewPetList();
       }
+
+      else if (choice == 3)
+      {
+        viewAppointmentList();
+      }
+
       else
       {
         cout << "Invalid Choice!";

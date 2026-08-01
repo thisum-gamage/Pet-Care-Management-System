@@ -404,6 +404,7 @@ void addAppointment()
 
 void addUserAccount()
 {
+  int tempRole;
   User user;
   user.userID = generateUserID();
   clearInput();
@@ -416,7 +417,38 @@ void addUserAccount()
   cout << "Enter Password: ";
   getline(cin, user.password);
 
-  cout << "Enter Role: ";
+  cout << "---- Select Role ----";
+  cout << "\n1. Administrator" << endl;
+  cout << "2. Receptionist" << endl;
+  cout << "3. Vet Staff Member" << endl;
+  cout << "\nEnter Role: ";
+
+  cin >> tempRole;
+
+  if (tempRole == 1)
+  {
+    user.role = "Administrator";
+    return;
+  }
+
+  else if (tempRole == 2)
+  {
+    user.role = "Receptionist";
+    return;
+  }
+
+  else if (tempRole == 3)
+  {
+    user.role = "Vet Staff Member";
+    return;
+  }
+
+  else
+  {
+    cout << "Invalid Choice!!!" << endl;
+    return;
+  }
+
   getline(cin, user.role);
 
   ofstream userFile(USER_FILE, ios::app);

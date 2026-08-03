@@ -12,16 +12,12 @@
 using namespace std;
 
 const string OWNERS_FILE = "D:\\Pet Care Management System Files\\owners.txt";
-
 const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
-
 const string APPOINTMENTS_FILE = "D:\\Pet Care Management System Files\\appointments.txt";
+const string USERS_FILE = "D:\\Pet Care Management System Files\\users.txt";
 
 const string TEMP_FILE_1 = "D:\\Pet Care Management System Files\\temp1.txt";
-
 const string TEMP_FILE_2 = "D:\\Pet Care Management System Files\\temp2.txt";
-
-const string USER_FILE = "D:\\Pet Care Management System Files\\user.txt";
 
 struct Owner
 {
@@ -54,11 +50,14 @@ void clearInput()
 
 string generateOwnerID()
 {
-  ifstream file(OWNERS_FILE);
-  string line;
+  int currentID;
   int highestID = 0;
+  int nextID;
 
-  while (getline(file, line))
+  ifstream ownersFile(OWNERS_FILE);
+  string line;
+  
+  while (getline(ownersFile, line))
   {
     stringstream ss(line);
     string id;
@@ -67,7 +66,7 @@ string generateOwnerID()
 
     if (!id.empty())
     {
-      int currentID = stoi(id.substr(3));
+      currentID = stoi(id.substr(3));
 
       if (currentID > highestID)
       {
@@ -75,9 +74,10 @@ string generateOwnerID()
       }
     }
   }
-  file.close();
+  ownersFile.close();
 
-  int nextID = highestID + 1;
+  nextID = highestID + 1;
+
   ostringstream ss;
   ss << "OWN" << setfill('0') << setw(3) << nextID;
   return ss.str();
@@ -85,11 +85,14 @@ string generateOwnerID()
 
 string generatePetID()
 {
-  ifstream file(PETS_FILE);
-  string line;
+  int currentID;
+  int nextID;
   int highestID = 0;
 
-  while (getline(file, line))
+  ifstream petsFile(PETS_FILE);
+  string line;
+  
+  while (getline(petsFile, line))
   {
     stringstream ss(line);
     string id;
@@ -98,7 +101,7 @@ string generatePetID()
 
     if (!id.empty())
     {
-      int currentID = stoi(id.substr(3));
+      currentID = stoi(id.substr(3));
 
       if (currentID > highestID)
       {
@@ -106,9 +109,10 @@ string generatePetID()
       }
     }
   }
-  file.close();
+  petsFile.close();
 
-  int nextID = highestID + 1;
+  nextID = highestID + 1;
+  
   ostringstream ss;
   ss << "PET" << setfill('0') << setw(3) << nextID;
   return ss.str();
@@ -147,7 +151,7 @@ string generateAppointmentID()
 
 int generateUserID()
 {
-  ifstream userFile(USER_FILE);
+  ifstream userFile(USERS_FILE);
   string line;
   int highestID = 0;
 
@@ -201,7 +205,7 @@ bool login(User &loggedInUser)
     cout << "Password: ";
     cin >> enteredPassword;
 
-    ifstream file(USER_FILE);
+    ifstream file(USERS_FILE);
 
     if (!file)
     {
@@ -255,7 +259,7 @@ bool login(User &loggedInUser)
 
 void initializeUserFile()
 {
-  ifstream inputFile(USER_FILE);
+  ifstream inputFile(USERS_FILE);
 
   // If the file already exists, do not create it again
   if (inputFile)
@@ -263,7 +267,7 @@ void initializeUserFile()
     inputFile.close();
     return;
   }
-  ofstream outputFile(USER_FILE);
+  ofstream outputFile(USERS_FILE);
 
   if (!outputFile)
   {
@@ -446,7 +450,7 @@ void addUserAccount()
     return;
   }
 
-  ofstream userFile(USER_FILE, ios::app);
+  ofstream userFile(USERS_FILE, ios::app);
 
   if (!userFile)
   {

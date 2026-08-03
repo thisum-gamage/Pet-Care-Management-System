@@ -56,7 +56,7 @@ string generateOwnerID()
 
   ifstream ownersFile(OWNERS_FILE);
   string line;
-  
+
   while (getline(ownersFile, line))
   {
     stringstream ss(line);
@@ -91,7 +91,7 @@ string generatePetID()
 
   ifstream petsFile(PETS_FILE);
   string line;
-  
+
   while (getline(petsFile, line))
   {
     stringstream ss(line);
@@ -112,7 +112,7 @@ string generatePetID()
   petsFile.close();
 
   nextID = highestID + 1;
-  
+
   ostringstream ss;
   ss << "PET" << setfill('0') << setw(3) << nextID;
   return ss.str();
@@ -1347,26 +1347,6 @@ int main()
           vetStaffMenu(loggedInUser);
         }
       }
-
-      /*cout << "\n   Login as," << endl;
-      cout << "\n1. Administrator" << endl;
-      cout << "2. Receptionist" << endl;
-      cout << "3. Vet Staff Member" << endl;
-      cout << "\nEnter your choice: ";
-      cin >> num;*/
-
-      /* if (num == 1)
-      {
-        administratorMenu(); // to admin login function.
-      }
-      else if (num == 2)
-      {
-        receptionistMenu(); // to reception login function.
-      }
-      else if (num == 3)
-      {
-        vetStaffMenu(); // to vet staff login function.
-      } */
 
       cout << "\n===== Main Menu =====" << endl;
       cout << "1. Login Again" << endl;

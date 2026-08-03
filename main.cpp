@@ -1353,6 +1353,7 @@ int main()
       cout << "2. Exit System" << endl;
       cout << "Enter your choice: ";
       cin >> mainChoice;
+
       if (mainChoice != 1 && mainChoice != 2)
       {
         cout << "Invalid choice. The system will close." << endl;

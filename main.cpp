@@ -86,7 +86,6 @@ string generateOwnerID()
   {
     stringstream ss(line);
     string id;
-
     getline(ss, id, ',');
 
     if (!id.empty())

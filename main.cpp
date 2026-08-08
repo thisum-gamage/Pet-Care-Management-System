@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <cctype>
 #include <iomanip>
-#include <algorithm>
 
 using namespace std;
 
@@ -19,14 +18,29 @@ const string USERS_FILE = "D:\\Pet Care Management System Files\\users.txt";
 const string TEMP_FILE_1 = "D:\\Pet Care Management System Files\\temp1.txt";
 const string TEMP_FILE_2 = "D:\\Pet Care Management System Files\\temp2.txt";
 
+// -----------------------------
+// Structures / Records
+// -----------------------------
+
 struct Owner
 {
-  string ownerID, firstName, lastName, address, registeredDate, mobileNumber;
+  string ownerID;
+  string firstName;
+  string lastName;
+  string mobileNumber;
+  string address;
+  string registeredDate;
 };
 
 struct Pet
 {
-  string petID, ownerID, petName, petType, breed, gender, specialNotes;
+  string petID;
+  string ownerID;
+  string petName;
+  string petType;
+  string breed;
+  string gender;
+  string specialNotes;
   int age;
 };
 
@@ -1318,7 +1332,7 @@ int main()
 {
   initializeUserFile();
   User loggedInUser;
-  int choice, num, mainChoice;
+  int choice, mainChoice;
 
   do
   {

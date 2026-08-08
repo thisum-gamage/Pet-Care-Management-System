@@ -46,7 +46,14 @@ struct Pet
 
 struct Appointment
 {
-  string appointmentNumber, petID, serviceType, symptoms, treatmentNotes, appointmentStatus, lastUpdatedDate, appointmentDate;
+  string appointmentNumber;
+  string petID;
+  string appointmentDate;
+  string serviceType;
+  string symptoms;
+  string treatmentNotes;
+  string appointmentStatus;
+  string lastUpdatedDate;
 };
 
 struct User
@@ -56,6 +63,10 @@ struct User
   string password;
   string role;
 };
+
+// ============================================================
+// General Input / Validation Functions
+// ============================================================
 
 void clearInput()
 {
@@ -1336,7 +1347,9 @@ int main()
 
   do
   {
-    cout << "\n===== Pet Care Management System =====" << endl;
+    cout << "\n========================================" << endl;
+    cout << "       PET CARE MANAGEMENT SYSTEM" << endl;
+    cout << "========================================" << endl;
     cout << "\n1. Login";
     cout << "\n2. Exit" << endl;
     cout << "\nEnter your choice: ";

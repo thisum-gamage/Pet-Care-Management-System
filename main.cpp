@@ -1205,30 +1205,29 @@ void viewPetsByOwner()
 // ========================================================
 void ownerManagementMenu()
 {
-  int subChoice;
-  cout << "\n========== Pet Owner Management ==========" << endl;
-  cout << "1. Add Pet Owner" << endl;
-  cout << "2. Update Pet Owner" << endl;
-  cout << "3. Back" << endl;
+  while (true)
+  {
 
-  cout << "\nEnter Your Choice: ";
-  cin >> subChoice;
+    int subChoice;
+    cout << "\n========== Pet Owner Management ==========" << endl;
+    cout << "1. Add Pet Owner" << endl;
+    cout << "2. Update Pet Owner" << endl;
+    cout << "3. Back" << endl;
 
-  if (subChoice == 1)
-  {
-    addPetOwner();
-  }
-  else if (subChoice == 2)
-  {
-    updatePetOwner();
-  }
-  else if (subChoice == 3)
-  {
-    return;
-  }
-  else
-  {
-    cout << "Invalid Choice!";
+    cout << "\nEnter Your Choice: ";
+    cin >> subChoice;
+
+    switch (subChoice)
+    {
+    case 1:
+      addPetOwner();
+      break;
+    case 2:
+      updatePetOwner();
+      break;
+    case 3:
+      return;
+    }
   }
 }
 void administratorMenu(const User &currentUser)

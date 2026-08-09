@@ -1254,17 +1254,19 @@ void administratorMenu(const User &currentUser)
     switch (option)
     {
     case 1:
-
+      ownerManagementMenu();
+      break;
+      
     case 2:
-      addPetRecord(); // Add pet records 🐾
+      addPetRecord(); 
       break;
 
     case 3:
-      addAppointment(); // Add appointments 📅
+      addAppointment(); 
       break;
 
     case 4:
-      updateAppointment(); // Track appointments 🔍
+      updateAppointment(); 
       break;
 
     case 5:

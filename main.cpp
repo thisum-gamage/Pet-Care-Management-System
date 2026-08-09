@@ -10,18 +10,16 @@
 
 using namespace std;
 
-// ========================================================
 //                         Files
 // ========================================================
 
-const string OWNERS_FILE = "D:\\Pet Care Management System Files\\owners.txt";
-const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
-const string APPOINTMENTS_FILE = "D:\\Pet Care Management System Files\\appointments.txt";
-const string USERS_FILE = "D:\\Pet Care Management System Files\\users.txt";
-const string TEMP_FILE_1 = "D:\\Pet Care Management System Files\\temp1.txt";
-const string TEMP_FILE_2 = "D:\\Pet Care Management System Files\\temp2.txt";
+const string OWNERS_FILE = "owners.txt";
+const string PETS_FILE = "pets.txt";
+const string APPOINTMENTS_FILE = "appointments.txt";
+const string USERS_FILE = "users.txt";
+const string TEMP_FILE_1 = "temp1.txt";
+const string TEMP_FILE_2 = "temp2.txt";
 
-// ========================================================
 //              Structures & Input Validation
 // ========================================================
 
@@ -86,7 +84,6 @@ string convertToLower(string text)
   return text;
 }
 
-// ========================================================
 //                      ID generators
 // ========================================================
 
@@ -130,10 +127,10 @@ string generatePetID()
   int nextID;
   int highestID = 0;
 
-  ifstream petsFile(PETS_FILE);
+  ifstream file(PETS_FILE);
   string line;
 
-  while (getline(petsFile, line))
+  while (getline(file, line))
   {
     stringstream ss(line);
     string id;
@@ -150,7 +147,7 @@ string generatePetID()
       }
     }
   }
-  petsFile.close();
+  file.close();
 
   nextID = highestID + 1;
 
@@ -161,9 +158,11 @@ string generatePetID()
 
 string generateAppointmentID()
 {
+  int nextID;
+  int highestID = 0;
+
   ifstream file(APPOINTMENTS_FILE);
   string line;
-  int highestID = 0;
 
   while (getline(file, line))
   {
@@ -184,7 +183,8 @@ string generateAppointmentID()
   }
   file.close();
 
-  int nextID = highestID + 1;
+  nextID = highestID + 1;
+
   ostringstream ss;
   ss << "APP" << setfill('0') << setw(3) << nextID;
   return ss.str();
@@ -192,11 +192,11 @@ string generateAppointmentID()
 
 int generateUserID()
 {
-  ifstream userFile(USERS_FILE);
+  ifstream file(USERS_FILE);
   string line;
   int highestID = 0;
 
-  while (getline(userFile, line))
+  while (getline(file, line))
   {
     stringstream ss(line);
     string id;
@@ -213,9 +213,11 @@ int generateUserID()
       }
     }
   }
-  userFile.close();
+  file.close();
   return highestID + 1;
 }
+
+// --------------------------------------------------------
 
 bool login(User &loggedInUser)
 {
@@ -225,7 +227,7 @@ bool login(User &loggedInUser)
 
   while (attempts > 0)
   {
-    cout << "\n===== Pet System Login =====" << endl;
+    cout << "\n======== Pet System Login ========" << endl;
 
     cout << "Username: ";
     cin >> enteredUsername;
@@ -265,7 +267,6 @@ bool login(User &loggedInUser)
       {
         loggedInUser = user;
 
-        file.close();
         cout << "\nLogin successful." << endl;
         cout << "Welcome, " << loggedInUser.username << "!" << endl;
         cout << "Role: " << loggedInUser.role << endl;
@@ -311,6 +312,9 @@ void initializeUserFile()
 
   cout << "Default user accounts were created." << endl;
 }
+
+//                         Adding
+// ========================================================
 
 void addPetOwner()
 {
@@ -477,21 +481,24 @@ void addUserAccount()
     return;
   }
 
-  ofstream userFile(USERS_FILE, ios::app);
+  ofstream file(USERS_FILE, ios::app);
 
-  if (!userFile)
+  if (!file)
   {
     cout << "Unable to open the employee file." << endl;
     return;
   }
 
-  userFile << user.userID << "," << user.username << "," << user.password << "," << user.role << endl;
+  file << user.userID << "," << user.username << "," << user.password << "," << user.role << endl;
 
-  userFile.close();
+  file.close();
 
   cout << "Employee inserted successfully." << endl;
   cout << "Employee ID: " << user.userID << endl;
 }
+
+//                        Searching
+// ========================================================
 
 void searchByAppointmentIDOrPetID(string searchID)
 {
@@ -810,6 +817,9 @@ void searchByOwnerIDtoAppointmentID(string searchID)
   }
 }
 
+//                         Update
+// ========================================================
+
 void trackAppointment()
 {
   clearInput();
@@ -987,6 +997,9 @@ void updateAppointment()
     cout << "Appointment record not found." << endl;
   }
 }
+
+//                         Viewing
+// ========================================================
 
 void viewOwnerList()
 {
@@ -1187,6 +1200,9 @@ void viewPetsByOwner()
     cout << "No pets found for this Owner ID." << endl;
   }
 }
+
+//                         Menus
+// ========================================================
 
 void administratorMenu(const User &currentUser)
 {
@@ -1400,6 +1416,9 @@ void vetStaffMenu(const User &currentUser)
   } while (option != 3);
 }
 
+//                       Main Program
+// ========================================================
+
 int main()
 {
   initializeUserFile();
@@ -1411,7 +1430,7 @@ int main()
     cout << "\n========================================" << endl;
     cout << "       PET CARE MANAGEMENT SYSTEM" << endl;
     cout << "========================================" << endl;
-    cout << "\n1. Login";
+    cout << "\n1. Login" << endl;
     cout << "\n2. Exit" << endl;
     cout << "\nEnter your choice: ";
     cin >> choice;

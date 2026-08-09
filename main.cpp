@@ -10,17 +10,20 @@
 
 using namespace std;
 
+// ========================================================
+//                         Files
+// ========================================================
+
 const string OWNERS_FILE = "D:\\Pet Care Management System Files\\owners.txt";
 const string PETS_FILE = "D:\\Pet Care Management System Files\\pets.txt";
 const string APPOINTMENTS_FILE = "D:\\Pet Care Management System Files\\appointments.txt";
 const string USERS_FILE = "D:\\Pet Care Management System Files\\users.txt";
-
 const string TEMP_FILE_1 = "D:\\Pet Care Management System Files\\temp1.txt";
 const string TEMP_FILE_2 = "D:\\Pet Care Management System Files\\temp2.txt";
 
-// -----------------------------
-// Structures / Records
-// -----------------------------
+// ========================================================
+//              Structures & Input Validation
+// ========================================================
 
 struct Owner
 {
@@ -64,25 +67,39 @@ struct User
   string role;
 };
 
-// ============================================================
-// General Input / Validation Functions
-// ============================================================
-
 void clearInput()
 {
   cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+string convertToLower(string text)
+{
+  transform(
+      text.begin(),
+      text.end(),
+      text.begin(),
+      [](unsigned char character)
+      {
+        return static_cast<char>(tolower(character));
+      });
+
+  return text;
+}
+
+// ========================================================
+//                      ID generators
+// ========================================================
+
 string generateOwnerID()
 {
   int currentID;
-  int highestID = 0;
   int nextID;
+  int highestID = 0;
 
-  ifstream ownersFile(OWNERS_FILE);
+  ifstream file(OWNERS_FILE);
   string line;
 
-  while (getline(ownersFile, line))
+  while (getline(file, line))
   {
     stringstream ss(line);
     string id;
@@ -98,7 +115,7 @@ string generateOwnerID()
       }
     }
   }
-  ownersFile.close();
+  file.close();
 
   nextID = highestID + 1;
 
@@ -198,20 +215,6 @@ int generateUserID()
   }
   userFile.close();
   return highestID + 1;
-}
-
-string convertToLower(string text)
-{
-  transform(
-      text.begin(),
-      text.end(),
-      text.begin(),
-      [](unsigned char character)
-      {
-        return static_cast<char>(tolower(character));
-      });
-
-  return text;
 }
 
 bool login(User &loggedInUser)
@@ -547,15 +550,15 @@ void searchByOwnerID(string searchID)
   Owner owner;
   bool found = false;
 
-  ifstream ownersFile(OWNERS_FILE);
+  ifstream file(OWNERS_FILE);
 
-  if (!ownersFile)
+  if (!file)
   {
     cout << "No owner records are available." << endl;
     return;
   }
 
-  while (getline(ownersFile, line))
+  while (getline(file, line))
   {
     stringstream ss(line);
 
@@ -579,7 +582,7 @@ void searchByOwnerID(string searchID)
       found = true;
     }
   }
-  ownersFile.close();
+  file.close();
 
   if (!found)
   {
@@ -1123,6 +1126,65 @@ void viewAppointmentList()
   if (!recordsAvailable)
   {
     cout << "No appointment records are available." << endl;
+  }
+}
+
+void viewPetsByOwner()
+{
+  string searchOwnerID;
+  clearInput();
+  cout << "Enter Owner ID to view pets: ";
+  getline(cin, searchOwnerID);
+
+  ifstream file(PETS_FILE);
+  string line, tempAge;
+  bool found = false;
+
+  if (!file)
+  {
+    cout << "No pet records are available." << endl;
+    return;
+  }
+
+  cout << "\n===== Pets Registered Under Owner: " << searchOwnerID << " =====" << endl;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    Pet pet;
+
+    getline(ss, pet.petID, ',');
+    getline(ss, pet.ownerID, ',');
+    getline(ss, pet.petName, ',');
+    getline(ss, pet.petType, ',');
+    getline(ss, pet.breed, ',');
+    getline(ss, tempAge, ',');
+    try
+    {
+      pet.age = stoi(tempAge);
+    }
+    catch (...)
+    {
+      pet.age = 0;
+    }
+    getline(ss, pet.gender, ',');
+    getline(ss, pet.specialNotes, ',');
+
+    if (pet.ownerID == searchOwnerID)
+    {
+      cout << "Pet ID   : " << pet.petID << endl;
+      cout << "Pet Name : " << pet.petName << endl;
+      cout << "Pet Type : " << pet.petType << endl;
+      cout << "Breed    : " << pet.breed << endl;
+      cout << "------------------------------" << endl;
+      found = true;
+    }
+  }
+  file.close();
+
+  if (!found)
+  {
+    cout << "No pets found for this Owner ID." << endl;
   }
 }
 

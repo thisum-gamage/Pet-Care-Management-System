@@ -1203,21 +1203,51 @@ void viewPetsByOwner()
 
 //                         Menus
 // ========================================================
+void ownerManagementMenu()
+{
+  int subChoice;
+  cout << "\n========== Pet Owner Management ==========" << endl;
+  cout << "1. Add Pet Owner" << endl;
+  cout << "2. Update Pet Owner" << endl;
+  cout << "3. Back" << endl;
 
+  cout << "\nEnter Your Choice: ";
+  cin >> subChoice;
+
+  if (subChoice == 1)
+  {
+    addPetOwner();
+  }
+  else if (subChoice == 2)
+  {
+    updatePetOwner();
+  }
+  else if (subChoice == 3)
+  {
+    return;
+  }
+  else
+  {
+    cout << "Invalid Choice!";
+  }
+}
 void administratorMenu(const User &currentUser)
 {
   int option;
-  int choice, subChoice1;
+  int choice;
+  int subChoice;
+
   do
   {
-    cout << "\n------Welcome to Administrator Section------" << endl;
-    cout << "1. Pet Owners" << endl;
-    cout << "2. Pet Records" << endl;
-    cout << "3. Appointments" << endl;
-    cout << "4. Appointments Updates" << endl;
-    cout << "5. Reports" << endl;
-    cout << "6. User Accounts" << endl;
-    cout << "7. Logout" << endl;
+    cout << "\n======= Welcome to Administrator Section =======" << endl;
+    cout << "1. Pet Owner Management" << endl;
+    cout << "2. Add Pet Records" << endl;
+    cout << "3. Add Appointments" << endl;
+    cout << "4. Update Appointments " << endl;
+    cout << "5. Track Appointments" << endl;
+    cout << "6. Reports" << endl;
+    cout << "7. User Accounts" << endl;
+    cout << "8. Logout" << endl;
 
     cout << "\nEnter your choice: ";
     cin >> option;
@@ -1225,24 +1255,6 @@ void administratorMenu(const User &currentUser)
     switch (option)
     {
     case 1:
-      cout << "1. Add pet owner details" << endl;
-      cout << "2. Update pet owner details" << endl;
-      cout << "\nEnter Your Choice: ";
-      cin >> subChoice1; // Add & update pet owner details 👤
-
-      if (subChoice1 == 1)
-      {
-        addPetOwner();
-      }
-      else if (subChoice1 == 2)
-      {
-        updatePetOwner();
-      }
-      else
-      {
-        cout << "Invalid Choice!";
-      }
-      break;
 
     case 2:
       addPetRecord(); // Add pet records 🐾
@@ -1257,9 +1269,11 @@ void administratorMenu(const User &currentUser)
       break;
 
     case 5:
-      cout << "1. Owners" << endl;
-      cout << "2. Pets" << endl;
-      cout << "3. Appointment" << endl;
+      cout << "1. View All Owners" << endl;
+      cout << "2. View All Pets" << endl;
+      cout << "3. View Pets by Owner ID" << endl;
+      cout << "4. View All Appointments" << endl;
+
       cout << "\nEnter Your Choice: ";
       cin >> choice;
 
@@ -1273,6 +1287,11 @@ void administratorMenu(const User &currentUser)
       }
 
       else if (choice == 3)
+      {
+        viewPetsByOwner();
+      }
+
+      else if (choice == 4)
       {
         viewAppointmentList();
       }

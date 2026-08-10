@@ -267,8 +267,8 @@ bool login(User &loggedInUser)
       {
         loggedInUser = user;
 
-        cout << "\nLogin successful." << endl;
-        cout << "Welcome, " << loggedInUser.username << "!" << endl;
+        cout << "\nLogin Successful..." << endl;
+        cout << "\nWelcome, " << loggedInUser.username << "!" << endl;
         cout << "Role: " << loggedInUser.role << endl;
 
         return true;
@@ -1230,6 +1230,7 @@ void ownerManagementMenu()
     }
   }
 }
+
 void administratorMenu(const User &currentUser)
 {
   int option;
@@ -1238,8 +1239,9 @@ void administratorMenu(const User &currentUser)
 
   do
   {
-    cout << "\n======= Welcome to Administrator Section =======" << endl;
-    cout << "1. Pet Owner Management" << endl;
+    cout << "\n===== Welcome to Administrator Section =====" << endl;
+    cout << "----------------------------------------------" << endl;
+    cout << "\n1. Pet Owner Management" << endl;
     cout << "2. Add Pet Records" << endl;
     cout << "3. Add Appointments" << endl;
     cout << "4. Update Appointments " << endl;
@@ -1248,7 +1250,7 @@ void administratorMenu(const User &currentUser)
     cout << "7. User Accounts" << endl;
     cout << "8. Logout" << endl;
 
-    cout << "\nEnter your choice: ";
+    cout << "\nEnter Your Choice: ";
     cin >> option;
 
     switch (option)
@@ -1256,17 +1258,17 @@ void administratorMenu(const User &currentUser)
     case 1:
       ownerManagementMenu();
       break;
-      
+
     case 2:
-      addPetRecord(); 
+      addPetRecord();
       break;
 
     case 3:
-      addAppointment(); 
+      addAppointment();
       break;
 
     case 4:
-      updateAppointment(); 
+      updateAppointment();
       break;
 
     case 5:
@@ -1451,8 +1453,8 @@ int main()
     cout << "       PET CARE MANAGEMENT SYSTEM" << endl;
     cout << "========================================" << endl;
     cout << "\n1. Login" << endl;
-    cout << "\n2. Exit" << endl;
-    cout << "\nEnter your choice: ";
+    cout << "2. Exit" << endl;
+    cout << "\nEnter Your Choice: ";
     cin >> choice;
 
     if (choice == 1)

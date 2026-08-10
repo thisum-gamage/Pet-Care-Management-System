@@ -1445,7 +1445,7 @@ int main()
 {
   initializeUserFile();
   User loggedInUser;
-  int choice, mainChoice;
+  int choice;
 
   do
   {
@@ -1454,11 +1454,14 @@ int main()
     cout << "========================================" << endl;
     cout << "\n1. Login" << endl;
     cout << "2. Exit" << endl;
+
     cout << "\nEnter Your Choice: ";
     cin >> choice;
 
-    if (choice == 1)
+    switch (choice)
     {
+    case 1:
+
       if (login(loggedInUser))
       {
         if (loggedInUser.role == "Administrator")
@@ -1475,35 +1478,32 @@ int main()
         {
           vetStaffMenu(loggedInUser);
         }
+
+        else
+        {
+          cout << "\nAccess Denied: Unrecognized User Role!" << endl;
+        }
       }
 
-      cout << "\n===== Main Menu =====" << endl;
-      cout << "1. Login Again" << endl;
-      cout << "2. Exit System" << endl;
-      cout << "Enter your choice: ";
-      cin >> mainChoice;
-
-      if (mainChoice != 1 && mainChoice != 2)
+      else
       {
-        cout << "Invalid choice. The system will close." << endl;
-        mainChoice = 2;
+        cout << "\nLogin Failed. Please try again." << endl;
       }
+      break;
+
+    case 2:
+      cout << "\nExiting system..." << endl;
+      break;
+
+    default:
+      cout << "\nInvalid Choice! Please select 1 or 2." << endl;
+      break;
     }
 
-    else if (choice == 2)
-    {
-      mainChoice = 2;
-    }
+  } while (choice != 2);
 
-    else
-    {
-      cout << "Invalid Choice !!!" << endl;
-      mainChoice = 1;
-    }
-
-  } while (mainChoice != 2);
-
-  cout << "\nThank you for using the Pet Management System." << endl;
-
+  cout << "\nThank you for using the Pet Care Management System!" << endl;
+  cout << "" << endl;
+  
   return 0;
 }

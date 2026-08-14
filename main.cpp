@@ -1203,6 +1203,48 @@ void viewPetsByOwner()
 
 //                         Menus
 // ========================================================
+
+void reportsMenu()
+{
+  int choice;
+
+  cout << "\n========== Reports ==========\n";
+  cout << "1. View All Owners\n";
+  cout << "2. View All Pets\n";
+  cout << "3. View Owners & Their Pets\n";
+  cout << "4. View All Appointments\n";
+  cout << "5. View Pending Appointments\n";
+  cout << "6. View Completed Appointments\n";
+  cout << "7. Back\n";
+
+  cout << "\nEnter Your Choice: ";
+  cin >> choice;
+
+  switch (choice)
+  {
+  case 1:
+    viewOwnerList();
+    break;
+  case 2:
+    viewPetList();
+    break;
+  case 3:
+    viewPetsByOwner();
+    break;
+  case 4:
+    viewAppointmentList();
+    break;
+  case 5:
+    viewAppointmentList("Pending");
+    break;
+  case 6:
+    viewAppointmentList("Completed");
+    break;
+  case 7:
+    return;
+  }
+}
+
 void ownerManagementMenu()
 {
   while (true)
@@ -1234,8 +1276,6 @@ void ownerManagementMenu()
 void administratorMenu(const User &currentUser)
 {
   int option;
-  int choice;
-  int subChoice;
 
   do
   {
@@ -1272,52 +1312,25 @@ void administratorMenu(const User &currentUser)
       break;
 
     case 5:
-      cout << "1. View All Owners" << endl;
-      cout << "2. View All Pets" << endl;
-      cout << "3. View Pets by Owner ID" << endl;
-      cout << "4. View All Appointments" << endl;
-
-      cout << "\nEnter Your Choice: ";
-      cin >> choice;
-
-      if (choice == 1)
-      {
-        viewOwnerList();
-      }
-      else if (choice == 2)
-      {
-        viewPetList();
-      }
-
-      else if (choice == 3)
-      {
-        viewPetsByOwner();
-      }
-
-      else if (choice == 4)
-      {
-        viewAppointmentList();
-      }
-
-      else
-      {
-        cout << "Invalid Choice!";
-      }
-      break;
+      trackAppointment();
 
     case 6:
-      cout << "User Accounts Management Section" << endl;
-      addUserAccount();
+      reportsMenu();
       break;
 
     case 7:
-      cout << "Logging out..." << endl;
+      addUserAccount();
       break;
+
+    case 8:
+      cout << "Logging out..." << endl;
+      return;
 
     default:
       cout << "Invalid option!" << endl;
+      break;
     }
-  } while (option != 7);
+  } while (option != 8);
 }
 
 void receptionistMenu(const User &currentUser)

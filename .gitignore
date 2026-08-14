@@ -5,3 +5,10 @@
 
 # IDE - VS Code settings 
 .vscode/
+
+# Code Runner Extension Temporary Files
+tempCodeRunnerFile.cpp
+*.tempCodeRunnerFile.*
+
+# Database / Local Storage Text Files
+*.txt

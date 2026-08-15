@@ -1301,37 +1301,48 @@ void viewAppointmentsByStatus()
 void reportsMenu()
 {
   int choice;
-
-  cout << "\n========== Reports ==========" << endl;
-  cout << "\n1. View All Owners" << endl;
-  cout << "2. View All Pets" << endl;
-  cout << "3. View Owners & Their Pets" << endl;
-  cout << "4. View All Appointments" << endl;
-  cout << "5. View Pending/Completed Appointments" << endl;
-  cout << "6. Back" << endl;
-
-  cout << "\nEnter Your Choice: ";
-  cin >> choice;
-
-  switch (choice)
+  while (true)
   {
-  case 1:
-    viewOwnerList();
-    break;
-  case 2:
-    viewPetList();
-    break;
-  case 3:
-    viewPetsByOwner();
-    break;
-  case 4:
-    viewAppointmentList();
-    break;
-  case 5:
-    viewAppointmentsByStatus();
-    break;
-  case 6:
-    return;
+    cout << "\n========== Reports ==========" << endl;
+    cout << "\n1. View All Owners" << endl;
+    cout << "2. View All Pets" << endl;
+    cout << "3. View Owners & Their Pets" << endl;
+    cout << "4. View All Appointments" << endl;
+    cout << "5. View Pending/Completed Appointments" << endl;
+    cout << "6. Back" << endl;
+
+    cout << "\nEnter Your Choice: ";
+    cin >> choice;
+
+    switch (choice)
+    {
+    case 1:
+      viewOwnerList();
+      break;
+
+    case 2:
+      viewPetList();
+      break;
+
+    case 3:
+      viewPetsByOwner();
+      break;
+
+    case 4:
+      viewAppointmentList();
+      break;
+
+    case 5:
+      viewAppointmentsByStatus();
+      break;
+
+    case 6:
+      return;
+
+    default:
+      cout << "Invalid Choice!" << endl;
+      break;
+    }
   }
 }
 

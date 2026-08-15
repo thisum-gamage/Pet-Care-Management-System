@@ -842,7 +842,7 @@ void trackAppointment()
   cin >> searchID;
 
   string searchIDUpper = convertToUpper(searchID);
-  string prefix = searchIDUpper.substr(0, 3);
+  prefix = searchIDUpper.substr(0, 3);
 
   if (prefix == "APP" || prefix == "PET")
   {
@@ -870,6 +870,7 @@ void updatePetOwner()
   cout << "\n===== Update Pet Owner =====" << endl;
   cout << "Enter Owner ID to update: ";
   cin >> updateID;
+  updateID = convertToUpper(updateID);
 
   ifstream inputFile(OWNERS_FILE);
   ofstream tempFile2(TEMP_FILE_2);
@@ -946,6 +947,7 @@ void updateAppointment()
   cout << "\n===== Update Appointment =====" << endl;
   cout << "Enter Pet ID/Appointment ID to update: ";
   cin >> updateID;
+  updateID = convertToUpper(updateID);
 
   ifstream inputFile(APPOINTMENTS_FILE);
   ofstream tempFile1(TEMP_FILE_1);
@@ -1156,8 +1158,10 @@ void viewPetsByOwner()
 {
   string searchOwnerID;
   clearInput();
+
   cout << "Enter Owner ID to view pets: ";
   getline(cin, searchOwnerID);
+  searchOwnerID = convertToUpper(searchOwnerID);
 
   ifstream file(PETS_FILE);
   string line, tempAge;

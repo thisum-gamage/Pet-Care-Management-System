@@ -1234,6 +1234,86 @@ void viewPetsByOwner()
   }
 }
 
+void viewAppointmentsByStatus()
+{
+  string line;
+  int choice;
+  string status = "";
+  bool recordsAvailable = false;
+
+  ifstream file(APPOINTMENTS_FILE);
+
+  if (!file)
+  {
+    cout << "No appointment records are available.\n";
+    return;
+  }
+
+  cout << "\n1. View Pending Appointments" << endl;
+  cout << "2. View Completed Appointments" << endl;
+  cout << "3. Back to Main Menu" << endl;
+
+  cout << "Enter Your Choice: " << endl;
+  cin >> choice;
+
+  if (choice == 1)
+  {
+    status = "Pending";
+  }
+
+  else if (choice == 2)
+  {
+    status = "Completed";
+  }
+
+  else if (choice == 3)
+  {
+    return;
+  }
+
+  else
+  {
+    cout << "\nInvalid Choice!" << endl;
+    return;
+  }
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    Appointment appointment;
+
+    getline(ss, appointment.appointmentNumber, ',');
+    getline(ss, appointment.petID, ',');
+    getline(ss, appointment.appointmentDate, ',');
+    getline(ss, appointment.serviceType, ',');
+    getline(ss, appointment.symptoms, ',');
+    getline(ss, appointment.treatmentNotes, ',');
+    getline(ss, appointment.appointmentStatus, ',');
+    getline(ss, appointment.lastUpdatedDate, ',');
+
+    if (appointment.appointmentStatus == status)
+    {
+      cout << "\n----------------------------------------" << endl;
+      cout << "Appointment Number : " << appointment.appointmentNumber << endl;
+      cout << "Pet ID             : " << appointment.petID << endl;
+      cout << "Appointment Date   : " << appointment.appointmentDate << endl;
+      cout << "Service Type       : " << appointment.serviceType << endl;
+      cout << "Symptoms           : " << appointment.symptoms << endl;
+      cout << "Treatment Notes    : " << appointment.treatmentNotes << endl;
+      cout << "Appointment Status : " << appointment.appointmentStatus << endl;
+      cout << "Last Updated Date  : " << appointment.lastUpdatedDate << endl;
+      cout << "----------------------------------------" << endl;
+
+      recordsAvailable = true;
+    }
+  }
+
+  if (!recordsAvailable)
+  {
+    cout << "No matching appointments are available." << endl;
+  }
+}
+
 //                         Menus
 // ========================================================
 
@@ -1246,9 +1326,8 @@ void reportsMenu()
   cout << "2. View All Pets" << endl;
   cout << "3. View Owners & Their Pets" << endl;
   cout << "4. View All Appointments" << endl;
-  cout << "5. View Pending Appointments" << endl;
-  cout << "6. View Completed Appointments" << endl;
-  cout << "7. Back" << endl;
+  cout << "5. View Pending/Completed Appointments" << endl;
+  cout << "6. Back" << endl;
 
   cout << "\nEnter Your Choice: ";
   cin >> choice;
@@ -1268,12 +1347,9 @@ void reportsMenu()
     viewAppointmentList();
     break;
   case 5:
-    viewAppointmentList("Pending");
+    viewAppointmentsByStatus();
     break;
   case 6:
-    viewAppointmentList("Completed");
-    break;
-  case 7:
     return;
   }
 }

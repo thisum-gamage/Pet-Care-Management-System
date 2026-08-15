@@ -503,6 +503,8 @@ void addUserAccount()
 
 void searchByAppointmentIDOrPetID(string searchID)
 {
+  searchID = convertToUpper(searchID);
+
   string line;
   Appointment appointment;
   bool found = false;
@@ -554,6 +556,8 @@ void searchByAppointmentIDOrPetID(string searchID)
 
 void searchByOwnerID(string searchID)
 {
+  searchID = convertToUpper(searchID);
+
   string line;
   Owner owner;
   bool found = false;
@@ -714,12 +718,16 @@ void searchByMobileNumber(string searchID)
 
 void searchByOwnerIDtoAppointmentID(string searchID)
 {
+  searchID = convertToUpper(searchID);
+
   string line;
   string tempAge;
+  string foundOwnerID = "";
+
   Owner owner;
   Pet pet;
   Appointment appointment;
-  string foundOwnerID = "";
+
   bool ownerFound = false;
   bool appointmentFound = false;
 

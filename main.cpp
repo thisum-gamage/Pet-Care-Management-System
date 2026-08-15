@@ -217,6 +217,7 @@ int generateUserID()
   return highestID + 1;
 }
 
+//                      Initializing
 // --------------------------------------------------------
 
 bool login(User &loggedInUser)
@@ -850,7 +851,7 @@ void searchByOwnerIDtoAppointmentID(string searchID)
   }
 }
 
-//                         Update
+//                    Update & Tracking
 // ========================================================
 
 void trackAppointment()

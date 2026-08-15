@@ -313,6 +313,39 @@ void initializeUserFile()
   cout << "Default user accounts were created." << endl;
 }
 
+void initializeLogin()
+{
+  User loggedInUser;
+
+  if (login(loggedInUser))
+  {
+    if (loggedInUser.role == "Administrator")
+    {
+      administratorMenu(loggedInUser);
+    }
+
+    else if (loggedInUser.role == "Receptionist")
+    {
+      receptionistMenu(loggedInUser);
+    }
+
+    else if (loggedInUser.role == "Vet Staff Member")
+    {
+      vetStaffMenu(loggedInUser);
+    }
+
+    else
+    {
+      cout << "\nAccess Denied: Unrecognized User Role!" << endl;
+    }
+  }
+
+  else
+  {
+    cout << "\nLogin Failed. Please try again." << endl;
+  }
+}
+
 //                         Adding
 // ========================================================
 
@@ -1457,7 +1490,7 @@ void vetStaffMenu(const User &currentUser)
 int main()
 {
   initializeUserFile();
-  User loggedInUser;
+
   int choice;
 
   do
@@ -1474,34 +1507,7 @@ int main()
     switch (choice)
     {
     case 1:
-
-      if (login(loggedInUser))
-      {
-        if (loggedInUser.role == "Administrator")
-        {
-          administratorMenu(loggedInUser);
-        }
-
-        else if (loggedInUser.role == "Receptionist")
-        {
-          receptionistMenu(loggedInUser);
-        }
-
-        else if (loggedInUser.role == "Vet Staff Member")
-        {
-          vetStaffMenu(loggedInUser);
-        }
-
-        else
-        {
-          cout << "\nAccess Denied: Unrecognized User Role!" << endl;
-        }
-      }
-
-      else
-      {
-        cout << "\nLogin Failed. Please try again." << endl;
-      }
+      initializeLogin();
       break;
 
     case 2:
@@ -1509,10 +1515,9 @@ int main()
       break;
 
     default:
-      cout << "\nInvalid Choice! Please select 1 or 2." << endl;
+      cout << "\nInvalid Choice!!! Please select 1 or 2." << endl;
       break;
     }
-
   } while (choice != 2);
 
   cout << "\nThank you for using the Pet Care Management System!" << endl;

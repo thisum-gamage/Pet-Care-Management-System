@@ -70,7 +70,7 @@ void clearInput()
   cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-string convertToLower(string text)
+string convertToUpper(string text)
 {
   transform(
       text.begin(),
@@ -78,7 +78,7 @@ string convertToLower(string text)
       text.begin(),
       [](unsigned char character)
       {
-        return static_cast<char>(tolower(character));
+        return static_cast<char>(toupper(character));
       });
 
   return text;
@@ -312,39 +312,6 @@ void initializeUserFile()
   outputFile.close();
 
   cout << "Default user accounts were created." << endl;
-}
-
-void initializeLogin()
-{
-  User loggedInUser;
-
-  if (login(loggedInUser))
-  {
-    if (loggedInUser.role == "Administrator")
-    {
-      administratorMenu(loggedInUser);
-    }
-
-    else if (loggedInUser.role == "Receptionist")
-    {
-      receptionistMenu(loggedInUser);
-    }
-
-    else if (loggedInUser.role == "Vet Staff Member")
-    {
-      vetStaffMenu(loggedInUser);
-    }
-
-    else
-    {
-      cout << "\nAccess Denied: Unrecognized User Role!" << endl;
-    }
-  }
-
-  else
-  {
-    cout << "\nLogin Failed. Please try again." << endl;
-  }
 }
 
 //                         Adding
@@ -866,7 +833,8 @@ void trackAppointment()
   cout << "Enter Appointment ID/Pet ID/Owner ID/Mobile Number: " << endl;
   cin >> searchID;
 
-  prefix = searchID.substr(0, 3);
+  string searchIDUpper = convertToUpper(searchID);
+  string prefix = searchIDUpper.substr(0, 3);
 
   if (prefix == "APP" || prefix == "PET")
   {
@@ -1425,6 +1393,7 @@ void administratorMenu(const User &currentUser)
 
     case 5:
       trackAppointment();
+      break;
 
     case 6:
       reportsMenu();
@@ -1533,6 +1502,39 @@ void vetStaffMenu(const User &currentUser)
 
 //                       Main Program
 // ========================================================
+
+void initializeLogin()
+{
+  User loggedInUser;
+
+  if (login(loggedInUser))
+  {
+    if (loggedInUser.role == "Administrator")
+    {
+      administratorMenu(loggedInUser);
+    }
+
+    else if (loggedInUser.role == "Receptionist")
+    {
+      receptionistMenu(loggedInUser);
+    }
+
+    else if (loggedInUser.role == "Vet Staff Member")
+    {
+      vetStaffMenu(loggedInUser);
+    }
+
+    else
+    {
+      cout << "\nAccess Denied: Unrecognized User Role!" << endl;
+    }
+  }
+
+  else
+  {
+    cout << "\nLogin Failed. Please try again." << endl;
+  }
+}
 
 int main()
 {

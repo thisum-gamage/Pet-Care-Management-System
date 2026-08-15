@@ -194,6 +194,7 @@ int generateUserID()
 {
   ifstream file(USERS_FILE);
   string line;
+
   int highestID = 0;
 
   while (getline(file, line))
@@ -214,6 +215,7 @@ int generateUserID()
     }
   }
   file.close();
+
   return highestID + 1;
 }
 
@@ -290,12 +292,12 @@ void initializeUserFile()
 {
   ifstream inputFile(USERS_FILE);
 
-  // If the file already exists, do not create it again
   if (inputFile)
   {
     inputFile.close();
     return;
   }
+
   ofstream outputFile(USERS_FILE);
 
   if (!outputFile)
@@ -304,7 +306,6 @@ void initializeUserFile()
     return;
   }
 
-  // Save default users
   outputFile << "1,admin,123,Administrator" << endl;
   outputFile << "2,receptionist,456,Receptionist" << endl;
   outputFile << "3,vetstaffmember,789,Vet Staff Member" << endl;

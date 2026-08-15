@@ -1241,14 +1241,14 @@ void reportsMenu()
 {
   int choice;
 
-  cout << "\n========== Reports ==========\n";
-  cout << "1. View All Owners\n";
-  cout << "2. View All Pets\n";
-  cout << "3. View Owners & Their Pets\n";
-  cout << "4. View All Appointments\n";
-  cout << "5. View Pending Appointments\n";
-  cout << "6. View Completed Appointments\n";
-  cout << "7. Back\n";
+  cout << "\n========== Reports ==========" << endl;
+  cout << "\n1. View All Owners" << endl;
+  cout << "2. View All Pets" << endl;
+  cout << "3. View Owners & Their Pets" << endl;
+  cout << "4. View All Appointments" << endl;
+  cout << "5. View Pending Appointments" << endl;
+  cout << "6. View Completed Appointments" << endl;
+  cout << "7. Back" << endl;
 
   cout << "\nEnter Your Choice: ";
   cin >> choice;
@@ -1280,26 +1280,28 @@ void reportsMenu()
 
 void ownerManagementMenu()
 {
+  int choice;
+
   while (true)
   {
-
-    int subChoice;
     cout << "\n========== Pet Owner Management ==========" << endl;
     cout << "1. Add Pet Owner" << endl;
     cout << "2. Update Pet Owner" << endl;
     cout << "3. Back" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> subChoice;
+    cin >> choice;
 
-    switch (subChoice)
+    switch (choice)
     {
     case 1:
       addPetOwner();
       break;
+
     case 2:
       updatePetOwner();
       break;
+
     case 3:
       return;
     }
@@ -1356,11 +1358,11 @@ void administratorMenu(const User &currentUser)
       break;
 
     case 8:
-      cout << "Logging out..." << endl;
+      cout << "Logging Out..." << endl;
       return;
 
     default:
-      cout << "Invalid option!" << endl;
+      cout << "Invalid Option!!!" << endl;
       break;
     }
   } while (option != 8);
@@ -1369,43 +1371,25 @@ void administratorMenu(const User &currentUser)
 void receptionistMenu(const User &currentUser)
 {
   int choice;
-  int subChoice;
-  int subChoice2;
 
   do
   {
-    cout << "\n------Welcome to Receptionist Section------" << endl;
+    cout << "\n========== Welcome to Receptionist Section ==========" << endl;
 
-    cout << "1. Add & update pet owner details" << endl;
-    cout << "2. Add pet records" << endl;
-    cout << "3. Add appointments" << endl;
-    cout << "4. Track appointments" << endl;
-    cout << "5. View owner & pet lists" << endl;
+    cout << "\n1. Pet Owner Management" << endl;
+    cout << "2. Add Pet Records" << endl;
+    cout << "3. Add Appointments" << endl;
+    cout << "4. Track Appointments" << endl;
+    cout << "5. View Owner & Pet Lists" << endl;
     cout << "6. Logout" << endl;
 
-    cout << "\nEnter your choice: ";
+    cout << "\nEnter Your Choice: ";
     cin >> choice;
 
     switch (choice)
     {
     case 1:
-      cout << "1. Add pet owner details" << endl;
-      cout << "2. Update pet owner details" << endl;
-      cout << "\nEnter Your Choice: ";
-      cin >> subChoice2;
-
-      if (subChoice2 == 1)
-      {
-        addPetOwner();
-      }
-      else if (subChoice2 == 2)
-      {
-        updatePetOwner();
-      }
-      else
-      {
-        cout << "Invalid Choice!";
-      }
+      ownerManagementMenu();
       break;
 
     case 2:
@@ -1421,31 +1405,16 @@ void receptionistMenu(const User &currentUser)
       break;
 
     case 5:
-      cout << "1. Owners" << endl;
-      cout << "2. Pets" << endl;
-      cout << "\nEnter Your Choice: ";
-      cin >> subChoice;
-
-      if (subChoice == 1)
-      {
-        viewOwnerList();
-      }
-      else if (subChoice == 2)
-      {
-        viewPetList();
-      }
-      else
-      {
-        cout << "Invalid Choice!";
-      }
+      viewPetsByOwner();
       break;
 
     case 6:
-      cout << "Logging out..." << endl;
-      break;
+      cout << "Logging Out..." << endl;
+      return;
 
     default:
-      cout << "Invalid option!" << endl;
+      cout << "Invalid Option!!!" << endl;
+      break;
     }
   } while (choice != 6);
 }
@@ -1456,7 +1425,7 @@ void vetStaffMenu(const User &currentUser)
 
   do
   {
-    cout << "\n------Welcome to Vet Staff Member Section------" << endl;
+    cout << "\n======= Welcome to Vet Staff Member Section =======" << endl;
     cout << "1. Update appointments details" << endl;
     cout << "2. Track appointments" << endl;
     cout << "3. Logout" << endl;
@@ -1476,10 +1445,11 @@ void vetStaffMenu(const User &currentUser)
 
     case 3:
       cout << "Logging out..." << endl;
-      break;
+      return;
 
     default:
       cout << "Invalid option!" << endl;
+      break;
     }
   } while (option != 3);
 }
@@ -1511,7 +1481,7 @@ int main()
       break;
 
     case 2:
-      cout << "\nExiting system..." << endl;
+      cout << "\nExiting System..." << endl;
       break;
 
     default:
@@ -1520,7 +1490,7 @@ int main()
     }
   } while (choice != 2);
 
-  cout << "\nThank you for using the Pet Care Management System!" << endl;
+  cout << "\nThank You for using the Pet Care Management System!" << endl;
   cout << "" << endl;
 
   return 0;

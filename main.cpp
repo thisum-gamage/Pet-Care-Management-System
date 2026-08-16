@@ -767,15 +767,6 @@ void searchByOwnerIDtoAppointmentID(string searchID)
 {
   searchID = convertToUpper(searchID);
 
-  string line;
-  string tempAge;
-
-  Owner owner;
-  Pet pet;
-  Appointment appointment;
-
-  bool appointmentFound = false;
-
   ifstream ownerFile(OWNERS_FILE);
 
   if (!ownerFile)
@@ -784,19 +775,21 @@ void searchByOwnerIDtoAppointmentID(string searchID)
     return;
   }
 
+  string ownerLine;
   string foundOwnerID = "";
   bool ownerFound = false;
 
-  while (getline(ownerFile, line))
+  while (getline(ownerFile, ownerLine))
   {
-    stringstream ss(line);
+    Owner owner;
+    stringstream ownerSS(ownerLine);
 
-    getline(ss, owner.ownerID, ',');
-    getline(ss, owner.firstName, ',');
-    getline(ss, owner.lastName, ',');
-    getline(ss, owner.mobileNumber, ',');
-    getline(ss, owner.address, ',');
-    getline(ss, owner.registeredDate, ',');
+    getline(ownerSS, owner.ownerID, ',');
+    getline(ownerSS, owner.firstName, ',');
+    getline(ownerSS, owner.lastName, ',');
+    getline(ownerSS, owner.mobileNumber, ',');
+    getline(ownerSS, owner.address, ',');
+    getline(ownerSS, owner.registeredDate, ',');
 
     if (searchID == owner.ownerID)
     {
@@ -813,33 +806,42 @@ void searchByOwnerIDtoAppointmentID(string searchID)
   }
 
   ifstream petFile(PETS_FILE);
+
   if (!petFile)
   {
     cout << "No pet records available!" << endl;
     return;
   }
 
-  while (getline(petFile, line))
-  {
-    stringstream ss(line);
+  string petLine;
+  bool appointmentFound = false;
 
-    getline(ss, pet.petID, ',');
-    getline(ss, pet.ownerID, ',');
-    getline(ss, pet.petName, ',');
-    getline(ss, pet.petType, ',');
-    getline(ss, pet.breed, ',');
-    getline(ss, tempAge, ',');
+  while (getline(petFile, petLine))
+  {
+    string tempAge;
+
+    Pet pet;
+    stringstream petSS(petLine);
+
+    getline(petSS, pet.petID, ',');
+    getline(petSS, pet.ownerID, ',');
+    getline(petSS, pet.petName, ',');
+    getline(petSS, pet.petType, ',');
+    getline(petSS, pet.breed, ',');
+    getline(petSS, tempAge, ',');
     pet.age = stoi(tempAge);
-    getline(ss, pet.gender, ',');
-    getline(ss, pet.specialNotes, ',');
+    getline(petSS, pet.gender, ',');
+    getline(petSS, pet.specialNotes, ',');
 
     if (foundOwnerID == pet.ownerID)
     {
       ifstream appointmentFile(APPOINTMENTS_FILE);
+
       string appointmentLine;
 
       while (getline(appointmentFile, appointmentLine))
       {
+        Appointment appointment;
         stringstream appointmentSS(appointmentLine);
 
         getline(appointmentSS, appointment.appointmentNumber, ',');
@@ -853,13 +855,10 @@ void searchByOwnerIDtoAppointmentID(string searchID)
 
         if (appointment.petID == pet.petID)
         {
-          cout << "\n--- Appointment Details ---" << endl;
-          cout << "Appointment ID : " << appointment.appointmentNumber << endl;
-          cout << "Pet ID         : " << appointment.petID << endl;
-          cout << "Pet Name       : " << pet.petName << endl;
-          cout << "Date           : " << appointment.appointmentDate << endl;
-          cout << "Service        : " << appointment.serviceType << endl;
-          cout << "Status         : " << appointment.appointmentStatus << endl;
+          cout << "\n----- Appointment Details -----" << endl;
+
+          displayAppointment();
+
           appointmentFound = true;
         }
       }

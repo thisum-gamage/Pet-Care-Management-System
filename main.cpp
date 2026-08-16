@@ -461,6 +461,7 @@ void addAppointment()
 void addUserAccount()
 {
   int tempRole;
+
   User user;
   user.userID = generateUserID();
 
@@ -529,35 +530,35 @@ void displayAppointment()
 {
   Appointment appointment;
 
-  cout << "\nAppointment ID : " << appointment.appointmentNumber << endl;
-  cout << "Pet ID         : " << appointment.petID << endl;
-  cout << "Date           : " << appointment.appointmentDate << endl;
-  cout << "Service Type   : " << appointment.serviceType << endl;
-  cout << "Symptoms       : " << appointment.symptoms << endl;
-  cout << "Status         : " << appointment.appointmentStatus << endl;
-  cout << "Treatment Notes: " << appointment.treatmentNotes << endl;
-  cout << "Last Updated   : " << appointment.lastUpdatedDate << endl;
+  cout << "\n----------------------------------------" << endl;
+  cout << "Appointment Number : " << appointment.appointmentNumber << endl;
+  cout << "Pet ID             : " << appointment.petID << endl;
+  cout << "Appointment Date   : " << appointment.appointmentDate << endl;
+  cout << "Service Type       : " << appointment.serviceType << endl;
+  cout << "Symptoms           : " << appointment.symptoms << endl;
+  cout << "Treatment Notes    : " << appointment.treatmentNotes << endl;
+  cout << "Appointment Status : " << appointment.appointmentStatus << endl;
+  cout << "Last Updated Date  : " << appointment.lastUpdatedDate << endl;
+  cout << "----------------------------------------" << endl;
 }
 
 void displayOwner()
 {
   Owner owner;
 
-  cout << "\nOwner ID     : " << owner.ownerID << endl;
-  cout << "First Name     : " << owner.firstName << endl;
-  cout << "Last Name      : " << owner.lastName << endl;
-  cout << "Mobile Number  : " << owner.mobileNumber << endl;
-  cout << "Address        : " << owner.address << endl;
-  cout << "Registered Date: " << owner.registeredDate << endl;
+  cout << "\n----------------------------------------" << endl;
+  cout << "Owner ID        : " << owner.ownerID << endl;
+  cout << "First Name      : " << owner.firstName << endl;
+  cout << "Last Name       : " << owner.lastName << endl;
+  cout << "Mobile Number   : " << owner.mobileNumber << endl;
+  cout << "Address         : " << owner.address << endl;
+  cout << "Registered Date : " << owner.registeredDate << endl;
+  cout << "----------------------------------------" << endl;
 }
 
 void searchByAppointmentIDOrPetID(string searchID)
 {
   searchID = convertToUpper(searchID);
-
-  string line;
-  Appointment appointment;
-  bool found = false;
 
   ifstream file(APPOINTMENTS_FILE);
 
@@ -567,8 +568,12 @@ void searchByAppointmentIDOrPetID(string searchID)
     return;
   }
 
+  bool found = false;
+  string line;
+
   while (getline(file, line))
   {
+    Appointment appointment;
     stringstream ss(line);
 
     getline(ss, appointment.appointmentNumber, ',');
@@ -582,7 +587,7 @@ void searchByAppointmentIDOrPetID(string searchID)
 
     if (searchID == appointment.appointmentNumber || searchID == appointment.petID)
     {
-      cout << "\n--- Appointment Found! ---" << endl;
+      cout << "\n----- Appointment Found! -----" << endl;
 
       displayAppointment();
 
@@ -627,7 +632,7 @@ void searchByOwnerID(string searchID)
 
     if (searchID == owner.ownerID)
     {
-      cout << "\n--- Owner Found! ---" << endl;
+      cout << "\n----- Owner Found! -----" << endl;
 
       displayOwner();
 
@@ -644,18 +649,11 @@ void searchByOwnerID(string searchID)
 
 void searchByMobileNumber(string searchID)
 {
-  string line;
-  string tempAge;
+  ifstream ownersFile(OWNERS_FILE);
 
-  Owner owner;
-  Pet pet;
-  Appointment appointment;
-
+  string ownerLine;
   string foundOwnerID = "";
   bool ownerFound = false;
-  bool appointmentFound = false;
-
-  ifstream ownersFile(OWNERS_FILE);
 
   if (!ownersFile)
   {
@@ -663,23 +661,24 @@ void searchByMobileNumber(string searchID)
     return;
   }
 
-  while (getline(ownersFile, line))
+  while (getline(ownersFile, ownerLine))
   {
-    stringstream ss(line);
+    Owner owner;
+    stringstream ownerSS(ownerLine);
 
-    getline(ss, owner.ownerID, ',');
-    getline(ss, owner.firstName, ',');
-    getline(ss, owner.lastName, ',');
-    getline(ss, owner.mobileNumber, ',');
-    getline(ss, owner.address, ',');
-    getline(ss, owner.registeredDate, ',');
+    getline(ownerSS, owner.ownerID, ',');
+    getline(ownerSS, owner.firstName, ',');
+    getline(ownerSS, owner.lastName, ',');
+    getline(ownerSS, owner.mobileNumber, ',');
+    getline(ownerSS, owner.address, ',');
+    getline(ownerSS, owner.registeredDate, ',');
 
     if (searchID == owner.mobileNumber)
     {
       foundOwnerID = owner.ownerID;
       ownerFound = true;
 
-      cout << "\n--- Owner Details Found ---" << endl;
+      cout << "\n----- Owner Details Found -----" << endl;
 
       displayOwner();
 
@@ -694,7 +693,12 @@ void searchByMobileNumber(string searchID)
     return;
   }
 
+  // --------------------------------------------------------
+
   ifstream petsFile(PETS_FILE);
+
+  string petLine;
+  bool appointmentFound = false;
 
   if (!petsFile)
   {
@@ -702,19 +706,22 @@ void searchByMobileNumber(string searchID)
     return;
   }
 
-  while (getline(petsFile, line))
+  while (getline(petsFile, petLine))
   {
-    stringstream ss(line);
+    Pet pet;
+    string tempAge;
 
-    getline(ss, pet.petID, ',');
-    getline(ss, pet.ownerID, ',');
-    getline(ss, pet.petName, ',');
-    getline(ss, pet.petType, ',');
-    getline(ss, pet.breed, ',');
-    getline(ss, tempAge, ',');
+    stringstream petSS(petLine);
+
+    getline(petSS, pet.petID, ',');
+    getline(petSS, pet.ownerID, ',');
+    getline(petSS, pet.petName, ',');
+    getline(petSS, pet.petType, ',');
+    getline(petSS, pet.breed, ',');
+    getline(petSS, tempAge, ',');
     pet.age = stoi(tempAge);
-    getline(ss, pet.gender, ',');
-    getline(ss, pet.specialNotes, ',');
+    getline(petSS, pet.gender, ',');
+    getline(petSS, pet.specialNotes, ',');
 
     if (foundOwnerID == pet.ownerID)
     {
@@ -723,6 +730,7 @@ void searchByMobileNumber(string searchID)
 
       while (getline(appointmentFile, appointmentLine))
       {
+        Appointment appointment;
         stringstream appointmentSS(appointmentLine);
 
         getline(appointmentSS, appointment.appointmentNumber, ',');
@@ -736,13 +744,11 @@ void searchByMobileNumber(string searchID)
 
         if (appointment.petID == pet.petID)
         {
-          cout << "\n--- Appointment Details ---" << endl;
-          cout << "Appointment ID : " << appointment.appointmentNumber << endl;
-          cout << "Pet ID         : " << appointment.petID << endl;
-          cout << "Pet Name       : " << pet.petName << endl;
-          cout << "Date           : " << appointment.appointmentDate << endl;
-          cout << "Service        : " << appointment.serviceType << endl;
-          cout << "Status         : " << appointment.appointmentStatus << endl;
+          cout << "\n----- Appointment Details -----" << endl;
+
+          cout << "Pet Name: " << pet.petName << endl;
+          displayAppointment();
+
           appointmentFound = true;
         }
       }
@@ -763,13 +769,11 @@ void searchByOwnerIDtoAppointmentID(string searchID)
 
   string line;
   string tempAge;
-  string foundOwnerID = "";
 
   Owner owner;
   Pet pet;
   Appointment appointment;
 
-  bool ownerFound = false;
   bool appointmentFound = false;
 
   ifstream ownerFile(OWNERS_FILE);
@@ -779,6 +783,9 @@ void searchByOwnerIDtoAppointmentID(string searchID)
     cout << "No owner records available!" << endl;
     return;
   }
+
+  string foundOwnerID = "";
+  bool ownerFound = false;
 
   while (getline(ownerFile, line))
   {

@@ -526,10 +526,8 @@ void addUserAccount()
 //                        Searching
 // ========================================================
 
-void displayAppointment()
+void displayAppointment(const Appointment &appointment)
 {
-  Appointment appointment;
-
   cout << "\n----------------------------------------" << endl;
   cout << "Appointment Number : " << appointment.appointmentNumber << endl;
   cout << "Pet ID             : " << appointment.petID << endl;
@@ -542,10 +540,8 @@ void displayAppointment()
   cout << "----------------------------------------" << endl;
 }
 
-void displayOwner()
+void displayOwner(const Owner &owner)
 {
-  Owner owner;
-
   cout << "\n----------------------------------------" << endl;
   cout << "Owner ID        : " << owner.ownerID << endl;
   cout << "First Name      : " << owner.firstName << endl;
@@ -589,7 +585,7 @@ void searchByAppointmentIDOrPetID(string searchID)
     {
       cout << "\n----- Appointment Found! -----" << endl;
 
-      displayAppointment();
+      displayAppointment(appointment);
 
       found = true;
     }
@@ -634,7 +630,7 @@ void searchByOwnerID(string searchID)
     {
       cout << "\n----- Owner Found! -----" << endl;
 
-      displayOwner();
+      displayOwner(owner);
 
       found = true;
     }
@@ -680,7 +676,7 @@ void searchByMobileNumber(string searchID)
 
       cout << "\n----- Owner Details Found -----" << endl;
 
-      displayOwner();
+      displayOwner(owner);
 
       break;
     }
@@ -747,7 +743,7 @@ void searchByMobileNumber(string searchID)
           cout << "\n----- Appointment Details -----" << endl;
 
           cout << "Pet Name: " << pet.petName << endl;
-          displayAppointment();
+          displayAppointment(appointment);
 
           appointmentFound = true;
         }
@@ -857,7 +853,7 @@ void searchByOwnerIDtoAppointmentID(string searchID)
         {
           cout << "\n----- Appointment Details -----" << endl;
 
-          displayAppointment();
+          displayAppointment(appointment);
 
           appointmentFound = true;
         }
@@ -1521,7 +1517,7 @@ void receptionistMenu(const User &currentUser)
       break;
 
     case 5:
-      viewPetsByOwner();
+      reportsMenu();
       break;
 
     case 6:

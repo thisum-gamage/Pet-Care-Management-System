@@ -357,6 +357,46 @@ bool petExists(const string &petID)
   return false;
 }
 
+int getValidAge()
+{
+  int age;
+
+  while (true)
+  {
+    cout << "Enter Your Pet Age: ";
+
+    if (cin >> age && age >= 0 && age <= 100)
+    {
+      clearInput();
+      return age;
+    }
+
+    cout << "Invalid age. Please enter a number between 0 and 100." << endl;
+    cin.clear();
+    clearInput();
+  }
+}
+
+int getMenuChoice()
+{
+  int choice;
+
+  while (true)
+  {
+    cin >> choice;
+
+    if (!cin.fail())
+    {
+      clearInput();
+      return choice;
+    }
+
+    cout << "Invalid input. Please enter a number." << endl;
+    cin.clear();
+    clearInput();
+  }
+}
+
 //                         Adding
 // ========================================================
 
@@ -429,9 +469,7 @@ void addPetRecord()
   cout << "Enter Your Pet Breed: ";
   getline(cin, pet.breed);
 
-  cout << "Enter Your Pet Age: ";
-  cin >> pet.age;
-  clearInput();
+  pet.age = getValidAge();
 
   cout << "Enter Pet Gender: ";
   getline(cin, pet.gender);
@@ -1413,7 +1451,7 @@ void reportsMenu()
     cout << "6. Back" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    choice = getMenuChoice();
 
     switch (choice)
     {
@@ -1459,7 +1497,7 @@ void ownerManagementMenu()
     cout << "3. Back" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    choice = getMenuChoice();
 
     switch (choice)
     {
@@ -1495,7 +1533,7 @@ void administratorMenu(const User &currentUser)
     cout << "8. Logout" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> option;
+    option = getMenuChoice();
 
     switch (option)
     {
@@ -1554,7 +1592,7 @@ void receptionistMenu(const User &currentUser)
     cout << "6. Logout" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    choice = getMenuChoice();
 
     switch (choice)
     {
@@ -1601,7 +1639,7 @@ void vetStaffMenu(const User &currentUser)
     cout << "3. Logout" << endl;
 
     cout << "\nEnter your choice: ";
-    cin >> option;
+    option = getMenuChoice();
 
     switch (option)
     {

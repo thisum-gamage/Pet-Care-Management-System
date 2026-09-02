@@ -448,7 +448,7 @@ void addPetOwner()
     return;
   }
 
-  cout << "Enter Your Address: ";
+  cout << "Enter Your Address (do not use commas): ";
   getline(cin, owner.address);
 
   cout << "Enter Registered Date: ";
@@ -476,6 +476,8 @@ void addPetOwner()
 
 void addPetRecord()
 {
+  int genderChoice;
+
   Pet pet;
   pet.petID = generatePetID();
 
@@ -503,10 +505,28 @@ void addPetRecord()
 
   pet.age = getValidAge();
 
-  cout << "Enter Pet Gender: ";
-  getline(cin, pet.gender);
+  cout << "Pet Gender" << endl;
 
-  cout << "Enter Pet Special Notes: ";
+  cout << "1. Male" << endl;
+  cout << "2. Female" << endl;
+  cout << "Enter Gender: ";
+  genderChoice = getMenuChoice();
+
+  if (genderChoice == 1)
+  {
+    pet.gender = "Male";
+  }
+  else if (genderChoice == 2)
+  {
+    pet.gender = "Female";
+  }
+  else
+  {
+    cout << "Invalid gender choice." << endl;
+    return;
+  }
+
+  cout << "Enter Pet Special Notes (do not use commas): ";
   getline(cin, pet.specialNotes);
 
   ofstream file(PETS_FILE, ios::app);
@@ -555,7 +575,7 @@ void addAppointment()
   cout << "Enter Service Type: ";
   getline(cin, appointment.serviceType);
 
-  cout << "Enter Pet Symptoms: ";
+  cout << "Enter Pet Symptoms (do not use commas): ";
   getline(cin, appointment.symptoms);
 
   appointment.treatmentNotes = "None";
@@ -1196,7 +1216,7 @@ void updateAppointment()
                 << appointment.treatmentNotes << ","
                 << appointment.appointmentStatus << ","
                 << appointment.lastUpdatedDate << endl;
-                
+
       found = true;
     }
     else

@@ -397,6 +397,32 @@ int getMenuChoice()
   }
 }
 
+bool mobileExists(const string &mobileNumber)
+{
+  ifstream file(OWNERS_FILE);
+  string line;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    Owner owner;
+
+    getline(ss, owner.ownerID, ',');
+    getline(ss, owner.firstName, ',');
+    getline(ss, owner.lastName, ',');
+    getline(ss, owner.mobileNumber, ',');
+    getline(ss, owner.address, ',');
+    getline(ss, owner.registeredDate, ',');
+
+    if (owner.mobileNumber == mobileNumber)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 //                         Adding
 // ========================================================
 
@@ -970,33 +996,53 @@ void searchByOwnerIDtoAppointmentID(string searchID)
 
 void trackAppointment()
 {
-  clearInput();
-
+  int choice;
   string searchID;
-  string prefix;
-  string line;
-  string targetOwnerID;
 
-  cout << "Enter Appointment ID/Pet ID/Owner ID/Mobile Number: " << endl;
-  cin >> searchID;
-
-  string searchIDUpper = convertToUpper(searchID);
-  prefix = searchIDUpper.substr(0, 3);
-
-  if (prefix == "APP" || prefix == "PET")
+  while (true)
   {
-    searchByAppointmentIDOrPetID(searchID);
-  }
+    cout << "\n========== Track Appointment ==========" << endl;
+    cout << "1. Search by Appointment Number" << endl;
+    cout << "2. Search by Owner ID" << endl;
+    cout << "3. Search by Pet ID" << endl;
+    cout << "4. Search by Mobile Number" << endl;
+    cout << "5. Back" << endl;
 
-  else if (prefix == "OWN")
-  {
-    searchByOwnerID(searchID);
-    searchByOwnerIDtoAppointmentID(searchID);
-  }
+    cout << "Enter Your Choice: ";
+    choice = getMenuChoice();
 
-  else
-  {
-    searchByMobileNumber(searchID);
+    switch (choice)
+    {
+    case 1:
+      cout << "Enter Appointment Number: ";
+      cin >> searchID;
+      searchByAppointmentIDOrPetID(searchID);
+      break;
+
+    case 2:
+      cout << "Enter Owner ID: ";
+      cin >> searchID;
+      searchByOwnerIDtoAppointmentID(searchID);
+      break;
+
+    case 3:
+      cout << "Enter Pet ID: ";
+      cin >> searchID;
+      searchByAppointmentIDOrPetID(searchID);
+      break;
+
+    case 4:
+      cout << "Enter Mobile Number: ";
+      cin >> searchID;
+      searchByMobileNumber(searchID);
+      break;
+
+    case 5:
+      return;
+
+    default:
+      cout << "Invalid Choice!" << endl;
+    }
   }
 }
 
@@ -1713,7 +1759,7 @@ int main()
     cout << "2. Exit" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    choice = getMenuChoice();
 
     switch (choice)
     {

@@ -315,6 +315,48 @@ void initializeUserFile()
   cout << "Default user accounts were created." << endl;
 }
 
+bool ownerExists(const string &ownerID)
+{
+  ifstream file(OWNERS_FILE);
+  string line;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string storedID;
+
+    getline(ss, storedID, ',');
+
+    if (convertToUpper(storedID) == convertToUpper(ownerID))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool petExists(const string &petID)
+{
+  ifstream file(PETS_FILE);
+  string line;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string storedPetID;
+
+    getline(ss, storedPetID, ',');
+
+    if (convertToUpper(storedPetID) == convertToUpper(petID))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 //                         Adding
 // ========================================================
 
@@ -370,6 +412,14 @@ void addPetRecord()
   cout << "Enter Owner ID: ";
   getline(cin, pet.ownerID);
 
+  pet.ownerID = convertToUpper(pet.ownerID);
+
+  if (!ownerExists(pet.ownerID))
+  {
+    cout << "Owner ID does not exist. Please register the owner first." << endl;
+    return;
+  }
+
   cout << "Enter Your Pet Name: ";
   getline(cin, pet.petName);
 
@@ -420,6 +470,14 @@ void addAppointment()
 
   cout << "Enter Pet ID: ";
   getline(cin, appointment.petID);
+
+  appointment.petID = convertToUpper(appointment.petID);
+
+  if (!petExists(appointment.petID))
+  {
+    cout << "Pet ID does not exist. Please register the pet first." << endl;
+    return;
+  }
 
   cout << "Enter Appointment Date: ";
   getline(cin, appointment.appointmentDate);

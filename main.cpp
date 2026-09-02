@@ -1059,8 +1059,14 @@ void updatePetOwner()
   bool found = false;
 
   cout << "\n===== Update Pet Owner =====" << endl;
-  cout << "Enter Owner ID to update: ";
+  cout << "Enter Owner ID to update (0 to cancel): ";
   cin >> updateID;
+
+  if (updateID == "0")
+  {
+    return;
+  }
+
   updateID = convertToUpper(updateID);
 
   ifstream inputFile(OWNERS_FILE);
@@ -1136,8 +1142,14 @@ void updateAppointment()
   bool found = false;
 
   cout << "\n===== Update Appointment =====" << endl;
-  cout << "Enter Pet ID/Appointment ID to update: ";
+  cout << "Enter Pet ID/Appointment ID to update (0 to cancel): ";
   cin >> updateID;
+
+  if (updateID == "0")
+  {
+    return;
+  }
+
   updateID = convertToUpper(updateID);
 
   ifstream inputFile(APPOINTMENTS_FILE);
@@ -1176,7 +1188,15 @@ void updateAppointment()
       cout << "Enter New Last Updated Date: ";
       getline(cin, appointment.lastUpdatedDate);
 
-      tempFile1 << appointment.appointmentNumber << "," << appointment.petID << "," << appointment.appointmentDate << "," << appointment.serviceType << "," << appointment.symptoms << "," << appointment.treatmentNotes << "," << appointment.appointmentStatus << "," << appointment.lastUpdatedDate << endl;
+      tempFile1 << appointment.appointmentNumber << ","
+                << appointment.petID << ","
+                << appointment.appointmentDate << ","
+                << appointment.serviceType << ","
+                << appointment.symptoms << ","
+                << appointment.treatmentNotes << ","
+                << appointment.appointmentStatus << ","
+                << appointment.lastUpdatedDate << endl;
+                
       found = true;
     }
     else

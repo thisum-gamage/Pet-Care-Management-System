@@ -442,6 +442,12 @@ void addPetOwner()
   cout << "Enter Your Mobile Number: ";
   getline(cin, owner.mobileNumber);
 
+  if (mobileExists(owner.mobileNumber))
+  {
+    cout << "An owner with this mobile number already exists." << endl;
+    return;
+  }
+
   cout << "Enter Your Address: ";
   getline(cin, owner.address);
 
@@ -1407,14 +1413,6 @@ void viewAppointmentsByStatus()
   string status = "";
   bool recordsAvailable = false;
 
-  ifstream file(APPOINTMENTS_FILE);
-
-  if (!file)
-  {
-    cout << "No appointment records are available.\n";
-    return;
-  }
-
   cout << "\n1. View Pending Appointments" << endl;
   cout << "2. View Completed Appointments" << endl;
   cout << "3. Back to Main Menu" << endl;
@@ -1440,6 +1438,14 @@ void viewAppointmentsByStatus()
   else
   {
     cout << "\nInvalid Choice!" << endl;
+    return;
+  }
+
+  ifstream file(APPOINTMENTS_FILE);
+
+  if (!file)
+  {
+    cout << "No appointment records are available.\n";
     return;
   }
 
@@ -1561,7 +1567,7 @@ void ownerManagementMenu()
   }
 }
 
-void administratorMenu(const User &currentUser)
+void administratorMenu()
 {
   int option;
 
@@ -1622,7 +1628,7 @@ void administratorMenu(const User &currentUser)
   } while (option != 8);
 }
 
-void receptionistMenu(const User &currentUser)
+void receptionistMenu()
 {
   int choice;
 
@@ -1673,7 +1679,7 @@ void receptionistMenu(const User &currentUser)
   } while (choice != 6);
 }
 
-void vetStaffMenu(const User &currentUser)
+void vetStaffMenu()
 {
   int option;
 
@@ -1719,17 +1725,17 @@ void initializeLogin()
   {
     if (loggedInUser.role == "Administrator")
     {
-      administratorMenu(loggedInUser);
+      administratorMenu();
     }
 
     else if (loggedInUser.role == "Receptionist")
     {
-      receptionistMenu(loggedInUser);
+      receptionistMenu();
     }
 
     else if (loggedInUser.role == "Vet Staff Member")
     {
-      vetStaffMenu(loggedInUser);
+      vetStaffMenu();
     }
 
     else

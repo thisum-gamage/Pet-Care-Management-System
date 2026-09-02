@@ -1717,7 +1717,7 @@ void vetStaffMenu()
 //                       Main Program
 // ========================================================
 
-void initializeLogin()
+void startLogin()
 {
   User loggedInUser;
 
@@ -1770,7 +1770,7 @@ int main()
     switch (choice)
     {
     case 1:
-      initializeLogin();
+      startLogin();
       break;
 
     case 2:

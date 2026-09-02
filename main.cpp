@@ -423,6 +423,28 @@ bool mobileExists(const string &mobileNumber)
   return false;
 }
 
+bool usernameExists(const string &username)
+{
+  ifstream file(USERS_FILE);
+  string line;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string id, storedUsername;
+
+    getline(ss, id, ',');
+    getline(ss, storedUsername, ',');
+
+    if (storedUsername == username)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 //                         Adding
 // ========================================================
 
@@ -620,6 +642,12 @@ void addUserAccount()
   cout << "Enter Username: ";
   getline(cin, user.username);
 
+  if (usernameExists(user.username))
+  {
+    cout << "Username already exists." << endl;
+    return;
+  }
+
   cout << "Enter Password: ";
   getline(cin, user.password);
 
@@ -629,7 +657,7 @@ void addUserAccount()
   cout << "3. Vet Staff Member" << endl;
 
   cout << "\nEnter Role: ";
-  cin >> tempRole;
+  tempRole = getMenuChoice();
 
   if (tempRole == 1)
   {
@@ -1159,6 +1187,7 @@ void updateAppointment()
 {
   string updateID;
   string line;
+  int statusChoice;
   bool found = false;
 
   cout << "\n===== Update Appointment =====" << endl;
@@ -1202,8 +1231,26 @@ void updateAppointment()
       cout << "Enter New Treatment Notes: ";
       getline(cin, appointment.treatmentNotes);
 
-      cout << "Enter New Appointment Status: ";
-      getline(cin, appointment.appointmentStatus);
+      cout << "Enter New Appointment Status" << endl;
+
+      cout << "1. Pending" << endl;
+      cout << "2. Completed" << endl;
+      cout << "Enter Status: ";
+      statusChoice = getMenuChoice();
+
+      if (statusChoice == 1)
+      {
+        appointment.appointmentStatus = "Pending";
+      }
+      else if (statusChoice == 2)
+      {
+        appointment.appointmentStatus = "Completed";
+      }
+      else
+      {
+        cout << "Invalid status." << endl;
+        return;
+      }
 
       cout << "Enter New Last Updated Date: ";
       getline(cin, appointment.lastUpdatedDate);
@@ -1338,6 +1385,53 @@ void viewPetList()
   }
 }
 
+void viewUserList()
+{
+  ifstream file(USERS_FILE);
+  string line;
+  bool recordsAvailable = false;
+
+  cout << "\n===== User Accounts List =====" << endl;
+
+  if (!file)
+  {
+    cout << "No user records are available." << endl;
+    return;
+  }
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    User user;
+    string id;
+
+    getline(ss, id, ',');
+    getline(ss, user.username, ',');
+    getline(ss, user.password, ',');
+    getline(ss, user.role);
+
+    if (id.empty())
+    {
+      continue;
+    }
+
+    user.userID = stoi(id);
+
+    cout << "\nUser ID  : " << user.userID << endl;
+    cout << "Username : " << user.username << endl;
+    cout << "Role     : " << user.role << endl;
+    cout << "------------------------------" << endl;
+
+    recordsAvailable = true;
+  }
+  file.close();
+
+  if (!recordsAvailable)
+  {
+    cout << "No user records are available." << endl;
+  }
+}
+
 void viewAppointmentList()
 {
   ifstream file(APPOINTMENTS_FILE);
@@ -1417,14 +1511,7 @@ void viewPetsByOwner()
     getline(ss, pet.petType, ',');
     getline(ss, pet.breed, ',');
     getline(ss, tempAge, ',');
-    try
-    {
-      pet.age = stoi(tempAge);
-    }
-    catch (...)
-    {
-      pet.age = 0;
-    }
+    pet.age = stoi(tempAge);
     getline(ss, pet.gender, ',');
     getline(ss, pet.specialNotes, ',');
 
@@ -1577,6 +1664,40 @@ void reportsMenu()
   }
 }
 
+void userManagementMenu()
+{
+  int choice;
+
+  while (true)
+  {
+    cout << "\n========== User Account Management ==========" << endl;
+    cout << "1. Add User" << endl;
+    cout << "2. View Users" << endl;
+    cout << "3. Back" << endl;
+
+    cout << "\nEnter Your Choice: ";
+    choice = getMenuChoice();
+
+    switch (choice)
+    {
+    case 1:
+      addUserAccount();
+      break;
+
+    case 2:
+      viewUserList();
+      break;
+
+    case 3:
+      return;
+
+    default:
+      cout << "Invalid Choice!" << endl;
+      break;
+    }
+  }
+}
+
 void ownerManagementMenu()
 {
   int choice;
@@ -1654,7 +1775,7 @@ void administratorMenu()
       break;
 
     case 7:
-      addUserAccount();
+      userManagementMenu();
       break;
 
     case 8:

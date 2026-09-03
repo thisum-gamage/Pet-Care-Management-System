@@ -20,7 +20,7 @@ const string USERS_FILE = "users.txt";
 const string TEMP_FILE_1 = "temp1.txt";
 const string TEMP_FILE_2 = "temp2.txt";
 
-//              Structures & Input Validation
+//                     Structures
 // ========================================================
 
 struct Owner
@@ -64,6 +64,9 @@ struct User
   string password;
   string role;
 };
+
+//                   Input Validation
+// ========================================================
 
 void clearInput()
 {
@@ -220,7 +223,7 @@ int generateUserID()
 }
 
 //                      Initializing
-// --------------------------------------------------------
+// ========================================================
 
 bool login(User &loggedInUser)
 {
@@ -234,8 +237,21 @@ bool login(User &loggedInUser)
 
     cout << "Username: ";
     cin >> enteredUsername;
+
+    if (enteredUsername.empty())
+    {
+      cout << "Username cannot be empty." << endl;
+      return false;
+    }
+
     cout << "Password: ";
     cin >> enteredPassword;
+
+    if (enteredPassword.empty())
+    {
+      cout << "Password cannot be empty." << endl;
+      return false;
+    }
 
     ifstream file(USERS_FILE);
 
@@ -315,6 +331,138 @@ void initializeUserFile()
   cout << "Default user accounts were created." << endl;
 }
 
+bool ownerExists(const string &ownerID)
+{
+  ifstream file(OWNERS_FILE);
+  string line;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string storedID;
+
+    getline(ss, storedID, ',');
+
+    if (convertToUpper(storedID) == convertToUpper(ownerID))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool petExists(const string &petID)
+{
+  ifstream file(PETS_FILE);
+  string line;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string storedPetID;
+
+    getline(ss, storedPetID, ',');
+
+    if (convertToUpper(storedPetID) == convertToUpper(petID))
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+int getValidAge()
+{
+  int age;
+
+  while (true)
+  {
+    cout << "Enter Your Pet Age: ";
+
+    if (cin >> age && age >= 0 && age <= 100)
+    {
+      clearInput();
+      return age;
+    }
+
+    cout << "Invalid age. Please enter a number between 0 and 100." << endl;
+    cin.clear();
+    clearInput();
+  }
+}
+
+int getMenuChoice()
+{
+  int choice;
+
+  while (true)
+  {
+    cin >> choice;
+
+    if (cin.fail())
+    {
+      cout << "Invalid input. Please enter a number." << endl;
+      cin.clear();
+      clearInput();
+    }
+    else
+    {
+      clearInput();
+      return choice;
+    }
+  }
+}
+
+bool mobileExists(const string &mobileNumber)
+{
+  ifstream file(OWNERS_FILE);
+  string line;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    Owner owner;
+
+    getline(ss, owner.ownerID, ',');
+    getline(ss, owner.firstName, ',');
+    getline(ss, owner.lastName, ',');
+    getline(ss, owner.mobileNumber, ',');
+    getline(ss, owner.address, ',');
+    getline(ss, owner.registeredDate, ',');
+
+    if (owner.mobileNumber == mobileNumber)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool usernameExists(const string &username)
+{
+  ifstream file(USERS_FILE);
+  string line;
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string id, storedUsername;
+
+    getline(ss, id, ',');
+    getline(ss, storedUsername, ',');
+
+    if (storedUsername == username)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 //                         Adding
 // ========================================================
 
@@ -322,8 +470,6 @@ void addPetOwner()
 {
   Owner owner;
   owner.ownerID = generateOwnerID();
-
-  clearInput();
 
   cout << "Enter Your First Name: ";
   getline(cin, owner.firstName);
@@ -334,10 +480,16 @@ void addPetOwner()
   cout << "Enter Your Mobile Number: ";
   getline(cin, owner.mobileNumber);
 
-  cout << "Enter Your Address: ";
+  if (mobileExists(owner.mobileNumber))
+  {
+    cout << "An owner with this mobile number already exists." << endl;
+    return;
+  }
+
+  cout << "Enter Your Address (do not use commas): ";
   getline(cin, owner.address);
 
-  cout << "Enter Registered Date: ";
+  cout << "Enter Registered Date (YYYY-MM-DD): ";
   getline(cin, owner.registeredDate);
 
   ofstream file(OWNERS_FILE, ios::app);
@@ -362,13 +514,21 @@ void addPetOwner()
 
 void addPetRecord()
 {
+  int genderChoice;
+
   Pet pet;
   pet.petID = generatePetID();
 
-  clearInput();
-
   cout << "Enter Owner ID: ";
   getline(cin, pet.ownerID);
+
+  pet.ownerID = convertToUpper(pet.ownerID);
+
+  if (!ownerExists(pet.ownerID))
+  {
+    cout << "Owner ID does not exist. Please register the owner first." << endl;
+    return;
+  }
 
   cout << "Enter Your Pet Name: ";
   getline(cin, pet.petName);
@@ -379,14 +539,30 @@ void addPetRecord()
   cout << "Enter Your Pet Breed: ";
   getline(cin, pet.breed);
 
-  cout << "Enter Your Pet Age: ";
-  cin >> pet.age;
-  clearInput();
+  pet.age = getValidAge();
 
-  cout << "Enter Pet Gender: ";
-  getline(cin, pet.gender);
+  cout << "Pet Gender" << endl;
 
-  cout << "Enter Pet Special Notes: ";
+  cout << "1. Male" << endl;
+  cout << "2. Female" << endl;
+  cout << "Enter Gender: ";
+  genderChoice = getMenuChoice();
+
+  if (genderChoice == 1)
+  {
+    pet.gender = "Male";
+  }
+  else if (genderChoice == 2)
+  {
+    pet.gender = "Female";
+  }
+  else
+  {
+    cout << "Invalid gender choice." << endl;
+    return;
+  }
+
+  cout << "Enter Pet Special Notes (do not use commas): ";
   getline(cin, pet.specialNotes);
 
   ofstream file(PETS_FILE, ios::app);
@@ -416,10 +592,16 @@ void addAppointment()
   Appointment appointment;
   appointment.appointmentNumber = generateAppointmentID();
 
-  clearInput();
-
   cout << "Enter Pet ID: ";
   getline(cin, appointment.petID);
+
+  appointment.petID = convertToUpper(appointment.petID);
+
+  if (!petExists(appointment.petID))
+  {
+    cout << "Pet ID does not exist. Please register the pet first." << endl;
+    return;
+  }
 
   cout << "Enter Appointment Date: ";
   getline(cin, appointment.appointmentDate);
@@ -427,7 +609,7 @@ void addAppointment()
   cout << "Enter Service Type: ";
   getline(cin, appointment.serviceType);
 
-  cout << "Enter Pet Symptoms: ";
+  cout << "Enter Pet Symptoms (do not use commas): ";
   getline(cin, appointment.symptoms);
 
   appointment.treatmentNotes = "None";
@@ -465,12 +647,16 @@ void addUserAccount()
   User user;
   user.userID = generateUserID();
 
-  clearInput();
-
   cout << "\n===== Add User Account =====" << endl;
 
   cout << "Enter Username: ";
   getline(cin, user.username);
+
+  if (usernameExists(user.username))
+  {
+    cout << "Username already exists." << endl;
+    return;
+  }
 
   cout << "Enter Password: ";
   getline(cin, user.password);
@@ -481,7 +667,7 @@ void addUserAccount()
   cout << "3. Vet Staff Member" << endl;
 
   cout << "\nEnter Role: ";
-  cin >> tempRole;
+  tempRole = getMenuChoice();
 
   if (tempRole == 1)
   {
@@ -526,10 +712,8 @@ void addUserAccount()
 //                        Searching
 // ========================================================
 
-void displayAppointment()
+void displayAppointment(const Appointment &appointment)
 {
-  Appointment appointment;
-
   cout << "\n----------------------------------------" << endl;
   cout << "Appointment Number : " << appointment.appointmentNumber << endl;
   cout << "Pet ID             : " << appointment.petID << endl;
@@ -542,10 +726,8 @@ void displayAppointment()
   cout << "----------------------------------------" << endl;
 }
 
-void displayOwner()
+void displayOwner(const Owner &owner)
 {
-  Owner owner;
-
   cout << "\n----------------------------------------" << endl;
   cout << "Owner ID        : " << owner.ownerID << endl;
   cout << "First Name      : " << owner.firstName << endl;
@@ -589,7 +771,7 @@ void searchByAppointmentIDOrPetID(string searchID)
     {
       cout << "\n----- Appointment Found! -----" << endl;
 
-      displayAppointment();
+      displayAppointment(appointment);
 
       found = true;
     }
@@ -634,7 +816,7 @@ void searchByOwnerID(string searchID)
     {
       cout << "\n----- Owner Found! -----" << endl;
 
-      displayOwner();
+      displayOwner(owner);
 
       found = true;
     }
@@ -680,7 +862,7 @@ void searchByMobileNumber(string searchID)
 
       cout << "\n----- Owner Details Found -----" << endl;
 
-      displayOwner();
+      displayOwner(owner);
 
       break;
     }
@@ -747,7 +929,7 @@ void searchByMobileNumber(string searchID)
           cout << "\n----- Appointment Details -----" << endl;
 
           cout << "Pet Name: " << pet.petName << endl;
-          displayAppointment();
+          displayAppointment(appointment);
 
           appointmentFound = true;
         }
@@ -763,7 +945,7 @@ void searchByMobileNumber(string searchID)
   }
 }
 
-void searchByOwnerIDtoAppointmentID(string searchID)
+void searchAppointmentsByOwnerID(string searchID)
 {
   searchID = convertToUpper(searchID);
 
@@ -857,7 +1039,7 @@ void searchByOwnerIDtoAppointmentID(string searchID)
         {
           cout << "\n----- Appointment Details -----" << endl;
 
-          displayAppointment();
+          displayAppointment(appointment);
 
           appointmentFound = true;
         }
@@ -878,33 +1060,53 @@ void searchByOwnerIDtoAppointmentID(string searchID)
 
 void trackAppointment()
 {
-  clearInput();
-
+  int choice;
   string searchID;
-  string prefix;
-  string line;
-  string targetOwnerID;
 
-  cout << "Enter Appointment ID/Pet ID/Owner ID/Mobile Number: " << endl;
-  cin >> searchID;
-
-  string searchIDUpper = convertToUpper(searchID);
-  prefix = searchIDUpper.substr(0, 3);
-
-  if (prefix == "APP" || prefix == "PET")
+  while (true)
   {
-    searchByAppointmentIDOrPetID(searchID);
-  }
+    cout << "\n========== Track Appointment ==========" << endl;
+    cout << "1. Search by Appointment Number" << endl;
+    cout << "2. Search by Owner ID" << endl;
+    cout << "3. Search by Pet ID" << endl;
+    cout << "4. Search by Mobile Number" << endl;
+    cout << "5. Back" << endl;
 
-  else if (prefix == "OWN")
-  {
-    searchByOwnerID(searchID);
-    searchByOwnerIDtoAppointmentID(searchID);
-  }
+    cout << "Enter Your Choice: ";
+    choice = getMenuChoice();
 
-  else
-  {
-    searchByMobileNumber(searchID);
+    switch (choice)
+    {
+    case 1:
+      cout << "Enter Appointment Number: ";
+      cin >> searchID;
+      searchByAppointmentIDOrPetID(searchID);
+      break;
+
+    case 2:
+      cout << "Enter Owner ID: ";
+      cin >> searchID;
+      searchAppointmentsByOwnerID(searchID);
+      break;
+
+    case 3:
+      cout << "Enter Pet ID: ";
+      cin >> searchID;
+      searchByAppointmentIDOrPetID(searchID);
+      break;
+
+    case 4:
+      cout << "Enter Mobile Number: ";
+      cin >> searchID;
+      searchByMobileNumber(searchID);
+      break;
+
+    case 5:
+      return;
+
+    default:
+      cout << "Invalid Choice!" << endl;
+    }
   }
 }
 
@@ -915,8 +1117,14 @@ void updatePetOwner()
   bool found = false;
 
   cout << "\n===== Update Pet Owner =====" << endl;
-  cout << "Enter Owner ID to update: ";
+  cout << "Enter Owner ID to update (0 to cancel): ";
   cin >> updateID;
+
+  if (updateID == "0")
+  {
+    return;
+  }
+
   updateID = convertToUpper(updateID);
 
   ifstream inputFile(OWNERS_FILE);
@@ -957,10 +1165,15 @@ void updatePetOwner()
       cout << "Enter New Address: ";
       getline(cin, owner.address);
 
-      cout << "Enter New Registered Date: ";
+      cout << "Enter New Registered Date (YYYY-MM-DD): ";
       getline(cin, owner.registeredDate);
 
-      tempFile2 << owner.ownerID << "," << owner.firstName << "," << owner.lastName << "," << owner.mobileNumber << "," << owner.address << "," << owner.registeredDate << endl;
+      tempFile2 << owner.ownerID << ","
+                << owner.firstName << ","
+                << owner.lastName << ","
+                << owner.mobileNumber << ","
+                << owner.address << ","
+                << owner.registeredDate << endl;
       found = true;
     }
     else
@@ -989,11 +1202,18 @@ void updateAppointment()
 {
   string updateID;
   string line;
+  int statusChoice;
   bool found = false;
 
   cout << "\n===== Update Appointment =====" << endl;
-  cout << "Enter Pet ID/Appointment ID to update: ";
+  cout << "Enter Appointment Number to update (0 to cancel): ";
   cin >> updateID;
+
+  if (updateID == "0")
+  {
+    return;
+  }
+
   updateID = convertToUpper(updateID);
 
   ifstream inputFile(APPOINTMENTS_FILE);
@@ -1019,20 +1239,49 @@ void updateAppointment()
     getline(ss, appointment.appointmentStatus, ',');
     getline(ss, appointment.lastUpdatedDate, ',');
 
-    if (appointment.appointmentNumber == updateID || appointment.petID == updateID)
+    if (appointment.appointmentNumber == updateID)
     {
       clearInput();
 
       cout << "Enter New Treatment Notes: ";
       getline(cin, appointment.treatmentNotes);
 
-      cout << "Enter New Appointment Status: ";
-      getline(cin, appointment.appointmentStatus);
+      cout << "Enter New Appointment Status" << endl;
+
+      cout << "1. Pending" << endl;
+      cout << "2. Completed" << endl;
+      cout << "Enter Status: ";
+      statusChoice = getMenuChoice();
+
+      if (statusChoice == 1)
+      {
+        appointment.appointmentStatus = "Pending";
+      }
+      else if (statusChoice == 2)
+      {
+        appointment.appointmentStatus = "Completed";
+      }
+      else
+      {
+        cout << "Invalid status choice." << endl;
+        inputFile.close();
+        tempFile1.close();
+        remove(TEMP_FILE_1.c_str());
+        return;
+      }
 
       cout << "Enter New Last Updated Date: ";
       getline(cin, appointment.lastUpdatedDate);
 
-      tempFile1 << appointment.appointmentNumber << "," << appointment.petID << "," << appointment.appointmentDate << "," << appointment.serviceType << "," << appointment.symptoms << "," << appointment.treatmentNotes << "," << appointment.appointmentStatus << "," << appointment.lastUpdatedDate << endl;
+      tempFile1 << appointment.appointmentNumber << ","
+                << appointment.petID << ","
+                << appointment.appointmentDate << ","
+                << appointment.serviceType << ","
+                << appointment.symptoms << ","
+                << appointment.treatmentNotes << ","
+                << appointment.appointmentStatus << ","
+                << appointment.lastUpdatedDate << endl;
+
       found = true;
     }
     else
@@ -1086,13 +1335,7 @@ void viewOwnerList()
     getline(ss, owner.address, ',');
     getline(ss, owner.registeredDate, ',');
 
-    cout << "\nOwner ID : " << owner.ownerID << endl;
-    cout << "First Name: " << owner.firstName << endl;
-    cout << "Last Name: " << owner.lastName << endl;
-    cout << "Mobile Number: " << owner.mobileNumber << endl;
-    cout << "Address: " << owner.address << endl;
-    cout << "Registered Date: " << owner.registeredDate << endl;
-    cout << "------------------------------" << endl;
+    displayOwner(owner);
 
     recordsAvailable = true;
   }
@@ -1154,6 +1397,53 @@ void viewPetList()
   }
 }
 
+void viewUserList()
+{
+  ifstream file(USERS_FILE);
+  string line;
+  bool recordsAvailable = false;
+
+  cout << "\n===== User Accounts List =====" << endl;
+
+  if (!file)
+  {
+    cout << "No user records are available." << endl;
+    return;
+  }
+
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    User user;
+    string id;
+
+    getline(ss, id, ',');
+    getline(ss, user.username, ',');
+    getline(ss, user.password, ',');
+    getline(ss, user.role);
+
+    if (id.empty())
+    {
+      continue;
+    }
+
+    user.userID = stoi(id);
+
+    cout << "\nUser ID  : " << user.userID << endl;
+    cout << "Username : " << user.username << endl;
+    cout << "Role     : " << user.role << endl;
+    cout << "------------------------------" << endl;
+
+    recordsAvailable = true;
+  }
+  file.close();
+
+  if (!recordsAvailable)
+  {
+    cout << "No user records are available." << endl;
+  }
+}
+
 void viewAppointmentList()
 {
   ifstream file(APPOINTMENTS_FILE);
@@ -1182,14 +1472,7 @@ void viewAppointmentList()
     getline(ss, appointment.appointmentStatus, ',');
     getline(ss, appointment.lastUpdatedDate, ',');
 
-    cout << "Appointment ID : " << appointment.appointmentNumber << endl;
-    cout << "Pet ID         : " << appointment.petID << endl;
-    cout << "Date           : " << appointment.appointmentDate << endl;
-    cout << "Service Type   : " << appointment.serviceType << endl;
-    cout << "Symptoms       : " << appointment.symptoms << endl;
-    cout << "Status         : " << appointment.appointmentStatus << endl;
-    cout << "Treatment Notes: " << appointment.treatmentNotes << endl;
-    cout << "Last Updated   : " << appointment.lastUpdatedDate << endl;
+    displayAppointment(appointment);
 
     recordsAvailable = true;
   }
@@ -1204,7 +1487,6 @@ void viewAppointmentList()
 void viewPetsByOwner()
 {
   string searchOwnerID;
-  clearInput();
 
   cout << "Enter Owner ID to view pets: ";
   getline(cin, searchOwnerID);
@@ -1233,14 +1515,7 @@ void viewPetsByOwner()
     getline(ss, pet.petType, ',');
     getline(ss, pet.breed, ',');
     getline(ss, tempAge, ',');
-    try
-    {
-      pet.age = stoi(tempAge);
-    }
-    catch (...)
-    {
-      pet.age = 0;
-    }
+    pet.age = stoi(tempAge);
     getline(ss, pet.gender, ',');
     getline(ss, pet.specialNotes, ',');
 
@@ -1269,20 +1544,12 @@ void viewAppointmentsByStatus()
   string status = "";
   bool recordsAvailable = false;
 
-  ifstream file(APPOINTMENTS_FILE);
-
-  if (!file)
-  {
-    cout << "No appointment records are available.\n";
-    return;
-  }
-
   cout << "\n1. View Pending Appointments" << endl;
   cout << "2. View Completed Appointments" << endl;
   cout << "3. Back to Main Menu" << endl;
 
   cout << "Enter Your Choice: " << endl;
-  cin >> choice;
+  choice = getMenuChoice();
 
   if (choice == 1)
   {
@@ -1305,6 +1572,14 @@ void viewAppointmentsByStatus()
     return;
   }
 
+  ifstream file(APPOINTMENTS_FILE);
+
+  if (!file)
+  {
+    cout << "No appointment records are available.\n";
+    return;
+  }
+
   while (getline(file, line))
   {
     stringstream ss(line);
@@ -1321,16 +1596,7 @@ void viewAppointmentsByStatus()
 
     if (appointment.appointmentStatus == status)
     {
-      cout << "\n----------------------------------------" << endl;
-      cout << "Appointment Number : " << appointment.appointmentNumber << endl;
-      cout << "Pet ID             : " << appointment.petID << endl;
-      cout << "Appointment Date   : " << appointment.appointmentDate << endl;
-      cout << "Service Type       : " << appointment.serviceType << endl;
-      cout << "Symptoms           : " << appointment.symptoms << endl;
-      cout << "Treatment Notes    : " << appointment.treatmentNotes << endl;
-      cout << "Appointment Status : " << appointment.appointmentStatus << endl;
-      cout << "Last Updated Date  : " << appointment.lastUpdatedDate << endl;
-      cout << "----------------------------------------" << endl;
+      displayAppointment(appointment);
 
       recordsAvailable = true;
     }
@@ -1339,6 +1605,44 @@ void viewAppointmentsByStatus()
   if (!recordsAvailable)
   {
     cout << "No matching appointments are available." << endl;
+  }
+}
+
+void viewOwnerPetMenu()
+{
+  int choice;
+
+  while (true)
+  {
+    cout << "\n========== View Owners & Pets ==========" << endl;
+    cout << "1. View All Owners" << endl;
+    cout << "2. View All Pets" << endl;
+    cout << "3. View Owners & Their Pets" << endl;
+    cout << "4. Back" << endl;
+
+    cout << "\nEnter Your Choice: ";
+    choice = getMenuChoice();
+
+    switch (choice)
+    {
+    case 1:
+      viewOwnerList();
+      break;
+
+    case 2:
+      viewPetList();
+      break;
+
+    case 3:
+      viewPetsByOwner();
+      break;
+
+    case 4:
+      return;
+
+    default:
+      cout << "Invalid Choice!" << endl;
+    }
   }
 }
 
@@ -1359,7 +1663,7 @@ void reportsMenu()
     cout << "6. Back" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    choice = getMenuChoice();
 
     switch (choice)
     {
@@ -1393,6 +1697,40 @@ void reportsMenu()
   }
 }
 
+void userManagementMenu()
+{
+  int choice;
+
+  while (true)
+  {
+    cout << "\n========== User Account Management ==========" << endl;
+    cout << "1. Add User" << endl;
+    cout << "2. View Users" << endl;
+    cout << "3. Back" << endl;
+
+    cout << "\nEnter Your Choice: ";
+    choice = getMenuChoice();
+
+    switch (choice)
+    {
+    case 1:
+      addUserAccount();
+      break;
+
+    case 2:
+      viewUserList();
+      break;
+
+    case 3:
+      return;
+
+    default:
+      cout << "Invalid Choice!" << endl;
+      break;
+    }
+  }
+}
+
 void ownerManagementMenu()
 {
   int choice;
@@ -1405,7 +1743,7 @@ void ownerManagementMenu()
     cout << "3. Back" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    choice = getMenuChoice();
 
     switch (choice)
     {
@@ -1423,7 +1761,7 @@ void ownerManagementMenu()
   }
 }
 
-void administratorMenu(const User &currentUser)
+void administratorMenu()
 {
   int option;
 
@@ -1441,7 +1779,7 @@ void administratorMenu(const User &currentUser)
     cout << "8. Logout" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> option;
+    option = getMenuChoice();
 
     switch (option)
     {
@@ -1470,7 +1808,7 @@ void administratorMenu(const User &currentUser)
       break;
 
     case 7:
-      addUserAccount();
+      userManagementMenu();
       break;
 
     case 8:
@@ -1484,7 +1822,7 @@ void administratorMenu(const User &currentUser)
   } while (option != 8);
 }
 
-void receptionistMenu(const User &currentUser)
+void receptionistMenu()
 {
   int choice;
 
@@ -1500,7 +1838,7 @@ void receptionistMenu(const User &currentUser)
     cout << "6. Logout" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    choice = getMenuChoice();
 
     switch (choice)
     {
@@ -1521,7 +1859,7 @@ void receptionistMenu(const User &currentUser)
       break;
 
     case 5:
-      viewPetsByOwner();
+      viewOwnerPetMenu();
       break;
 
     case 6:
@@ -1535,7 +1873,7 @@ void receptionistMenu(const User &currentUser)
   } while (choice != 6);
 }
 
-void vetStaffMenu(const User &currentUser)
+void vetStaffMenu()
 {
   int option;
 
@@ -1547,7 +1885,7 @@ void vetStaffMenu(const User &currentUser)
     cout << "3. Logout" << endl;
 
     cout << "\nEnter your choice: ";
-    cin >> option;
+    option = getMenuChoice();
 
     switch (option)
     {
@@ -1573,7 +1911,7 @@ void vetStaffMenu(const User &currentUser)
 //                       Main Program
 // ========================================================
 
-void initializeLogin()
+void startLogin()
 {
   User loggedInUser;
 
@@ -1581,17 +1919,17 @@ void initializeLogin()
   {
     if (loggedInUser.role == "Administrator")
     {
-      administratorMenu(loggedInUser);
+      administratorMenu();
     }
 
     else if (loggedInUser.role == "Receptionist")
     {
-      receptionistMenu(loggedInUser);
+      receptionistMenu();
     }
 
     else if (loggedInUser.role == "Vet Staff Member")
     {
-      vetStaffMenu(loggedInUser);
+      vetStaffMenu();
     }
 
     else
@@ -1621,12 +1959,12 @@ int main()
     cout << "2. Exit" << endl;
 
     cout << "\nEnter Your Choice: ";
-    cin >> choice;
+    choice = getMenuChoice();
 
     switch (choice)
     {
     case 1:
-      initializeLogin();
+      startLogin();
       break;
 
     case 2:

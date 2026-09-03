@@ -241,7 +241,7 @@ bool login(User &loggedInUser)
     if (enteredUsername.empty())
     {
       cout << "Username cannot be empty." << endl;
-      return;
+      return false;
     }
 
     cout << "Password: ";
@@ -250,7 +250,7 @@ bool login(User &loggedInUser)
     if (enteredPassword.empty())
     {
       cout << "Password cannot be empty." << endl;
-      return;
+      return false;
     }
 
     ifstream file(USERS_FILE);
@@ -647,8 +647,6 @@ void addUserAccount()
   User user;
   user.userID = generateUserID();
 
-  clearInput();
-
   cout << "\n===== Add User Account =====" << endl;
 
   cout << "Enter Username: ";
@@ -947,7 +945,7 @@ void searchByMobileNumber(string searchID)
   }
 }
 
-void searchByOwnerIDtoAppointmentID(string searchID)
+void searchAppointmentsByOwnerID(string searchID)
 {
   searchID = convertToUpper(searchID);
 
@@ -1088,7 +1086,7 @@ void trackAppointment()
     case 2:
       cout << "Enter Owner ID: ";
       cin >> searchID;
-      searchByOwnerIDtoAppointmentID(searchID);
+      searchAppointmentsByOwnerID(searchID);
       break;
 
     case 3:
@@ -1170,7 +1168,12 @@ void updatePetOwner()
       cout << "Enter New Registered Date (YYYY-MM-DD): ";
       getline(cin, owner.registeredDate);
 
-      tempFile2 << owner.ownerID << "," << owner.firstName << "," << owner.lastName << "," << owner.mobileNumber << "," << owner.address << "," << owner.registeredDate << endl;
+      tempFile2 << owner.ownerID << ","
+                << owner.firstName << ","
+                << owner.lastName << ","
+                << owner.mobileNumber << ","
+                << owner.address << ","
+                << owner.registeredDate << endl;
       found = true;
     }
     else
@@ -1203,7 +1206,7 @@ void updateAppointment()
   bool found = false;
 
   cout << "\n===== Update Appointment =====" << endl;
-  cout << "Enter Pet ID/Appointment ID to update (0 to cancel): ";
+  cout << "Enter Appointment Number to update (0 to cancel): ";
   cin >> updateID;
 
   if (updateID == "0")
@@ -1236,7 +1239,7 @@ void updateAppointment()
     getline(ss, appointment.appointmentStatus, ',');
     getline(ss, appointment.lastUpdatedDate, ',');
 
-    if (appointment.appointmentNumber == updateID || appointment.petID == updateID)
+    if (appointment.appointmentNumber == updateID)
     {
       clearInput();
 
@@ -1484,7 +1487,6 @@ void viewAppointmentList()
 void viewPetsByOwner()
 {
   string searchOwnerID;
-  clearInput();
 
   cout << "Enter Owner ID to view pets: ";
   getline(cin, searchOwnerID);

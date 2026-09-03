@@ -20,7 +20,7 @@ const string USERS_FILE = "users.txt";
 const string TEMP_FILE_1 = "temp1.txt";
 const string TEMP_FILE_2 = "temp2.txt";
 
-//              Structures & Input Validation
+//                     Structures
 // ========================================================
 
 struct Owner
@@ -64,6 +64,9 @@ struct User
   string password;
   string role;
 };
+
+//                   Input Validation
+// ========================================================
 
 void clearInput()
 {
@@ -1329,13 +1332,7 @@ void viewOwnerList()
     getline(ss, owner.address, ',');
     getline(ss, owner.registeredDate, ',');
 
-    cout << "\nOwner ID : " << owner.ownerID << endl;
-    cout << "First Name: " << owner.firstName << endl;
-    cout << "Last Name: " << owner.lastName << endl;
-    cout << "Mobile Number: " << owner.mobileNumber << endl;
-    cout << "Address: " << owner.address << endl;
-    cout << "Registered Date: " << owner.registeredDate << endl;
-    cout << "------------------------------" << endl;
+    displayOwner(owner);
 
     recordsAvailable = true;
   }
@@ -1472,14 +1469,7 @@ void viewAppointmentList()
     getline(ss, appointment.appointmentStatus, ',');
     getline(ss, appointment.lastUpdatedDate, ',');
 
-    cout << "Appointment ID : " << appointment.appointmentNumber << endl;
-    cout << "Pet ID         : " << appointment.petID << endl;
-    cout << "Date           : " << appointment.appointmentDate << endl;
-    cout << "Service Type   : " << appointment.serviceType << endl;
-    cout << "Symptoms       : " << appointment.symptoms << endl;
-    cout << "Status         : " << appointment.appointmentStatus << endl;
-    cout << "Treatment Notes: " << appointment.treatmentNotes << endl;
-    cout << "Last Updated   : " << appointment.lastUpdatedDate << endl;
+    displayAppointment(appointment);
 
     recordsAvailable = true;
   }

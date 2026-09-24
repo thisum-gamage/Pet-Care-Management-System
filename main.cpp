@@ -87,7 +87,7 @@ string convertToUpper(string text)
   return text;
 }
 
-string getNonEmptyInput(const string &prompt)
+string getNonEmptyInput(const string& prompt)
 {
   string input;
 
@@ -102,6 +102,45 @@ string getNonEmptyInput(const string &prompt)
     }
 
     cout << "Input cannot be empty. Please try again.\n";
+  }
+}
+
+int getValidAge(const string& prompt)
+{
+  int age;
+
+  while (true)
+  {
+    cout << prompt;
+
+    if (cin >> age && age >= 0 && age <= 100)
+    {
+      clearInput();
+      return age;
+    }
+
+    cout << "Invalid age. Please enter a number between 0 and 100." << endl;
+    cin.clear();
+    clearInput();
+  }
+}
+
+int getMenuChoice()
+{
+  int choice;
+
+  while (true)
+  {
+    if (cin >> choice)
+    {
+      clearInput();
+      return choice;
+    }
+
+    cout << "Invalid input. Please enter a number.\n";
+
+    cin.clear();
+    clearInput();
   }
 }
 
@@ -349,7 +388,7 @@ void initializeUserFile()
   cout << "Default user accounts were created." << endl;
 }
 
-bool ownerExists(const string &ownerID)
+bool ownerExists(const string& ownerID)
 {
   ifstream file(OWNERS_FILE);
   string line;
@@ -370,7 +409,7 @@ bool ownerExists(const string &ownerID)
   return false;
 }
 
-bool petExists(const string &petID)
+bool petExists(const string& petID)
 {
   ifstream file(PETS_FILE);
   string line;
@@ -391,46 +430,7 @@ bool petExists(const string &petID)
   return false;
 }
 
-int getValidAge()
-{
-  int age;
-
-  while (true)
-  {
-    cout << "Enter Your Pet Age: ";
-
-    if (cin >> age && age >= 0 && age <= 100)
-    {
-      clearInput();
-      return age;
-    }
-
-    cout << "Invalid age. Please enter a number between 0 and 100." << endl;
-    cin.clear();
-    clearInput();
-  }
-}
-
-int getMenuChoice()
-{
-  int choice;
-
-  while (true)
-  {
-    if (cin >> choice)
-    {
-      clearInput();
-      return choice;
-    }
-
-    cout << "Invalid input. Please enter a number.\n";
-
-    cin.clear();
-    clearInput();
-  }
-}
-
-bool mobileExists(const string &mobileNumber)
+bool mobileExists(const string& mobileNumber)
 {
   ifstream file(OWNERS_FILE);
   string line;
@@ -456,7 +456,7 @@ bool mobileExists(const string &mobileNumber)
   return false;
 }
 
-bool usernameExists(const string &username)
+bool usernameExists(const string& username)
 {
   ifstream file(USERS_FILE);
   string line;
@@ -554,7 +554,7 @@ void addPetRecord()
   cout << "Enter Your Pet Breed: ";
   getline(cin, pet.breed);
 
-  pet.age = getValidAge();
+  pet.age = getValidAge("Enter Your Pet Age: ");
 
   cout << "Pet Gender" << endl;
 
@@ -727,7 +727,7 @@ void addUserAccount()
 //                        Searching
 // ========================================================
 
-void displayAppointment(const Appointment &appointment)
+void displayAppointment(const Appointment& appointment)
 {
   cout << "\n----------------------------------------" << endl;
   cout << "Appointment Number : " << appointment.appointmentNumber << endl;
@@ -741,7 +741,7 @@ void displayAppointment(const Appointment &appointment)
   cout << "----------------------------------------" << endl;
 }
 
-void displayOwner(const Owner &owner)
+void displayOwner(const Owner& owner)
 {
   cout << "\n----------------------------------------" << endl;
   cout << "Owner ID        : " << owner.ownerID << endl;

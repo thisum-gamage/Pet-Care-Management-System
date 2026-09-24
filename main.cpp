@@ -87,6 +87,24 @@ string convertToUpper(string text)
   return text;
 }
 
+string getNonEmptyInput(const string &prompt)
+{
+  string input;
+
+  while (true)
+  {
+    cout << prompt;
+    getline(cin, input);
+
+    if (!input.empty())
+    {
+      return input;
+    }
+
+    cout << "Input cannot be empty. Please try again.\n";
+  }
+}
+
 //                      ID generators
 // ========================================================
 

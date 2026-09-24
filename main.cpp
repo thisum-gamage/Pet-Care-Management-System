@@ -417,19 +417,16 @@ int getMenuChoice()
 
   while (true)
   {
-    cin >> choice;
-
-    if (cin.fail())
-    {
-      cout << "Invalid input. Please enter a number." << endl;
-      cin.clear();
-      clearInput();
-    }
-    else
+    if (cin >> choice)
     {
       clearInput();
       return choice;
     }
+
+    cout << "Invalid input. Please enter a number.\n";
+
+    cin.clear();
+    clearInput();
   }
 }
 

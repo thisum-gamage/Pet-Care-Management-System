@@ -87,7 +87,7 @@ string convertToUpper(string text)
   return text;
 }
 
-string getNonEmptyInput(const string& prompt)
+string getNonEmptyInput(const string &prompt)
 {
   string input;
 
@@ -105,7 +105,7 @@ string getNonEmptyInput(const string& prompt)
   }
 }
 
-int getValidAge(const string& prompt)
+int getValidAge(const string &prompt)
 {
   int age;
 
@@ -142,6 +142,29 @@ int getMenuChoice()
     cin.clear();
     clearInput();
   }
+}
+
+bool isValidMobileNumber(const string &mobileNumber)
+{
+  if (mobileNumber.length() != 10)
+  {
+    return false;
+  }
+
+  if (mobileNumber[0] != '0')
+  {
+    return false;
+  }
+
+  for (char character : mobileNumber)
+  {
+    if (!isdigit(static_cast<unsigned char>(character)))
+    {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 //                      ID generators
@@ -388,7 +411,7 @@ void initializeUserFile()
   cout << "Default user accounts were created." << endl;
 }
 
-bool ownerExists(const string& ownerID)
+bool ownerExists(const string &ownerID)
 {
   ifstream file(OWNERS_FILE);
   string line;
@@ -409,7 +432,7 @@ bool ownerExists(const string& ownerID)
   return false;
 }
 
-bool petExists(const string& petID)
+bool petExists(const string &petID)
 {
   ifstream file(PETS_FILE);
   string line;
@@ -430,7 +453,7 @@ bool petExists(const string& petID)
   return false;
 }
 
-bool mobileExists(const string& mobileNumber)
+bool mobileExists(const string &mobileNumber)
 {
   ifstream file(OWNERS_FILE);
   string line;
@@ -456,7 +479,7 @@ bool mobileExists(const string& mobileNumber)
   return false;
 }
 
-bool usernameExists(const string& username)
+bool usernameExists(const string &username)
 {
   ifstream file(USERS_FILE);
   string line;
@@ -727,7 +750,7 @@ void addUserAccount()
 //                        Searching
 // ========================================================
 
-void displayAppointment(const Appointment& appointment)
+void displayAppointment(const Appointment &appointment)
 {
   cout << "\n----------------------------------------" << endl;
   cout << "Appointment Number : " << appointment.appointmentNumber << endl;
@@ -741,7 +764,7 @@ void displayAppointment(const Appointment& appointment)
   cout << "----------------------------------------" << endl;
 }
 
-void displayOwner(const Owner& owner)
+void displayOwner(const Owner &owner)
 {
   cout << "\n----------------------------------------" << endl;
   cout << "Owner ID        : " << owner.ownerID << endl;

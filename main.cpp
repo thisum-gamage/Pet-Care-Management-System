@@ -167,6 +167,25 @@ bool isValidMobileNumber(const string &mobileNumber)
   return true;
 }
 
+string getValidMobileNumber()
+{
+  string mobileNumber;
+
+  while (true)
+  {
+    cout << "Enter Your Mobile Number: ";
+    getline(cin, mobileNumber);
+
+    if (isValidMobileNumber(mobileNumber))
+    {
+      return mobileNumber;
+    }
+
+    cout << "Invalid mobile number. "
+         << "Please enter a valid 10-digit mobile number.\n";
+  }
+}
+
 //                      ID generators
 // ========================================================
 
@@ -507,16 +526,11 @@ bool usernameExists(const string &username)
 void addPetOwner()
 {
   Owner owner;
+
   owner.ownerID = generateOwnerID();
-
-  cout << "Enter Your First Name: ";
-  getline(cin, owner.firstName);
-
-  cout << "Enter Your Last Name: ";
-  getline(cin, owner.lastName);
-
-  cout << "Enter Your Mobile Number: ";
-  getline(cin, owner.mobileNumber);
+  owner.firstName = getNonEmptyInput("Enter Your First Name: ");
+  owner.lastName = getNonEmptyInput("Enter Your Last Name: ");
+  owner.mobileNumber = getValidMobileNumber();
 
   if (mobileExists(owner.mobileNumber))
   {
@@ -568,38 +582,38 @@ void addPetRecord()
     return;
   }
 
-  cout << "Enter Your Pet Name: ";
-  getline(cin, pet.petName);
-
-  cout << "Enter Your Pet Type: ";
-  getline(cin, pet.petType);
-
-  cout << "Enter Your Pet Breed: ";
-  getline(cin, pet.breed);
-
+  pet.petName = getNonEmptyInput("Enter Your Pet Name: ");
+  pet.petType = getNonEmptyInput("Enter Your Pet Type: ");
+  pet.breed = getNonEmptyInput("Enter Your Pet Breed: ");
   pet.age = getValidAge("Enter Your Pet Age: ");
 
-  cout << "Pet Gender" << endl;
-
-  cout << "1. Male" << endl;
-  cout << "2. Female" << endl;
-  cout << "Enter Gender: ";
-  genderChoice = getMenuChoice();
-
-  if (genderChoice == 1)
+  while (true)
   {
-    pet.gender = "Male";
-  }
-  else if (genderChoice == 2)
-  {
-    pet.gender = "Female";
-  }
-  else
-  {
-    cout << "Invalid gender choice." << endl;
-    return;
-  }
+    cout << "Pet Gender" << endl;
 
+    cout << "1. Male" << endl;
+    cout << "2. Female" << endl;
+
+    cout << "Enter Gender: ";
+
+    genderChoice = getMenuChoice();
+
+    if (genderChoice == 1)
+    {
+      pet.gender = "Male";
+      break;
+    }
+    else if (genderChoice == 2)
+    {
+      pet.gender = "Female";
+      break;
+    }
+    else
+    {
+      cout << "Invalid gender choice. Please select 1 or 2." << endl;
+      return;
+    }
+  }
   cout << "Enter Pet Special Notes (do not use commas): ";
   getline(cin, pet.specialNotes);
 

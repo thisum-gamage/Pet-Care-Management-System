@@ -713,35 +713,42 @@ void addUserAccount()
   cout << "Enter Password: ";
   getline(cin, user.password);
 
-  cout << "---- Select Role ----" << endl;
-  cout << "\n1. Administrator" << endl;
-  cout << "2. Receptionist" << endl;
-  cout << "3. Vet Staff Member" << endl;
-
-  cout << "\nEnter Role: ";
-  tempRole = getMenuChoice();
-
-  if (tempRole == 1)
+  while (true)
   {
-    user.role = "Administrator";
-  }
+    cout << "---- Select Role ----" << endl;
 
-  else if (tempRole == 2)
-  {
-    user.role = "Receptionist";
-  }
+    cout << "\n1. Administrator" << endl;
+    cout << "2. Receptionist" << endl;
+    cout << "3. Vet Staff Member" << endl;
 
-  else if (tempRole == 3)
-  {
-    user.role = "Vet Staff Member";
-  }
+    cout << "\nEnter Role: ";
 
-  else
-  {
-    cout << "Invalid Choice!!!" << endl;
-    return;
-  }
+    tempRole = getMenuChoice();
 
+    if (tempRole == 1)
+    {
+      user.role = "Administrator";
+      break;
+    }
+
+    else if (tempRole == 2)
+    {
+      user.role = "Receptionist";
+      break;
+    }
+
+    else if (tempRole == 3)
+    {
+      user.role = "Vet Staff Member";
+      break;
+    }
+
+    else
+    {
+      cout << "Invalid Choice. Please select 1, 2, or 3." << endl;
+      return;
+    }
+  }
   ofstream file(USERS_FILE, ios::app);
 
   if (!file)

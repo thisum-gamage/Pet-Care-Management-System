@@ -186,6 +186,27 @@ string getValidMobileNumber()
   }
 }
 
+//                      Parsers
+// ========================================================
+
+Appointment parseAppointment(const string &line)
+{
+  Appointment appointment;
+
+  stringstream ss(line);
+
+  getline(ss, appointment.appointmentNumber, ',');
+  getline(ss, appointment.petID, ',');
+  getline(ss, appointment.appointmentDate, ',');
+  getline(ss, appointment.serviceType, ',');
+  getline(ss, appointment.symptoms, ',');
+  getline(ss, appointment.treatmentNotes, ',');
+  getline(ss, appointment.appointmentStatus, ',');
+  getline(ss, appointment.lastUpdatedDate, ',');
+
+  return appointment;
+}
+
 //                      ID generators
 // ========================================================
 
@@ -603,15 +624,16 @@ void addPetRecord()
       pet.gender = "Male";
       break;
     }
+
     else if (genderChoice == 2)
     {
       pet.gender = "Female";
       break;
     }
+
     else
     {
       cout << "Invalid gender choice. Please select 1 or 2." << endl;
-      return;
     }
   }
   cout << "Enter Pet Special Notes (do not use commas): ";
@@ -746,7 +768,6 @@ void addUserAccount()
     else
     {
       cout << "Invalid Choice. Please select 1, 2, or 3." << endl;
-      return;
     }
   }
   ofstream file(USERS_FILE, ios::app);
@@ -814,19 +835,10 @@ void searchByAppointmentIDOrPetID(string searchID)
 
   while (getline(file, line))
   {
-    Appointment appointment;
-    stringstream ss(line);
+    Appointment appointment = parseAppointment(line);
 
-    getline(ss, appointment.appointmentNumber, ',');
-    getline(ss, appointment.petID, ',');
-    getline(ss, appointment.appointmentDate, ',');
-    getline(ss, appointment.serviceType, ',');
-    getline(ss, appointment.symptoms, ',');
-    getline(ss, appointment.treatmentNotes, ',');
-    getline(ss, appointment.appointmentStatus, ',');
-    getline(ss, appointment.lastUpdatedDate, ',');
-
-    if (searchID == appointment.appointmentNumber || searchID == appointment.petID)
+    if (searchID == appointment.appointmentNumber ||
+        searchID == appointment.petID)
     {
       cout << "\n----- Appointment Found! -----" << endl;
 
@@ -971,17 +983,7 @@ void searchByMobileNumber(string searchID)
 
       while (getline(appointmentFile, appointmentLine))
       {
-        Appointment appointment;
-        stringstream appointmentSS(appointmentLine);
-
-        getline(appointmentSS, appointment.appointmentNumber, ',');
-        getline(appointmentSS, appointment.petID, ',');
-        getline(appointmentSS, appointment.appointmentDate, ',');
-        getline(appointmentSS, appointment.serviceType, ',');
-        getline(appointmentSS, appointment.symptoms, ',');
-        getline(appointmentSS, appointment.treatmentNotes, ',');
-        getline(appointmentSS, appointment.appointmentStatus, ',');
-        getline(appointmentSS, appointment.lastUpdatedDate, ',');
+        Appointment appointment = parseAppointment(appointmentLine);
 
         if (appointment.petID == pet.petID)
         {

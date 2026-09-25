@@ -207,6 +207,42 @@ Appointment parseAppointment(const string &line)
   return appointment;
 }
 
+Pet parsePet(const string &line)
+{
+  Pet pet;
+  stringstream ss(line);
+  string tempAge;
+
+  getline(ss, pet.petID, ',');
+  getline(ss, pet.ownerID, ',');
+  getline(ss, pet.petName, ',');
+  getline(ss, pet.petType, ',');
+  getline(ss, pet.breed, ',');
+  getline(ss, tempAge, ',');
+  getline(ss, pet.gender, ',');
+  getline(ss, pet.specialNotes, ',');
+
+  pet.age = stoi(tempAge);
+
+  return pet;
+}
+
+Owner parseOwner(const string &line)
+{
+  Owner owner;
+
+  stringstream ss(line);
+
+  getline(ss, owner.ownerID, ',');
+  getline(ss, owner.firstName, ',');
+  getline(ss, owner.lastName, ',');
+  getline(ss, owner.mobileNumber, ',');
+  getline(ss, owner.address, ',');
+  getline(ss, owner.registeredDate, ',');
+
+  return owner;
+}
+
 //                      ID generators
 // ========================================================
 
@@ -874,14 +910,7 @@ void searchByOwnerID(string searchID)
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-
-    getline(ss, owner.ownerID, ',');
-    getline(ss, owner.firstName, ',');
-    getline(ss, owner.lastName, ',');
-    getline(ss, owner.mobileNumber, ',');
-    getline(ss, owner.address, ',');
-    getline(ss, owner.registeredDate, ',');
+    Owner owner = parseOwner(line);
 
     if (searchID == owner.ownerID)
     {
@@ -916,15 +945,7 @@ void searchByMobileNumber(string searchID)
 
   while (getline(ownersFile, ownerLine))
   {
-    Owner owner;
-    stringstream ownerSS(ownerLine);
-
-    getline(ownerSS, owner.ownerID, ',');
-    getline(ownerSS, owner.firstName, ',');
-    getline(ownerSS, owner.lastName, ',');
-    getline(ownerSS, owner.mobileNumber, ',');
-    getline(ownerSS, owner.address, ',');
-    getline(ownerSS, owner.registeredDate, ',');
+    Owner owner = parseOwner(ownerLine);
 
     if (searchID == owner.mobileNumber)
     {
@@ -961,20 +982,7 @@ void searchByMobileNumber(string searchID)
 
   while (getline(petsFile, petLine))
   {
-    Pet pet;
-    string tempAge;
-
-    stringstream petSS(petLine);
-
-    getline(petSS, pet.petID, ',');
-    getline(petSS, pet.ownerID, ',');
-    getline(petSS, pet.petName, ',');
-    getline(petSS, pet.petType, ',');
-    getline(petSS, pet.breed, ',');
-    getline(petSS, tempAge, ',');
-    pet.age = stoi(tempAge);
-    getline(petSS, pet.gender, ',');
-    getline(petSS, pet.specialNotes, ',');
+    Pet pet = parsePet(petLine);
 
     if (foundOwnerID == pet.ownerID)
     {
@@ -1024,15 +1032,7 @@ void searchAppointmentsByOwnerID(string searchID)
 
   while (getline(ownerFile, ownerLine))
   {
-    Owner owner;
-    stringstream ownerSS(ownerLine);
-
-    getline(ownerSS, owner.ownerID, ',');
-    getline(ownerSS, owner.firstName, ',');
-    getline(ownerSS, owner.lastName, ',');
-    getline(ownerSS, owner.mobileNumber, ',');
-    getline(ownerSS, owner.address, ',');
-    getline(ownerSS, owner.registeredDate, ',');
+    Owner owner = parseOwner(ownerLine);
 
     if (searchID == owner.ownerID)
     {
@@ -1061,20 +1061,7 @@ void searchAppointmentsByOwnerID(string searchID)
 
   while (getline(petFile, petLine))
   {
-    string tempAge;
-
-    Pet pet;
-    stringstream petSS(petLine);
-
-    getline(petSS, pet.petID, ',');
-    getline(petSS, pet.ownerID, ',');
-    getline(petSS, pet.petName, ',');
-    getline(petSS, pet.petType, ',');
-    getline(petSS, pet.breed, ',');
-    getline(petSS, tempAge, ',');
-    pet.age = stoi(tempAge);
-    getline(petSS, pet.gender, ',');
-    getline(petSS, pet.specialNotes, ',');
+    Pet pet = parsePet(petLine);
 
     if (foundOwnerID == pet.ownerID)
     {
@@ -1366,16 +1353,8 @@ void viewOwnerList()
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    Owner owner;
-
-    getline(ss, owner.ownerID, ',');
-    getline(ss, owner.firstName, ',');
-    getline(ss, owner.lastName, ',');
-    getline(ss, owner.mobileNumber, ',');
-    getline(ss, owner.address, ',');
-    getline(ss, owner.registeredDate, ',');
-
+    Owner owner = parseOwner(line);
+    
     displayOwner(owner);
 
     recordsAvailable = true;
@@ -1405,18 +1384,7 @@ void viewPetList()
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    Pet pet;
-
-    getline(ss, pet.petID, ',');
-    getline(ss, pet.ownerID, ',');
-    getline(ss, pet.petName, ',');
-    getline(ss, pet.petType, ',');
-    getline(ss, pet.breed, ',');
-    getline(ss, tempAge, ',');
-    pet.age = stoi(tempAge);
-    getline(ss, pet.gender, ',');
-    getline(ss, pet.specialNotes, ',');
+    Pet pet = parsePet(line);
 
     cout << "\nPet ID: " << pet.petID << endl;
     cout << "Owner ID : " << pet.ownerID << endl;
@@ -1537,18 +1505,7 @@ void viewPetsByOwner()
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    Pet pet;
-
-    getline(ss, pet.petID, ',');
-    getline(ss, pet.ownerID, ',');
-    getline(ss, pet.petName, ',');
-    getline(ss, pet.petType, ',');
-    getline(ss, pet.breed, ',');
-    getline(ss, tempAge, ',');
-    pet.age = stoi(tempAge);
-    getline(ss, pet.gender, ',');
-    getline(ss, pet.specialNotes, ',');
+    Pet pet = parsePet(line);
 
     if (pet.ownerID == searchOwnerID)
     {

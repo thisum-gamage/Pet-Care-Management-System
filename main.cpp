@@ -243,6 +243,40 @@ Owner parseOwner(const string &line)
   return owner;
 }
 
+string appointmentToCSV(const Appointment &appointment)
+{
+  return appointment.appointmentNumber + "," +
+         appointment.petID + "," +
+         appointment.appointmentDate + "," +
+         appointment.serviceType + "," +
+         appointment.symptoms + "," +
+         appointment.treatmentNotes + "," +
+         appointment.appointmentStatus + "," +
+         appointment.lastUpdatedDate;
+}
+
+string petToCSV(const Pet &pet)
+{
+  return pet.petID + "," +
+         pet.ownerID + "," +
+         pet.petName + "," +
+         pet.petType + "," +
+         pet.breed + "," +
+         to_string(pet.age) + "," +
+         pet.gender + "," +
+         pet.specialNotes;
+}
+
+string ownerToCSV(const Owner &owner)
+{
+  return owner.ownerID + "," +
+         owner.firstName + "," +
+         owner.lastName + "," +
+         owner.mobileNumber + "," +
+         owner.address + "," +
+         owner.registeredDate;
+}
+
 //                      ID generators
 // ========================================================
 
@@ -609,12 +643,7 @@ void addPetOwner()
     return;
   }
 
-  file << owner.ownerID << ","
-       << owner.firstName << ","
-       << owner.lastName << ","
-       << owner.mobileNumber << ","
-       << owner.address << ","
-       << owner.registeredDate << endl;
+  file << ownerToCSV(owner) << endl;
 
   file.close();
 
@@ -683,14 +712,7 @@ void addPetRecord()
     return;
   }
 
-  file << pet.petID << ","
-       << pet.ownerID << ","
-       << pet.petName << ","
-       << pet.petType << ","
-       << pet.breed << ","
-       << pet.age << ","
-       << pet.gender << ","
-       << pet.specialNotes << endl;
+  file << petToCSV(pet) << endl;
 
   file.close();
 
@@ -736,14 +758,7 @@ void addAppointment()
     return;
   }
 
-  file << appointment.appointmentNumber << ","
-       << appointment.petID << ","
-       << appointment.appointmentDate << ","
-       << appointment.serviceType << ","
-       << appointment.symptoms << ","
-       << appointment.treatmentNotes << ","
-       << appointment.appointmentStatus << ","
-       << appointment.lastUpdatedDate << endl;
+  file << appointmentToCSV(appointment) << endl;
 
   file.close();
 
@@ -1354,7 +1369,7 @@ void viewOwnerList()
   while (getline(file, line))
   {
     Owner owner = parseOwner(line);
-    
+
     displayOwner(owner);
 
     recordsAvailable = true;

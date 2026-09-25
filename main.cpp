@@ -1084,17 +1084,7 @@ void searchAppointmentsByOwnerID(string searchID)
 
       while (getline(appointmentFile, appointmentLine))
       {
-        Appointment appointment;
-        stringstream appointmentSS(appointmentLine);
-
-        getline(appointmentSS, appointment.appointmentNumber, ',');
-        getline(appointmentSS, appointment.petID, ',');
-        getline(appointmentSS, appointment.appointmentDate, ',');
-        getline(appointmentSS, appointment.serviceType, ',');
-        getline(appointmentSS, appointment.symptoms, ',');
-        getline(appointmentSS, appointment.treatmentNotes, ',');
-        getline(appointmentSS, appointment.appointmentStatus, ',');
-        getline(appointmentSS, appointment.lastUpdatedDate, ',');
+        Appointment appointment = parseAppointment(appointmentLine);
 
         if (appointment.petID == pet.petID)
         {
@@ -1288,17 +1278,7 @@ void updateAppointment()
 
   while (getline(inputFile, line))
   {
-    stringstream ss(line);
-    Appointment appointment;
-
-    getline(ss, appointment.appointmentNumber, ',');
-    getline(ss, appointment.petID, ',');
-    getline(ss, appointment.appointmentDate, ',');
-    getline(ss, appointment.serviceType, ',');
-    getline(ss, appointment.symptoms, ',');
-    getline(ss, appointment.treatmentNotes, ',');
-    getline(ss, appointment.appointmentStatus, ',');
-    getline(ss, appointment.lastUpdatedDate, ',');
+    Appointment appointment = parseAppointment(line);
 
     if (appointment.appointmentNumber == updateID)
     {
@@ -1521,17 +1501,7 @@ void viewAppointmentList()
 
   while (getline(file, line))
   {
-    Appointment appointment;
-    stringstream ss(line);
-
-    getline(ss, appointment.appointmentNumber, ',');
-    getline(ss, appointment.petID, ',');
-    getline(ss, appointment.appointmentDate, ',');
-    getline(ss, appointment.serviceType, ',');
-    getline(ss, appointment.symptoms, ',');
-    getline(ss, appointment.treatmentNotes, ',');
-    getline(ss, appointment.appointmentStatus, ',');
-    getline(ss, appointment.lastUpdatedDate, ',');
+    Appointment appointment = parseAppointment(line);
 
     displayAppointment(appointment);
 
@@ -1643,17 +1613,7 @@ void viewAppointmentsByStatus()
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    Appointment appointment;
-
-    getline(ss, appointment.appointmentNumber, ',');
-    getline(ss, appointment.petID, ',');
-    getline(ss, appointment.appointmentDate, ',');
-    getline(ss, appointment.serviceType, ',');
-    getline(ss, appointment.symptoms, ',');
-    getline(ss, appointment.treatmentNotes, ',');
-    getline(ss, appointment.appointmentStatus, ',');
-    getline(ss, appointment.lastUpdatedDate, ',');
+    Appointment appointment = parseAppointment(line);
 
     if (appointment.appointmentStatus == status)
     {

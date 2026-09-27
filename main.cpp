@@ -869,6 +869,48 @@ void displayOwner(const Owner &owner)
   cout << "----------------------------------------" << endl;
 }
 
+bool displayPetAppointments(const string &petID)
+{
+  ifstream appointmentFile(APPOINTMENTS_FILE);
+
+  if (!appointmentFile)
+  {
+    cout << "Unable to open appointments file.\n";
+    return false;
+  }
+
+  string line;
+  bool found = false;
+
+  while (getline(appointmentFile, line))
+  {
+    if (line.empty())
+    {
+      continue;
+    }
+
+    Appointment appointment = parseAppointment(line);
+
+    if (appointment.petID == petID)
+    {
+      found = true;
+
+      cout << "\n----- Appointment Details -----" << endl;
+
+      displayAppointment(appointment);
+    }
+  }
+
+  appointmentFile.close();
+
+  if (!found)
+  {
+    cout << "No appointments found for this pet.\n";
+  }
+
+  return found;
+}
+
 void searchByAppointmentIDOrPetID(string searchID)
 {
   searchID = convertToUpper(searchID);
@@ -1001,24 +1043,10 @@ void searchByMobileNumber(string searchID)
 
     if (foundOwnerID == pet.ownerID)
     {
-      ifstream appointmentFile(APPOINTMENTS_FILE);
-      string appointmentLine;
-
-      while (getline(appointmentFile, appointmentLine))
+      if (displayPetAppointments(pet.petID))
       {
-        Appointment appointment = parseAppointment(appointmentLine);
-
-        if (appointment.petID == pet.petID)
-        {
-          cout << "\n----- Appointment Details -----" << endl;
-
-          cout << "Pet Name: " << pet.petName << endl;
-          displayAppointment(appointment);
-
-          appointmentFound = true;
-        }
+        appointmentFound = true;
       }
-      appointmentFile.close();
     }
   }
   petsFile.close();
@@ -1080,24 +1108,10 @@ void searchAppointmentsByOwnerID(string searchID)
 
     if (foundOwnerID == pet.ownerID)
     {
-      ifstream appointmentFile(APPOINTMENTS_FILE);
-
-      string appointmentLine;
-
-      while (getline(appointmentFile, appointmentLine))
+      if (displayPetAppointments(pet.petID))
       {
-        Appointment appointment = parseAppointment(appointmentLine);
-
-        if (appointment.petID == pet.petID)
-        {
-          cout << "\n----- Appointment Details -----" << endl;
-
-          displayAppointment(appointment);
-
-          appointmentFound = true;
-        }
+        appointmentFound = true;
       }
-      appointmentFile.close();
     }
   }
   petFile.close();

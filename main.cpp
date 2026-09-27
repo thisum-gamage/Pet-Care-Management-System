@@ -528,12 +528,14 @@ bool ownerExists(const string &ownerID)
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    string storedID;
+    if (line.empty())
+    {
+      continue;
+    }
 
-    getline(ss, storedID, ',');
+    Owner owner = parseOwner(line);
 
-    if (convertToUpper(storedID) == convertToUpper(ownerID))
+    if (convertToUpper(owner.ownerID) == convertToUpper(ownerID))
     {
       return true;
     }
@@ -549,12 +551,14 @@ bool petExists(const string &petID)
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    string storedPetID;
+    if (line.empty())
+    {
+      continue;
+    }
 
-    getline(ss, storedPetID, ',');
+    Pet pet = parsePet(line);
 
-    if (convertToUpper(storedPetID) == convertToUpper(petID))
+    if (convertToUpper(pet.petID) == convertToUpper(petID))
     {
       return true;
     }
@@ -570,15 +574,12 @@ bool mobileExists(const string &mobileNumber)
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    Owner owner;
+    if (line.empty())
+    {
+      continue;
+    }
 
-    getline(ss, owner.ownerID, ',');
-    getline(ss, owner.firstName, ',');
-    getline(ss, owner.lastName, ',');
-    getline(ss, owner.mobileNumber, ',');
-    getline(ss, owner.address, ',');
-    getline(ss, owner.registeredDate, ',');
+    Owner owner = parseOwner(line);
 
     if (owner.mobileNumber == mobileNumber)
     {
@@ -1205,15 +1206,7 @@ void updatePetOwner()
 
   while (getline(inputFile, line))
   {
-    stringstream ss(line);
-    Owner owner;
-
-    getline(ss, owner.ownerID, ',');
-    getline(ss, owner.firstName, ',');
-    getline(ss, owner.lastName, ',');
-    getline(ss, owner.mobileNumber, ',');
-    getline(ss, owner.address, ',');
-    getline(ss, owner.registeredDate, ',');
+    Owner owner = parseOwner(line);
 
     if (owner.ownerID == updateID)
     {
@@ -1235,14 +1228,11 @@ void updatePetOwner()
       cout << "Enter New Registered Date (YYYY-MM-DD): ";
       getline(cin, owner.registeredDate);
 
-      tempFile2 << owner.ownerID << ","
-                << owner.firstName << ","
-                << owner.lastName << ","
-                << owner.mobileNumber << ","
-                << owner.address << ","
-                << owner.registeredDate << endl;
+      tempFile2 << ownerToCSV(owner) << endl;
+
       found = true;
     }
+
     else
     {
       tempFile2 << line << endl;
@@ -1258,9 +1248,11 @@ void updatePetOwner()
 
     cout << "Owner record updated successfully." << endl;
   }
+
   else
   {
     remove(TEMP_FILE_2.c_str());
+
     cout << "Owner record not found." << endl;
   }
 }
@@ -1314,33 +1306,32 @@ void updateAppointment()
       {
         appointment.appointmentStatus = "Pending";
       }
+
       else if (statusChoice == 2)
       {
         appointment.appointmentStatus = "Completed";
       }
+
       else
       {
         cout << "Invalid status choice." << endl;
+
         inputFile.close();
         tempFile1.close();
+
         remove(TEMP_FILE_1.c_str());
+
         return;
       }
 
       cout << "Enter New Last Updated Date: ";
       getline(cin, appointment.lastUpdatedDate);
 
-      tempFile1 << appointment.appointmentNumber << ","
-                << appointment.petID << ","
-                << appointment.appointmentDate << ","
-                << appointment.serviceType << ","
-                << appointment.symptoms << ","
-                << appointment.treatmentNotes << ","
-                << appointment.appointmentStatus << ","
-                << appointment.lastUpdatedDate << endl;
+      tempFile1 << appointmentToCSV(appointment) << endl;
 
       found = true;
     }
+
     else
     {
       tempFile1 << line << endl;
@@ -1356,6 +1347,7 @@ void updateAppointment()
 
     cout << "Appointment record updated successfully." << endl;
   }
+
   else
   {
     remove(TEMP_FILE_1.c_str());

@@ -5,6 +5,9 @@
 
 using namespace std;
 
+//                     Input Validation
+// ========================================================
+
 void clearInput();
 
 string convertToUpper(string text);

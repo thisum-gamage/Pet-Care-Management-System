@@ -5,6 +5,9 @@
 
 using namespace std;
 
+//                        ID generators
+// ========================================================
+
 string generateNextPrefixedID(
     const string &filename,
     const string &prefix);

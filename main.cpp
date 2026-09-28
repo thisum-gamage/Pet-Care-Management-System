@@ -8,6 +8,8 @@
 #include <cctype>
 #include <iomanip>
 
+#include "models.h"
+
 using namespace std;
 
 //                         Files
@@ -19,51 +21,6 @@ const string APPOINTMENTS_FILE = "appointments.txt";
 const string USERS_FILE = "users.txt";
 const string TEMP_FILE_1 = "temp1.txt";
 const string TEMP_FILE_2 = "temp2.txt";
-
-//                     Structures
-// ========================================================
-
-struct Owner
-{
-  string ownerID;
-  string firstName;
-  string lastName;
-  string mobileNumber;
-  string address;
-  string registeredDate;
-};
-
-struct Pet
-{
-  string petID;
-  string ownerID;
-  string petName;
-  string petType;
-  string breed;
-  string gender;
-  string specialNotes;
-  int age;
-};
-
-struct Appointment
-{
-  string appointmentNumber;
-  string petID;
-  string appointmentDate;
-  string serviceType;
-  string symptoms;
-  string treatmentNotes;
-  string appointmentStatus;
-  string lastUpdatedDate;
-};
-
-struct User
-{
-  int userID;
-  string username;
-  string password;
-  string role;
-};
 
 //                   Input Validation
 // ========================================================
@@ -367,19 +324,16 @@ int generateUserID()
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    string id;
-
-    getline(ss, id, ',');
-
-    if (!id.empty())
+    if (line.empty())
     {
-      int currentID = stoi(id);
+      continue;
+    }
 
-      if (currentID > highestID)
-      {
-        highestID = currentID;
-      }
+    User user = parseUser(line);
+
+    if (user.userID > highestID)
+    {
+      highestID = user.userID;
     }
   }
   file.close();
@@ -430,21 +384,7 @@ bool login(User &loggedInUser)
 
     while (getline(file, line))
     {
-      stringstream ss(line);
-      User user;
-      string id;
-
-      getline(ss, id, ',');
-      getline(ss, user.username, ',');
-      getline(ss, user.password, ',');
-      getline(ss, user.role);
-
-      if (id.empty())
-      {
-        continue;
-      }
-
-      user.userID = stoi(id);
+      User user = parseUser(line);
 
       if (enteredUsername == user.username &&
           enteredPassword == user.password)
@@ -572,13 +512,9 @@ bool usernameExists(const string &username)
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    string id, storedUsername;
+    User user = parseUser(line);
 
-    getline(ss, id, ',');
-    getline(ss, storedUsername, ',');
-
-    if (storedUsername == username)
+    if (user.username == username)
     {
       return true;
     }
@@ -805,10 +741,7 @@ void addUserAccount()
     return;
   }
 
-  file << user.userID << ","
-       << user.username << ","
-       << user.password << ","
-       << user.role << endl;
+  file << userToCSV(user) << endl;
 
   file.close();
 
@@ -1367,7 +1300,7 @@ void viewPetList()
 {
   ifstream file(PETS_FILE);
   string line;
-  string tempAge;
+
   bool recordsAvailable = false;
 
   cout << "\n===== Pets Records =====" << endl;
@@ -1418,21 +1351,7 @@ void viewUserList()
 
   while (getline(file, line))
   {
-    stringstream ss(line);
-    User user;
-    string id;
-
-    getline(ss, id, ',');
-    getline(ss, user.username, ',');
-    getline(ss, user.password, ',');
-    getline(ss, user.role);
-
-    if (id.empty())
-    {
-      continue;
-    }
-
-    user.userID = stoi(id);
+    User user = parseUser(line);
 
     cout << "\nUser ID  : " << user.userID << endl;
     cout << "Username : " << user.username << endl;
@@ -1488,7 +1407,7 @@ void viewPetsByOwner()
   searchOwnerID = convertToUpper(searchOwnerID);
 
   ifstream file(PETS_FILE);
-  string line, tempAge;
+  string line;
   bool found = false;
 
   if (!file)

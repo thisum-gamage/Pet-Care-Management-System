@@ -7,6 +7,9 @@
 
 using namespace std;
 
+//                    Input Validation
+// ========================================================
+
 void clearInput()
 {
   cin.ignore(numeric_limits<streamsize>::max(), '\n');

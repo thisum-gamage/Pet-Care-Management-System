@@ -8,8 +8,8 @@
 #include <cctype>
 #include <iomanip>
 
-#include "models.h"
-#include "input.h"
+#include "include/models.h"
+#include "include/input.h"
 
 using namespace std;
 

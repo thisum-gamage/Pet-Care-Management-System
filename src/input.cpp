@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cctype>
 
-#include "input.h"
+#include "../include/input.h"
 
 using namespace std;
 

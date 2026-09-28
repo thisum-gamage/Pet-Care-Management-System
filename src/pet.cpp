@@ -37,7 +37,7 @@ void addPetRecord()
 {
   int genderChoice;
   Pet pet;
-  
+
   pet.petID = generatePetID();
 
   cout << "Enter Owner ID: ";

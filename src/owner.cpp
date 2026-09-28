@@ -56,7 +56,6 @@ bool mobileExists(const string &mobileNumber)
   return false;
 }
 
-
 void displayOwner(const Owner &owner)
 {
   cout << "\n----------------------------------------" << endl;

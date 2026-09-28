@@ -40,7 +40,6 @@ bool usernameExists(const string &username)
 //                         Adding
 // ========================================================
 
-
 void addAppointment()
 {
   Appointment appointment;

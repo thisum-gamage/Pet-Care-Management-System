@@ -280,24 +280,28 @@ string ownerToCSV(const Owner &owner)
 //                      ID generators
 // ========================================================
 
-string generateOwnerID()
+string generateNextPrefixedID(const string &filename, const string &prefix)
 {
-  int currentID;
-  int nextID;
   int highestID = 0;
 
-  ifstream file(OWNERS_FILE);
+  ifstream file(filename);
   string line;
 
   while (getline(file, line))
   {
+    if (line.empty())
+    {
+      continue;
+    }
+
     stringstream ss(line);
     string id;
+
     getline(ss, id, ',');
 
-    if (!id.empty())
+    if (!id.empty() && id.length() > prefix.length())
     {
-      currentID = stoi(id.substr(3));
+      int currentID = stoi(id.substr(prefix.length()));
 
       if (currentID > highestID)
       {
@@ -305,82 +309,28 @@ string generateOwnerID()
       }
     }
   }
+
   file.close();
 
-  nextID = highestID + 1;
+  ostringstream output;
+  output << prefix << setfill('0') << setw(3) << highestID + 1;
 
-  ostringstream ss;
-  ss << "OWN" << setfill('0') << setw(3) << nextID;
-  return ss.str();
+  return output.str();
+}
+
+string generateOwnerID()
+{
+  return generateNextPrefixedID(OWNERS_FILE, "OWN");
 }
 
 string generatePetID()
 {
-  int currentID;
-  int nextID;
-  int highestID = 0;
-
-  ifstream file(PETS_FILE);
-  string line;
-
-  while (getline(file, line))
-  {
-    stringstream ss(line);
-    string id;
-
-    getline(ss, id, ',');
-
-    if (!id.empty())
-    {
-      currentID = stoi(id.substr(3));
-
-      if (currentID > highestID)
-      {
-        highestID = currentID;
-      }
-    }
-  }
-  file.close();
-
-  nextID = highestID + 1;
-
-  ostringstream ss;
-  ss << "PET" << setfill('0') << setw(3) << nextID;
-  return ss.str();
+  return generateNextPrefixedID(PETS_FILE, "PET");
 }
 
 string generateAppointmentID()
 {
-  int nextID;
-  int highestID = 0;
-
-  ifstream file(APPOINTMENTS_FILE);
-  string line;
-
-  while (getline(file, line))
-  {
-    stringstream ss(line);
-    string id;
-
-    getline(ss, id, ',');
-
-    if (!id.empty())
-    {
-      int currentID = stoi(id.substr(3));
-
-      if (currentID > highestID)
-      {
-        highestID = currentID;
-      }
-    }
-  }
-  file.close();
-
-  nextID = highestID + 1;
-
-  ostringstream ss;
-  ss << "APP" << setfill('0') << setw(3) << nextID;
-  return ss.str();
+  return generateNextPrefixedID(APPOINTMENTS_FILE, "APP");
 }
 
 int generateUserID()

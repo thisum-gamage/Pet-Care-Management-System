@@ -1,11 +1,11 @@
-#include "../include/id_generator.h"
-
-#include "../include/models.h"
-#include "../include/parser.h"
-
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+
+#include "../include/id_generator.h"
+#include "../include/models.h"
+#include "../include/parser.h"
+#include "../include/config.h"
 
 using namespace std;
 
@@ -54,22 +54,22 @@ string generateNextPrefixedID(
 
 string generateOwnerID()
 {
-  return generateNextPrefixedID("data/owners.txt", "OWN");
+  return generateNextPrefixedID(OWNERS_FILE, "OWN");
 }
 
 string generatePetID()
 {
-  return generateNextPrefixedID("data/pets.txt", "PET");
+  return generateNextPrefixedID(PETS_FILE, "PET");
 }
 
 string generateAppointmentID()
 {
-  return generateNextPrefixedID("data/appointments.txt", "APP");
+  return generateNextPrefixedID(APPOINTMENTS_FILE, "APP");
 }
 
 int generateUserID()
 {
-  ifstream file("data/users.txt");
+  ifstream file(USERS_FILE);
   string line;
 
   int highestID = 0;

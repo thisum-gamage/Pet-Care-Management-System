@@ -243,6 +243,23 @@ Owner parseOwner(const string &line)
   return owner;
 }
 
+User parseUser(const string &line)
+{
+  User user;
+
+  stringstream ss(line);
+  string tempUserID;
+
+  getline(ss, tempUserID, ',');
+  getline(ss, user.username, ',');
+  getline(ss, user.password, ',');
+  getline(ss, user.role, ',');
+
+  user.userID = stoi(tempUserID);
+
+  return user;
+}
+
 string appointmentToCSV(const Appointment &appointment)
 {
   return appointment.appointmentNumber + "," +
@@ -275,6 +292,14 @@ string ownerToCSV(const Owner &owner)
          owner.mobileNumber + "," +
          owner.address + "," +
          owner.registeredDate;
+}
+
+string userToCSV(const User &user)
+{
+  return to_string(user.userID) + "," +
+         user.username + "," +
+         user.password + "," +
+         user.role;
 }
 
 //                      ID generators

@@ -9,7 +9,7 @@ void updateAppointment();
 void displayAppointment(const Appointment &appointment);
 bool displayPetAppointments(const string &petID);
 
-void searchByAppointmentIDOrPetID(const string &searchID);
+void searchByAppointmentIDOrPetID(string searchID);
 
 void viewAppointmentList();
 void viewAppointmentsByStatus();

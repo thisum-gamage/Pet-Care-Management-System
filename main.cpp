@@ -1,18 +1,6 @@
 #include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <cstdio>
-#include <limits>
-#include <algorithm>
-#include <cctype>
-#include <iomanip>
 
-#include "include/models.h"
 #include "include/input.h"
-#include "include/parser.h"
-#include "include/id_generator.h"
-#include "include/config.h"
 #include "include/auth.h"
 #include "include/owner.h"
 #include "include/pet.h"
@@ -220,6 +208,10 @@ void ownerManagementMenu()
 
     case 3:
       return;
+
+    default:
+      cout << "Invalid Choice!" << endl;
+      break;
     }
   }
 }

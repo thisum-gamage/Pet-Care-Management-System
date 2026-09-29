@@ -38,7 +38,18 @@ string getNonEmptyInput(const string &prompt)
     cout << prompt;
     getline(cin, input);
 
-    if (!input.empty())
+    bool hasText = false;
+
+    for (char character : input)
+    {
+      if (!isspace(static_cast<unsigned char>(character)))
+      {
+        hasText = true;
+        break;
+      }
+    }
+
+    if (hasText)
     {
       return input;
     }
@@ -69,14 +80,28 @@ int getValidAge(const string &prompt)
 
 int getMenuChoice()
 {
-  int choice;
+  string input;
 
   while (true)
   {
-    if (cin >> choice)
+    if (cin >> input)
     {
-      clearInput();
-      return choice;
+      bool isNumber = !input.empty();
+
+      for (char character : input)
+      {
+        if (!isdigit(static_cast<unsigned char>(character)))
+        {
+          isNumber = false;
+          break;
+        }
+      }
+      
+      if (isNumber)
+      {
+        clearInput();
+        return stoi(input);
+      }
     }
 
     cout << "Invalid input. Please enter a number.\n";

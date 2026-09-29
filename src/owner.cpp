@@ -7,6 +7,7 @@
 #include "../include/parser.h"
 #include "../include/input.h"
 #include "../include/id_generator.h"
+#include "../include/models.h"
 
 using namespace std;
 
@@ -48,6 +49,30 @@ bool mobileExists(const string &mobileNumber)
     Owner owner = parseOwner(line);
 
     if (owner.mobileNumber == mobileNumber)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool duplicateMobileCheck(const Owner &owner)
+{
+  ifstream checkFile(OWNERS_FILE);
+  string checkLine;
+
+  while (getline(checkFile, checkLine))
+  {
+    if (checkLine.empty())
+    {
+      continue;
+    }
+
+    Owner existingOwner = parseOwner(checkLine);
+
+    if (existingOwner.ownerID != owner.ownerID &&
+        existingOwner.mobileNumber == owner.mobileNumber)
     {
       return true;
     }
@@ -145,8 +170,13 @@ void updatePetOwner()
       cout << "Enter New Last Name: ";
       getline(cin, owner.lastName);
 
-      cout << "Enter New Mobile Number: ";
-      getline(cin, owner.mobileNumber);
+      owner.mobileNumber = getValidMobileNumber();
+
+      if (duplicateMobileCheck(owner))
+      {
+        cout << "This mobile number is already registered to another owner." << endl;
+        return;
+      }
 
       cout << "Enter New Address: ";
       getline(cin, owner.address);

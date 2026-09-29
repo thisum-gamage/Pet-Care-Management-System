@@ -5,6 +5,7 @@
 
 bool ownerExists(const string &ownerID);
 bool mobileExists(const string &mobileNumber);
+bool duplicateMobileCheck(const Owner &owner);
 
 void displayOwner(const Owner &owner);
 void addPetOwner();

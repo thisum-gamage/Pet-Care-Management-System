@@ -96,7 +96,7 @@ int getMenuChoice()
           break;
         }
       }
-      
+
       if (isNumber)
       {
         clearInput();
@@ -150,5 +150,52 @@ string getValidMobileNumber()
 
     cout << "Invalid mobile number. "
          << "Please enter a valid 10-digit mobile number.\n";
+  }
+}
+
+bool isValidDateFormat(const string &date)
+{
+  if (date.length() != 10)
+  {
+    return false;
+  }
+
+  if (date[4] != '-' || date[7] != '-')
+  {
+    return false;
+  }
+
+  for (int i = 0; i < date.length(); i++)
+  {
+    if (i == 4 || i == 7)
+    {
+      continue;
+    }
+
+    if (!isdigit(static_cast<unsigned char>(date[i])))
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+string getValidDate(const string &prompt)
+{
+  string date;
+
+  while (true)
+  {
+    cout << prompt;
+    getline(cin, date);
+
+    if (isValidDateFormat(date))
+    {
+      return date;
+    }
+
+    cout << "Invalid date format. "
+         << "Please use YYYY-MM-DD.\n";
   }
 }

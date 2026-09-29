@@ -22,4 +22,6 @@ bool isValidMobileNumber(const string &mobileNumber);
 
 string getValidMobileNumber();
 
+string getValidDate(const string &prompt);
+
 #endif

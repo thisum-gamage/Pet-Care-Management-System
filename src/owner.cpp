@@ -108,11 +108,11 @@ void addPetOwner()
     return;
   }
 
-  cout << "Enter Your Address (do not use commas): ";
-  getline(cin, owner.address);
+  owner.address = getNonEmptyInput(
+      "Enter Your Address (do not use commas): ");
 
-  cout << "Enter Registered Date (YYYY-MM-DD): ";
-  getline(cin, owner.registeredDate);
+  owner.registeredDate = getValidDate(
+      "Enter Registered Date (YYYY-MM-DD): ");
 
   ofstream file(OWNERS_FILE, ios::app);
 
@@ -164,11 +164,8 @@ void updatePetOwner()
 
       clearInput();
 
-      cout << "Enter New First Name: ";
-      getline(cin, owner.firstName);
-
-      cout << "Enter New Last Name: ";
-      getline(cin, owner.lastName);
+      owner.firstName = getNonEmptyInput("Enter New First Name: ");
+      owner.lastName = getNonEmptyInput("Enter New Last Name: ");
 
       owner.mobileNumber = getValidMobileNumber();
 
@@ -178,11 +175,10 @@ void updatePetOwner()
         return;
       }
 
-      cout << "Enter New Address: ";
-      getline(cin, owner.address);
+      owner.address = getNonEmptyInput("Enter New Address: ");
 
-      cout << "Enter New Registered Date (YYYY-MM-DD): ";
-      getline(cin, owner.registeredDate);
+      owner.registeredDate = getValidDate(
+          "Enter New Registered Date (YYYY-MM-DD): ");
 
       tempFile2 << ownerToCSV(owner) << endl;
 

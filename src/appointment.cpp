@@ -27,20 +27,20 @@ void addAppointment()
     return;
   }
 
-  cout << "Enter Appointment Date: ";
-  getline(cin, appointment.appointmentDate);
+  appointment.appointmentDate = getValidDate(
+      "Enter Appointment Date (YYYY-MM-DD): ");
 
-  cout << "Enter Service Type: ";
-  getline(cin, appointment.serviceType);
+  appointment.serviceType = getNonEmptyInput(
+      "Enter Service Type: ");
 
-  cout << "Enter Pet Symptoms (do not use commas): ";
-  getline(cin, appointment.symptoms);
+  appointment.symptoms = getNonEmptyInput(
+      "Enter Pet Symptoms (do not use commas): ");
 
   appointment.treatmentNotes = "None";
   appointment.appointmentStatus = "Pending";
 
-  cout << "Enter Last Updated Date: ";
-  getline(cin, appointment.lastUpdatedDate);
+  appointment.lastUpdatedDate = getValidDate(
+      "Enter Last Updated Date (YYYY-MM-DD): ");
 
   ofstream file(APPOINTMENTS_FILE, ios::app);
 
@@ -92,8 +92,8 @@ void updateAppointment()
     {
       clearInput();
 
-      cout << "Enter New Treatment Notes: ";
-      getline(cin, appointment.treatmentNotes);
+      appointment.treatmentNotes = getNonEmptyInput(
+          "Enter New Treatment Notes (do not use commas): ");
 
       cout << "Enter New Appointment Status" << endl;
 
@@ -124,8 +124,8 @@ void updateAppointment()
         return;
       }
 
-      cout << "Enter New Last Updated Date: ";
-      getline(cin, appointment.lastUpdatedDate);
+      appointment.lastUpdatedDate = getValidDate(
+          "Enter Last Updated Date (YYYY-MM-DD): ");
 
       tempFile1 << appointmentToCSV(appointment) << endl;
 

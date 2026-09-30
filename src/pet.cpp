@@ -84,6 +84,7 @@ void addPetRecord()
       cout << "Invalid gender choice. Please select 1 or 2." << endl;
     }
   }
+  
   cout << "Enter Pet Special Notes (do not use commas): ";
   getline(cin, pet.specialNotes);
 
